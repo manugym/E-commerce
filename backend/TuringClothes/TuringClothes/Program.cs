@@ -43,6 +43,19 @@ namespace TuringClothes
                 MyDatabase myDatabase = scope.ServiceProvider.GetService<MyDatabase>();
                 myDatabase.Database.EnsureCreated();
             }
+
+            static void SeedDatabase(IServiceProvider serviceProvider)
+            {
+                using IServiceScope scope = serviceProvider.CreateScope();
+                using MyDatabase dataBaseContext = scope.ServiceProvider.GetService<MyDatabase>();
+
+                if (dataBaseContext.Database.EnsureCreated())
+                {
+                    DataSeed seeder = new DataSeed(dataBaseContext);
+                    seeder.Seed();
+                }
+            }
+
             app.Run();
         }
     }
