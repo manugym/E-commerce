@@ -1,7 +1,7 @@
 <!-- Navigation-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container px-4 px-lg-5">
-    <h1 class="navbar-brand">Turing Clothes</h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%;">
+  <div class="container flex-wrap flex-lg-nowrap">
+    <a class="navbar-brand" href="home">Turing Clothes</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -18,37 +18,22 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="home">Inicio</a>
         </li>
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            id="navbarDropdown"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            >Catálogo</a
-          >
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li>
-              <a class="dropdown-item" href="catalogo">Todos los productos</a>
-            </li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li><a class="dropdown-item" href="#!">Productos populares</a></li>
-            <li><a class="dropdown-item" href="#!">Novedades</a></li>
-          </ul>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="catalog">Catálogo</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#!">Sobre nosotros</a>
         </li>
       </ul>
-      <form class="d-flex">
-        <button class="btn btn-outline-dark" type="submit">
+      <div class="d-flex">
+        <button class="btn btn-outline-dark">
           <i class="bi bi-bag"></i>
           <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
         </button>
-      </form>
+        <a class="btn btn-outline-dark bg-primary" href="login">
+          <span class="badge text-white ms-1 rounded-pill">Iniciar sesión</span>
+        </a>
+      </div>
     </div>
   </div>
 </nav>
