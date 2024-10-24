@@ -1,1 +1,39 @@
-<p>iniciosesion works!</p>
+<!-- <div class="d-flex justify-content-center align-items-center">
+  <form class="custom-form" method="post">
+    <h1>Login</h1>
+    <input
+      type="email"
+      name="Correo electrónico"
+      placeholder="Email"
+      required="required"
+    />
+    <br>
+    <input
+      type="password"
+      name="Contraseña"
+      placeholder="Password"
+      required="required"
+    />
+    <br>
+    <button type="submit">Iniciar sesión</button>
+  </form>
+</div> -->
+<div class="container-fluid login-container d-flex justify-content-center align-items-center" style="height: 100vh; width: 500px;">
+  <div class="login-form shadow p-4 bg-white rounded" style="min-width: 100px; width: 400px; max-width: 65%;">
+    <h3 class="text-center mb-4">Iniciar Sesión</h3>
+    <form>
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo Electrónico</label>
+        <input type="email" class="form-control" id="email" placeholder="Correo electrónico">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="password" placeholder="Contraseña">
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+    </form>
+    <p class="text-center mt-3">
+      <a href="register">Registrarse</a>
+    </p>
+  </div>
+</div>
