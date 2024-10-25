@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace TuringClothes.Database
 {
@@ -11,6 +12,8 @@ namespace TuringClothes.Database
         public string Email { get; set; }
         public string Password { get; set; }
         public string Address { get; set; }
+
+        [DefaultValue("user")]
         public string Role { get; set; }
 
 
