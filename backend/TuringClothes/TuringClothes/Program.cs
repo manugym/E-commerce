@@ -1,5 +1,6 @@
 
 using TuringClothes.Database;
+using TuringClothes.Repository;
 
 namespace TuringClothes
 {
@@ -18,6 +19,7 @@ namespace TuringClothes
             
 
             builder.Services.AddScoped<MyDatabase>();
+            builder.Services.AddScoped<AuthRepository>();
 
             var app = builder.Build();
 
