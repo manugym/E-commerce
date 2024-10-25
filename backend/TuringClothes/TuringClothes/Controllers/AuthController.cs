@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TuringClothes.Database;
+using TuringClothes.Repository;
 
 namespace TuringClothes.Controllers
 {
@@ -9,15 +10,20 @@ namespace TuringClothes.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly MyDatabase _myDatabase;
+        private readonly AuthRepository _authRepository;
 
-        public AuthController(MyDatabase myDatabase)
+
+        public AuthController(AuthRepository authRepository)
         {
-            _myDatabase = myDatabase;
+            _authRepository = authRepository;
         }
 
         [HttpGet]
-        public IEnumerable<User> GetUsers() => _myDatabase.Users.ToList();
+        public async Task<ICollection<User>> GetByEmail(string mail)
+        {
+            var user = await _authRepository.GetByEmail(mail);
+            return user;
+        }
 
 
     }
