@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
-
-namespace TuringClothes.Database
+﻿namespace TuringClothes.Database
 {
     public class DataSeed
     {
@@ -14,7 +11,7 @@ namespace TuringClothes.Database
         public void Seed()
         {
             User[] users =
-            [
+            {
                 new User
             {
                 Name = "Juanma",
@@ -54,11 +51,20 @@ namespace TuringClothes.Database
                 Email = "julitaperez@gmail.com",
                 Password = "123456",
                 Address = "Calle Navarro Ledesma 13"
+            },
+            new User
+            {
+                Name = "Noe",
+                Surname = "Frances",
+                Email = "noe@gmail.com",
+                    Password = "938382",
+                Address = "Riogordo n0 3"
             }
-            ];
+            };
             _context.Users.AddRange(users);
             _context.SaveChanges();
+            Console.WriteLine("datos insertados en la db");
         }
     }
-    
+
 }
