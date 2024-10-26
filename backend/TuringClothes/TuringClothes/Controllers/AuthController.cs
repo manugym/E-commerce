@@ -12,28 +12,44 @@ namespace TuringClothes.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private MyDatabase _database;
         private readonly AuthRepository _authRepository;
         private readonly AuthMapper _authMapper;
 
 
-        public AuthController(AuthRepository authRepository)
+        public AuthController(AuthRepository authRepository, AuthMapper authMapper)
         {
             _authRepository = authRepository;
+            _authMapper = authMapper;
         }
 
-        [HttpGet]
-        public async Task<ICollection<User>> GetByEmail(string mail)
+
+        [HttpGet("GetAllUsers")]
+        public async Task<IEnumerable<User>> GetAllUsersSinConvertir()
+        {
+            IEnumerable<User> users = await _authRepository.GetAllUsersAsync();
+
+            return users;
+        }
+
+        [HttpGet("GetByEmail")]
+        public async Task<IEnumerable<User>> GetByEmail(string mail)
         {
             var user = await _authRepository.GetByEmail(mail);
             return user;
-            
+
         }
 
-        [HttpGet]
-        public AuthDto ToDto(User users)
+        [HttpGet("ToDto")]
+        public async Task<IEnumerable<AuthDto>> GetAllUsersConvertidos()
         {
-            AuthDto autDto = _authMapper.ToDto(users);
-            return autDto;
+            IEnumerable<User> userAConvertir = await _authRepository.GetAllUsersAsync();
+            
+            
+
+            IEnumerable<AuthDto> usersConvertidos = _authMapper.ToDto(userAConvertir);
+
+            return usersConvertidos;
         }
     }
 }

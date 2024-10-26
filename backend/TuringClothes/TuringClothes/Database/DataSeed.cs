@@ -18,7 +18,8 @@
                 Surname = "López Navarro",
                 Email = "juanmita@gmail.com",
                 Password = "123456",
-                Address = "Calle La Fuente 3"
+                Address = "Calle La Fuente 3",
+                Role = "Alumno"
             },
             new User
             {
@@ -26,7 +27,8 @@
                 Surname = "Ruiz Sánchez",
                 Email = "franruiz@gmail.com",
                 Password = "12345678",
-                Address = "Calle Hermes 4"
+                Address = "Calle Hermes 4",
+                Role = "Alumno"
             },
             new User
             {
@@ -34,7 +36,8 @@
                 Surname = "Díaz Pérez",
                 Email = "danidiazperez@gmail.com",
                 Password = "1234567",
-                Address = "Calle Hermes 4"
+                Address = "Calle Hermes 4",
+                Role = "Alumno"
             },
             new User
             {
@@ -42,7 +45,8 @@
                 Surname = "Muñoz Pérez",
                 Email = "nereamuñoz@hotmail.com",
                 Password = "12345",
-                Address = "Calle Hermes 4"
+                Address = "Calle Hermes 4",
+                Role = "Alumno"
             },
             new User
             {
@@ -50,15 +54,17 @@
                 Surname = "Pérez Cabrera",
                 Email = "julitaperez@gmail.com",
                 Password = "123456",
-                Address = "Calle Navarro Ledesma 13"
+                Address = "Calle Navarro Ledesma 13",
+                Role = "Alumno"
             },
             new User
             {
                 Name = "Noe",
                 Surname = "Frances",
                 Email = "noe@gmail.com",
-                    Password = "938382",
-                Address = "Riogordo n0 3"
+                Password = "938382",
+                Address = "Riogordo n0 3",
+                Role = "Alumno"
             }
             };
             _context.Users.AddRange(users);
