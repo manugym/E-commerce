@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TuringClothes.Database;
 using TuringClothes.Mapper;
 using TuringClothes.Model;
@@ -15,6 +17,7 @@ namespace TuringClothes.Controllers
         private MyDatabase _database;
         private readonly AuthRepository _authRepository;
         private readonly AuthMapper _authMapper;
+        private readonly TokenValidationParameters _tokenParameters;
 
 
         public AuthController(AuthRepository authRepository, AuthMapper authMapper)
@@ -23,7 +26,7 @@ namespace TuringClothes.Controllers
             _authMapper = authMapper;
         }
 
-
+        [Authorize]
         [HttpGet("GetAllUsers")]
         public async Task<IEnumerable<User>> GetAllUsersSinConvertir()
         {
@@ -32,6 +35,7 @@ namespace TuringClothes.Controllers
             return users;
         }
 
+        [Authorize]
         [HttpGet("GetByEmail")]
         public async Task<IEnumerable<User>> GetByEmail(string mail)
         {
@@ -40,6 +44,7 @@ namespace TuringClothes.Controllers
 
         }
 
+        [Authorize]
         [HttpGet("ToDto")]
         public async Task<IEnumerable<AuthDto>> GetAllUsersConvertidos()
         {
