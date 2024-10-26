@@ -9,9 +9,12 @@ namespace TuringClothes.Repository
         { 
         }
 
+
         public async Task <ICollection<User>> GetByEmail(string mail)
         {
             return await GetQueryable().Where(email => email.Email == mail).ToArrayAsync();
         }
+
+        
     }
 }
