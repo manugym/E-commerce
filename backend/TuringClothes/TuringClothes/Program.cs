@@ -34,7 +34,7 @@ namespace TuringClothes
                 app.UseSwaggerUI();
                 SeedDatabase(app.Services);
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
@@ -45,8 +45,10 @@ namespace TuringClothes
             //crea la base de datos si no está ya creada
             using (IServiceScope scope = app.Services.CreateScope())
             {
+                
                 MyDatabase myDatabase = scope.ServiceProvider.GetService<MyDatabase>();
                 myDatabase.Database.EnsureCreated();
+                
             }
 
             static void SeedDatabase(IServiceProvider serviceProvider)
