@@ -17,8 +17,7 @@ namespace TuringClothes.Controllers
         private MyDatabase _database;
         private readonly AuthRepository _authRepository;
         private readonly AuthMapper _authMapper;
-        private readonly TokenValidationParameters _tokenParameters;
-
+        
 
         public AuthController(AuthRepository authRepository, AuthMapper authMapper)
         {
@@ -26,7 +25,8 @@ namespace TuringClothes.Controllers
             _authMapper = authMapper;
         }
 
-        [Authorize]
+
+        //[Authorize]
         [HttpGet("GetAllUsers")]
         public async Task<IEnumerable<User>> GetAllUsersSinConvertir()
         {
@@ -35,16 +35,16 @@ namespace TuringClothes.Controllers
             return users;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("GetByEmail")]
-        public async Task<IEnumerable<User>> GetByEmail(string mail)
+        public async Task<User> GetByEmail(string mail, string password)
         {
-            var user = await _authRepository.GetByEmail(mail);
+            var user = await _authRepository.GetByEmail(mail, password);
             return user;
 
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("ToDto")]
         public async Task<IEnumerable<AuthDto>> GetAllUsersConvertidos()
         {
@@ -55,6 +55,18 @@ namespace TuringClothes.Controllers
             IEnumerable<AuthDto> usersConvertidos = _authMapper.ToDto(userAConvertir);
 
             return usersConvertidos;
+        }
+
+        [HttpPost("Login")]
+        public async Task<ActionResult<string>> Login([FromBody] AuthDto data)
+        {
+            var user = await _authRepository.GetByEmail(data.Email, data.Password);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var token = await _authRepository.GenerateJwtToken(mail: user.Email, userID: user.Id);
+            return Ok(token);
         }
     }
 }
