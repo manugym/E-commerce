@@ -1,5 +1,6 @@
 
 using TuringClothes.Database;
+using TuringClothes.Mapper;
 using TuringClothes.Repository;
 
 namespace TuringClothes
@@ -19,6 +20,7 @@ namespace TuringClothes
             
 
             builder.Services.AddScoped<MyDatabase>();
+            builder.Services.AddScoped<AuthMapper>();
             builder.Services.AddScoped<AuthRepository>();
 
             var app = builder.Build();
@@ -32,7 +34,7 @@ namespace TuringClothes
                 app.UseSwaggerUI();
                 SeedDatabase(app.Services);
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
@@ -43,8 +45,10 @@ namespace TuringClothes
             //crea la base de datos si no está ya creada
             using (IServiceScope scope = app.Services.CreateScope())
             {
+                
                 MyDatabase myDatabase = scope.ServiceProvider.GetService<MyDatabase>();
                 myDatabase.Database.EnsureCreated();
+                
             }
 
             static void SeedDatabase(IServiceProvider serviceProvider)
