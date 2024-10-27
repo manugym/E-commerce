@@ -14,45 +14,19 @@ namespace TuringClothes.Repository
     public class AuthRepository : Repository<User, int>
     {
         private readonly TokenValidationParameters _tokenParameters;
+        private readonly MyDatabase _mydatabase;
         public AuthRepository(MyDatabase myDatabase, TokenValidationParameters tokenParameters) : base(myDatabase) 
         {
             _tokenParameters = tokenParameters;
+            _mydatabase = myDatabase;
         }
 
-        public async Task<User> GetByEmail(string mail, string password)
+        public async Task<User?> GetByEmail(string mail)
         {
-            var user =  await GetQueryable().FirstOrDefaultAsync(email => email.Email == mail);
+           return await GetQueryable().FirstOrDefaultAsync(email => email.Email == mail);
 
-            if (user == null || user.Password != password)
-            {
-                return null;
-            }
-            return user;
         }
-
-        public async Task <IEnumerable<User>> GetAllUsersAsync()
-        {
-            return await GetQueryable().ToArrayAsync();
-        }
-
-        public async Task<string> GenerateJwtToken(string mail, long userID)
-        {
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Claims = new Dictionary<string, object>
-                {
-                    { ClaimTypes.Email, mail },
-                    { "id", userID}
-                },
-                Expires = DateTime.UtcNow.AddHours(7),
-                SigningCredentials = new SigningCredentials(
-                    _tokenParameters.IssuerSigningKey,
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
+ 
         
     }
 }
