@@ -65,22 +65,6 @@ namespace TuringClothes.Controllers
             return "Esto es un secreto que no todo el mundo debería leer";
         }
 
-        [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] User registerData)
-        {
-            var newUser = new User
-            {
-                Name = registerData.Name,
-                Surname = registerData.Surname,
-                Email = registerData.Email,
-                Password = registerData.Password,
-                Address = registerData.Address,
-                Role = "User"
-            };
-            await _myDatabase.Users.AddAsync(newUser);
-            await _myDatabase.SaveChangesAsync();
-            return Ok("Usuario registrado");
-        }
 
         ////[Authorize]
         //[HttpGet("GetAllUsers")]
