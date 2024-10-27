@@ -26,31 +26,7 @@ namespace TuringClothes.Repository
            return await GetQueryable().FirstOrDefaultAsync(email => email.Email == mail);
 
         }
-
-        public async Task <IEnumerable<User>> GetAllUsersAsync()
-        {
-            return await GetQueryable().ToArrayAsync();
-        }
-
-        public async Task<string> GenerateJwtToken(string mail, long userID)
-        {
-            
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Claims = new Dictionary<string, object>
-                {
-                    { ClaimTypes.Email, mail },
-                    { "id", userID}
-                },
-                Expires = DateTime.UtcNow.AddHours(7),
-                SigningCredentials = new SigningCredentials(
-                    _tokenParameters.IssuerSigningKey,
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
+ 
         
     }
 }

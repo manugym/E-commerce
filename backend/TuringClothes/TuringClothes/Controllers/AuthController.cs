@@ -30,8 +30,8 @@ namespace TuringClothes.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login([FromBody] AuthDto loginData)
         {
-            var user = await  _authRepository.GetByEmail(loginData.Email);
-            
+            var user = await _authRepository.GetByEmail(loginData.Email);
+
             if (user == null)
             {
                 return NotFound("Usuario no encontrado");
@@ -73,53 +73,9 @@ namespace TuringClothes.Controllers
         {
             return "Esto es un secreto que no todo el mundo debería leer";
         }
-
-
-        ////[Authorize]
-        //[HttpGet("GetAllUsers")]
-        //public async Task<IEnumerable<User>> GetAllUsersSinConvertir()
-        //{
-        //    IEnumerable<User> users = await _authRepository.GetAllUsersAsync();
-
-        //    return users;
-        //}
-
-
-        [HttpGet("GetByEmail")]
-        public async Task<ActionResult<string>> GetEmail(string mail)
-        {
-            var user = await _authRepository.GetByEmail(mail);
-            if (user == null)
-            {
-                return NotFound("vuelve a intentarlo");
-            }
-            return user.Email;
-
-        }
-
-        ////[Authorize]
-        //[HttpGet("ToDto")]
-        //public async Task<IEnumerable<AuthDto>> GetAllUsersConvertidos()
-        //{
-        //    IEnumerable<User> userAConvertir = await _authRepository.GetAllUsersAsync();
-
-
-
-        //    IEnumerable<AuthDto> usersConvertidos = _authMapper.ToDto(userAConvertir);
-
-        //    return usersConvertidos;
-        //}
-
-        //[HttpPost("Login")]
-        //public async Task<ActionResult<string>> Login([FromBody] AuthDto data)
-        //{
-        //    var user = await _authRepository.GetByEmail(data.Email, data.Password);
-        //    if (user == null)
-        //    {
-        //        return Unauthorized();
-        //    }
-        //    var token = await _authRepository.GenerateJwtToken(mail: user.Email, userID: user.Id);
-        //    return Ok(token);
-        //}
     }
+
+
+
 }
+
