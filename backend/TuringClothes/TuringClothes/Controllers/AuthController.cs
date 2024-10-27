@@ -18,8 +18,9 @@ namespace TuringClothes.Controllers
         private readonly TokenValidationParameters _tokenParameters;
         private readonly MyDatabase _myDatabase;
 
-        public AuthController(IOptionsMonitor<JwtBearerOptions> jwtOptions)
+        public AuthController(MyDatabase myDatabase, IOptionsMonitor<JwtBearerOptions> jwtOptions)
         {
+            _myDatabase = myDatabase;
             _tokenParameters = jwtOptions.Get(JwtBearerDefaults.AuthenticationScheme).TokenValidationParameters;
         }
 
@@ -62,6 +63,23 @@ namespace TuringClothes.Controllers
         public string GetSecret()
         {
             return "Esto es un secreto que no todo el mundo debería leer";
+        }
+
+        [HttpPost("register")]
+        public async Task<ActionResult> Register([FromBody] User registerData)
+        {
+            var newUser = new User
+            {
+                Name = registerData.Name,
+                Surname = registerData.Surname,
+                Email = registerData.Email,
+                Password = registerData.Password,
+                Address = registerData.Address,
+                Role = "User"
+            };
+            await _myDatabase.Users.AddAsync(newUser);
+            await _myDatabase.SaveChangesAsync();
+            return Ok("Usuario registrado");
         }
 
         ////[Authorize]
