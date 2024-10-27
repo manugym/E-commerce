@@ -1,4 +1,6 @@
 
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TuringClothes.Database;
 using TuringClothes.Mapper;
 using TuringClothes.Repository;
@@ -14,6 +16,18 @@ namespace TuringClothes
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddAuthentication().AddJwtBearer(options =>
+            {
+                string key = "bdisub678kji@miods/3bjk970kjbhvytdtjvñkpokop";
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                };
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -37,6 +51,7 @@ namespace TuringClothes
             
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
