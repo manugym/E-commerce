@@ -13,7 +13,9 @@ namespace TuringClothes.Mapper
                 Password = user.Password,
             };
         }
-
-       
+        public IEnumerable<AuthDto> ToDto(IEnumerable<User> users)
+        {
+            return users.Select(user => ToDto(user));
+        }
     }
 }
