@@ -19,7 +19,7 @@
                 Email = "juanmita@gmail.com",
                 Password = "123456",
                 Address = "Calle La Fuente 3",
-                Role = "Alumno"
+                Role = "admin"
             },
             new User
             {
