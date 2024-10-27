@@ -37,7 +37,7 @@ namespace TuringClothes.Controllers
                 return NotFound("Usuario no encontrado");
             }
             //si el usuario existe creamos su token
-            if (loginData.Email == user.Email && loginData.Password == user.Password)
+            if (loginData.Email == user.Email && BCrypt.Net.BCrypt.Verify(loginData.Password, user.Password))
             {
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
