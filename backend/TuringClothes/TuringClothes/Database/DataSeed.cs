@@ -18,7 +18,12 @@
                 Surname = "López Navarro",
                 Email = "juanmita@gmail.com",
                 Password = "123456",
+<<<<<<< Updated upstream
                 Address = "Calle La Fuente 3"
+=======
+                Address = "Calle La Fuente 3",
+                Role = "admin"
+>>>>>>> Stashed changes
             },
             new User
             {
