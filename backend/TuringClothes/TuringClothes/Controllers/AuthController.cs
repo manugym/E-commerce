@@ -18,8 +18,9 @@ namespace TuringClothes.Controllers
         private readonly TokenValidationParameters _tokenParameters;
         private readonly MyDatabase _myDatabase;
 
-        public AuthController(IOptionsMonitor<JwtBearerOptions> jwtOptions)
+        public AuthController(MyDatabase myDatabase, IOptionsMonitor<JwtBearerOptions> jwtOptions)
         {
+            _myDatabase = myDatabase;
             _tokenParameters = jwtOptions.Get(JwtBearerDefaults.AuthenticationScheme).TokenValidationParameters;
         }
 
@@ -63,6 +64,7 @@ namespace TuringClothes.Controllers
         {
             return "Esto es un secreto que no todo el mundo debería leer";
         }
+
 
         ////[Authorize]
         //[HttpGet("GetAllUsers")]
