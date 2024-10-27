@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TuringClothes.Database;
 using TuringClothes.Mapper;
 using TuringClothes.Model;
@@ -12,28 +14,59 @@ namespace TuringClothes.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private MyDatabase _database;
         private readonly AuthRepository _authRepository;
         private readonly AuthMapper _authMapper;
+        
 
-
-        public AuthController(AuthRepository authRepository)
+        public AuthController(AuthRepository authRepository, AuthMapper authMapper)
         {
             _authRepository = authRepository;
+            _authMapper = authMapper;
         }
 
-        [HttpGet]
-        public async Task<ICollection<User>> GetByEmail(string mail)
+
+        //[Authorize]
+        [HttpGet("GetAllUsers")]
+        public async Task<IEnumerable<User>> GetAllUsersSinConvertir()
         {
-            var user = await _authRepository.GetByEmail(mail);
+            IEnumerable<User> users = await _authRepository.GetAllUsersAsync();
+
+            return users;
+        }
+
+        //[Authorize]
+        [HttpGet("GetByEmail")]
+        public async Task<User> GetByEmail(string mail, string password)
+        {
+            var user = await _authRepository.GetByEmail(mail, password);
             return user;
-            
+
         }
 
-        [HttpGet]
-        public AuthDto ToDto(User users)
+        //[Authorize]
+        [HttpGet("ToDto")]
+        public async Task<IEnumerable<AuthDto>> GetAllUsersConvertidos()
         {
-            AuthDto autDto = _authMapper.ToDto(users);
-            return autDto;
+            IEnumerable<User> userAConvertir = await _authRepository.GetAllUsersAsync();
+            
+            
+
+            IEnumerable<AuthDto> usersConvertidos = _authMapper.ToDto(userAConvertir);
+
+            return usersConvertidos;
+        }
+
+        [HttpPost("Login")]
+        public async Task<ActionResult<string>> Login([FromBody] AuthDto data)
+        {
+            var user = await _authRepository.GetByEmail(data.Email, data.Password);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var token = await _authRepository.GenerateJwtToken(mail: user.Email, userID: user.Id);
+            return Ok(token);
         }
     }
 }

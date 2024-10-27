@@ -15,7 +15,7 @@ namespace TuringClothes.Database
         {
             string basedir = AppDomain.CurrentDomain.BaseDirectory;
             optionsBuilder.UseSqlite($"Datasource={basedir}{DATABASE_PATH}");
-            optionsBuilder.LogTo(Console.WriteLine);
+            /*optionsBuilder.LogTo(Console.WriteLine);*/
         }
     }
 }
