@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthRequest } from '../../models/auth-request';
-import { AuthResponse } from '../../models/auth-response';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { AuthDto } from '../../models/auth-dto';
 
 @Component({
   selector: 'app-login',
@@ -15,20 +14,24 @@ import { AuthService } from '../../services/auth.service';
 
 
 export class LoginComponent {
-email: string = "Correo electrónico";
-password: string = "123456";
-role: string = "admin";
-jwt: string = ' ';
+  email: string = "";
+  password: string = "";
+  jwt: string = ' ';
 
 
-constructor(private AuthService: AuthService){}
+  constructor(private AuthService: AuthService) { }
 
-async submit(){
-  const authData : AuthRequest = { email: this.email, password: this.password, role: this.role};
-  const result = await this.AuthService.login(authData);
+  async submit() {
+    const authData: AuthDto = { Email: this.email, Password: this.password };
+    const result = await this.AuthService.login(authData);
 
-  if (result.success){
-    this.jwt = result.data.accessToken;
+    if (result.success) {
+      this.jwt = result.data.accessToken;
+      console.log(this.jwt)
+    }
   }
-}
+
+  private saveToken(token: string): void {
+    localStorage.setItem(this.jwt, token)
+  }
 }
