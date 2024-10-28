@@ -1,4 +1,4 @@
-export interface InicioRequest {
+export interface AuthRequest {
     email: string;
     password: string;
     role: string;

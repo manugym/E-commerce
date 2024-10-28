@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { InicioRequest } from '../../models/inicio-request.model';
-import { InicioResponse } from '../../models/inicio-response.model';
+import { InicioRequest } from '../../models/loginRequest';
+import { InicioResponse } from '../../models/auth-response';
 import { FormsModule } from '@angular/forms';
-import { InicioSesionService } from '../../services/inicio-sesion.service';
+import { InicioSesionService } from '../../services/login.service';
 
 @Component({
   selector: 'app-iniciosesion',
