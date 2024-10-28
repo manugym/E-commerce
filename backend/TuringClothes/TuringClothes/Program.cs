@@ -6,7 +6,6 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using TuringClothes.Database;
-using TuringClothes.Mapper;
 using TuringClothes.Repository;
 
 namespace TuringClothes
@@ -39,7 +38,7 @@ namespace TuringClothes
 
             builder.Services.AddAuthentication().AddJwtBearer(options =>
             {
-                string key = "bdisub678kji@miods/3bjk970kjbhvytdtjvñkpokop";
+                string key = "bdisub678kji@m32iods/3bjk970kjbhvytdtjvñkpokop";
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = false,
@@ -55,24 +54,36 @@ namespace TuringClothes
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            
+
 
             builder.Services.AddScoped<MyDatabase>();
-            builder.Services.AddScoped<AuthMapper>();
             builder.Services.AddScoped<AuthRepository>();
 
+            if (builder.Environment.IsDevelopment())
+            {
+                //Permite CORS
+                builder.Services.AddCors(options =>
+                {
+                    options.AddDefaultPolicy(builder =>
+                    {
+                        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });
+                });
+            }
             var app = builder.Build();
 
-
-
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+            if (app.Environment.IsDevelopment()) { 
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                //permite CORS
+                app.UseCors();
+                //rellena la base de datos con DataSeed
                 SeedDatabase(app.Services);
             }
-            
+
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
@@ -84,10 +95,10 @@ namespace TuringClothes
             //crea la base de datos si no está ya creada
             using (IServiceScope scope = app.Services.CreateScope())
             {
-                
+
                 MyDatabase myDatabase = scope.ServiceProvider.GetService<MyDatabase>();
                 myDatabase.Database.EnsureCreated();
-                
+
             }
 
             static void SeedDatabase(IServiceProvider serviceProvider)

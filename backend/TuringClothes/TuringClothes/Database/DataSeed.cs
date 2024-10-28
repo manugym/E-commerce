@@ -10,6 +10,13 @@
 
         public void Seed()
         {
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword("1234");
+            var hashedPassword2 = BCrypt.Net.BCrypt.HashPassword("12345");
+            var hashedPassword3 = BCrypt.Net.BCrypt.HashPassword("123456");
+            var hashedPassword4 = BCrypt.Net.BCrypt.HashPassword("1234567");
+            var hashedPassword5 = BCrypt.Net.BCrypt.HashPassword("1234321");
+            var hashedPassword6 = BCrypt.Net.BCrypt.HashPassword("12342");
+
             User[] users =
             {
                 new User
@@ -17,7 +24,7 @@
                 Name = "Juanma",
                 Surname = "López Navarro",
                 Email = "juanmita@gmail.com",
-                Password = "123456",
+                Password = hashedPassword,
                 Address = "Calle La Fuente 3",
                 Role = "admin"
             },
@@ -26,7 +33,7 @@
                 Name = "Francisco",
                 Surname = "Ruiz Sánchez",
                 Email = "franruiz@gmail.com",
-                Password = "12345678",
+                Password = hashedPassword2,
                 Address = "Calle Hermes 4",
                 Role = "Alumno"
             },
@@ -35,7 +42,7 @@
                 Name = "Daniel",
                 Surname = "Díaz Pérez",
                 Email = "danidiazperez@gmail.com",
-                Password = "1234567",
+                Password = hashedPassword3,
                 Address = "Calle Hermes 4",
                 Role = "Alumno"
             },
@@ -44,7 +51,7 @@
                 Name = "Nerea",
                 Surname = "Muñoz Pérez",
                 Email = "nereamuñoz@hotmail.com",
-                Password = "12345",
+                Password = hashedPassword4,
                 Address = "Calle Hermes 4",
                 Role = "Alumno"
             },
@@ -53,7 +60,7 @@
                 Name = "Julia",
                 Surname = "Pérez Cabrera",
                 Email = "julitaperez@gmail.com",
-                Password = "123456",
+                Password = hashedPassword5,
                 Address = "Calle Navarro Ledesma 13",
                 Role = "Alumno"
             },
@@ -62,7 +69,7 @@
                 Name = "Noe",
                 Surname = "Frances",
                 Email = "noe@gmail.com",
-                Password = "938382",
+                Password = hashedPassword6,
                 Address = "Riogordo n0 3",
                 Role = "Alumno"
             }
