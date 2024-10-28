@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TuringClothes.Database;
 using TuringClothes.Model;
+using TuringClothes.Repository;
 
 namespace TuringClothes.Controllers
 {
@@ -16,18 +17,27 @@ namespace TuringClothes.Controllers
     {
 
         private readonly TokenValidationParameters _tokenParameters;
+        private readonly AuthRepository _authRepository;
         private readonly MyDatabase _myDatabase;
 
-        public AuthController(IOptionsMonitor<JwtBearerOptions> jwtOptions)
+        public AuthController(MyDatabase myDatabase, IOptionsMonitor<JwtBearerOptions> jwtOptions, AuthRepository authRepository)
         {
+            _authRepository = authRepository;
+            _myDatabase = myDatabase;
             _tokenParameters = jwtOptions.Get(JwtBearerDefaults.AuthenticationScheme).TokenValidationParameters;
         }
 
         [HttpPost("login")]
-        public ActionResult<string> Login([FromBody] AuthDto loginData)
+        public async Task<ActionResult<string>> Login([FromBody] AuthDto loginData)
         {
+            var user = await _authRepository.GetByEmail(loginData.Email);
+
+            if (user == null)
+            {
+                return NotFound("Usuario no encontrado");
+            }
             //si el usuario existe creamos su token
-            if (loginData.Email == "juanmita@gmail.com" && loginData.Password == "123456")
+            if (loginData.Email == user.Email && loginData.Password == user.Password)
             {
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -36,7 +46,7 @@ namespace TuringClothes.Controllers
                     {
                         { "id", Guid.NewGuid().ToString() },
                         { ClaimTypes.Email, loginData.Email },
-                        { ClaimTypes.Role, loginData.Role }
+                        { ClaimTypes.Role, user.Role }
 
                     },
                     //caducidad del Token
@@ -64,47 +74,10 @@ namespace TuringClothes.Controllers
             return "Esto es un secreto que no todo el mundo debería leer";
         }
 
-        ////[Authorize]
-        //[HttpGet("GetAllUsers")]
-        //public async Task<IEnumerable<User>> GetAllUsersSinConvertir()
-        //{
-        //    IEnumerable<User> users = await _authRepository.GetAllUsersAsync();
-
-        //    return users;
-        //}
-
-        ////[Authorize]
-        //[HttpGet("GetByEmail")]
-        //public async Task<User> GetByEmail(string mail, string password)
-        //{
-        //    var user = await _authRepository.GetByEmail(mail, password);
-        //    return user;
-
-        //}
-
-        ////[Authorize]
-        //[HttpGet("ToDto")]
-        //public async Task<IEnumerable<AuthDto>> GetAllUsersConvertidos()
-        //{
-        //    IEnumerable<User> userAConvertir = await _authRepository.GetAllUsersAsync();
-
-
-
-        //    IEnumerable<AuthDto> usersConvertidos = _authMapper.ToDto(userAConvertir);
-
-        //    return usersConvertidos;
-        //}
-
-        //[HttpPost("Login")]
-        //public async Task<ActionResult<string>> Login([FromBody] AuthDto data)
-        //{
-        //    var user = await _authRepository.GetByEmail(data.Email, data.Password);
-        //    if (user == null)
-        //    {
-        //        return Unauthorized();
-        //    }
-        //    var token = await _authRepository.GenerateJwtToken(mail: user.Email, userID: user.Id);
-        //    return Ok(token);
-        //}
+        
     }
+
+
+
 }
+
