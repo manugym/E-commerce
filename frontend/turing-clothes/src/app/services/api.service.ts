@@ -17,7 +17,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  async get<T = void>(path: string, params: any = {}, responseType = null): Promise<Result<T>> {
+  async get<T = void>(path: string, params: any = {}, responseType: any = 'json'): Promise<Result<T>> {
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.get(url, {
       params: new HttpParams({ fromObject: params }),
@@ -28,6 +28,10 @@ export class ApiService {
 
     return this.sendRequest<T>(request$);
   }
+  
+  // get<T>(endpoint: string, options?: { headers?: HttpHeaders }): Observable<Result<T>> {
+  //   return this.http.get<Result<T>>(`${this.BASE_URL}${endpoint}`, options);
+  // }
 
   async post<T = void>(path: string, body: Object = {}, contentType = null): Promise<Result<T>> {
     const url = `${this.BASE_URL}Auth/login`;
