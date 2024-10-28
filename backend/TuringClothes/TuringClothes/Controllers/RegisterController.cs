@@ -22,7 +22,7 @@ namespace TuringClothes.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult> Register([FromBody] UserDto registerData)
+        public async Task<ActionResult> Register([FromBody] User registerData)
         {
             var existingUser = await _authRepository.GetByEmail(registerData.Email);
             if (existingUser != null)
