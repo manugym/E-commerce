@@ -6,7 +6,6 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using TuringClothes.Database;
-using TuringClothes.Mapper;
 using TuringClothes.Repository;
 
 namespace TuringClothes
@@ -39,7 +38,7 @@ namespace TuringClothes
 
             builder.Services.AddAuthentication().AddJwtBearer(options =>
             {
-                string key = "bdisub678kji@miods/3bjk970kjbhvytdtjvñkpokop";
+                string key = "bdisub678kji@m32iods/3bjk970kjbhvytdtjvñkpokop";
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = false,
@@ -58,14 +57,9 @@ namespace TuringClothes
 
 
             builder.Services.AddScoped<MyDatabase>();
-            builder.Services.AddScoped<AuthMapper>();
             builder.Services.AddScoped<AuthRepository>();
 
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (builder.Environment.IsDevelopment())
             {
                 //Permite CORS
                 builder.Services.AddCors(options =>
@@ -77,6 +71,11 @@ namespace TuringClothes
                         .AllowAnyMethod();
                     });
                 });
+            }
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment()) { 
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 //permite CORS
