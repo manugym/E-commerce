@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { CatalogoComponent } from './components/catalogo/catalogo.component';
 import { RegistroComponent } from './components/registro/registro.component';
-import { IniciosesionComponent } from './components/iniciosesion/iniciosesion.component';
+import { InicioSesionComponent } from './components/iniciosesion/iniciosesion.component';
 import { FooterComponent } from './components/footer/footer.component';
 
 export const routes: Routes = [
@@ -10,6 +10,6 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'catalog', component: CatalogoComponent },
   { path: 'register', component: RegistroComponent },
-  { path: 'login', component: IniciosesionComponent },
+  { path: 'login', component: InicioSesionComponent },
   { path: 'footer', component: FooterComponent}
 ];
