@@ -55,24 +55,36 @@ namespace TuringClothes
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            
+
 
             builder.Services.AddScoped<MyDatabase>();
             builder.Services.AddScoped<AuthMapper>();
             builder.Services.AddScoped<AuthRepository>();
 
+
             var app = builder.Build();
-
-
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                //Permite CORS
+                builder.Services.AddCors(options =>
+                {
+                    options.AddDefaultPolicy(builder =>
+                    {
+                        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });
+                });
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                //permite CORS
+                app.UseCors();
+                //rellena la base de datos con DataSeed
                 SeedDatabase(app.Services);
             }
-            
+
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
@@ -84,10 +96,10 @@ namespace TuringClothes
             //crea la base de datos si no está ya creada
             using (IServiceScope scope = app.Services.CreateScope())
             {
-                
+
                 MyDatabase myDatabase = scope.ServiceProvider.GetService<MyDatabase>();
                 myDatabase.Database.EnsureCreated();
-                
+
             }
 
             static void SeedDatabase(IServiceProvider serviceProvider)
