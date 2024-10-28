@@ -21,6 +21,7 @@ namespace TuringClothes.Repository
             _mydatabase = myDatabase;
         }
 
+        
         public async Task<User?> GetByEmail(string mail)
         {
            return await GetQueryable().FirstOrDefaultAsync(email => email.Email == mail);
