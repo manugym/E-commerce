@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { AuthDto } from '../../models/auth-dto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,18 +17,26 @@ import { AuthDto } from '../../models/auth-dto';
 export class LoginComponent {
   email: string = "";
   password: string = "";
-  jwt: string = ' ';
+  jwt: string = '';
+  remember: boolean = false;
+  
 
 
-  constructor(private AuthService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
+
 
   async submit() {
     const authData: AuthDto = { Email: this.email, Password: this.password };
-    const result = await this.AuthService.login(authData);
+    const result = await this.authService.login(authData, this.remember);
 
     if (result.success) {
       this.jwt = result.data.accessToken;
-      console.log(this.jwt)
+      this.router.navigate(['/home'])
     }
   }
+
+  logout() {
+    this.authService.logout()
+  }
+
 }
