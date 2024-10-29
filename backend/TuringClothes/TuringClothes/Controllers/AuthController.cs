@@ -28,7 +28,7 @@ namespace TuringClothes.Controllers
             _tokenParameters = jwtOptions.Get(JwtBearerDefaults.AuthenticationScheme).TokenValidationParameters;
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<ActionResult<string>> Login([FromBody] LoginDto loginData)
         {
             var user = await _authRepository.GetByEmail(loginData.Email);
@@ -66,7 +66,8 @@ namespace TuringClothes.Controllers
                 Surname = registerData.Surname,
                 Email = registerData.Email,
                 Password = hashedPassword,
-                Address = registerData.Address
+                Address = registerData.Address,
+                Role = "user"
             };
             await _myDatabase.Users.AddAsync(newUser);
             await _myDatabase.SaveChangesAsync();
@@ -78,9 +79,10 @@ namespace TuringClothes.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public string GetSecret()
+        public IActionResult GetSecret()
         {
-            return "Esto es un secreto que no todo el mundo debería leer";
+            // Envuelve el string en un objeto JSON
+            return Ok(new { message = "Esto es un secreto que nadie puede saber..." });
         }
 
         [HttpGet("user by email")]
