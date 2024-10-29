@@ -30,7 +30,7 @@ export class ApiService {
   }
 
   async post<T = void>(path: string, body: Object = {}, contentType = null): Promise<Result<T>> {
-    const url = `${this.BASE_URL}${path}`;
+    const url = `${this.BASE_URL}Auth/login`;
     const request$ = this.http.post(url, body, {
       headers: this.getHeader(contentType),
       observe: 'response'

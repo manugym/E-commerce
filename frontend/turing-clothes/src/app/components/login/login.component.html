@@ -4,11 +4,11 @@
       <form (submit)="submit()">
       <div class="mb-3">
         <label for="email" class="form-label">Correo Electrónico</label>
-        <input type="email" value="{{email}}" class="form-control" id="email" placeholder="Correo electrónico">
+        <input type="email" [(ngModel)]="email" [ngModelOptions]="{standalone: true}" class="form-control" id="email" placeholder="Correo electrónico">
       </div>
       <div class="mb-3">
         <label for="password" class="form-label">Contraseña</label>
-        <input type="password" value="{{password}}" class="form-control" id="password" placeholder="Contraseña">
+        <input type="password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}" class="form-control" id="password" placeholder="Contraseña">
       </div>
       <button type="submit" class="btn btn-primary w-100">Ingresar</button>
     </form>
