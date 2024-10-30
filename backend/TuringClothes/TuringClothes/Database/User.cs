@@ -8,9 +8,6 @@ namespace TuringClothes.Database
     [Index(nameof(Email), IsUnique = true)]
     public class User
     {
-        /*[Required]
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]*/
         public long Id { get; set; }
  
         public string Name { get; set; }
