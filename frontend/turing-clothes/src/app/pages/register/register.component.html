@@ -1,0 +1,34 @@
+<div class="container-fluid login-container d-flex justify-content-center align-items-center" style="height: 100vh;">
+  <div class="login-form shadow p-4 bg-white rounded" style="min-width: 100px; width: 400px; max-width: 85%;">
+
+    <h3 class="text-center mb-4">Registro de Usuario</h3>
+    <form (submit)="submit()">
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Nombre</label>
+        <input type="user" [(ngModel)]="Name" [ngModelOptions]="{standalone: true}" class="form-control" id="nombre">
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Apellido</label>
+        <input type="userLastName" [(ngModel)]="Surname" [ngModelOptions]="{standalone: true}" class="form-control" id="apellido">
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Correo Electrónico</label>
+        <input type="email" [(ngModel)]="Email" [ngModelOptions]="{standalone: true}" class="form-control" id="correoId">
+      </div>
+
+      <div class=" mb-3">
+        <label for="inputPassword5" class="form-label">Contraseña</label>
+        <input type="password" [(ngModel)]="Password" [ngModelOptions]="{standalone: true}" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
+      </div>
+
+      <div class=" mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Dirección</label>
+        <input class="form-control" [(ngModel)]="Address" [ngModelOptions]="{standalone: true}" type="adress">
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+    </form>
+  </div>
+</div>
