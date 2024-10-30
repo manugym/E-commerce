@@ -14,7 +14,7 @@ namespace TuringClothes.Controllers
             _myDatabase = myDatabase;
         }
 
-        [HttpGet ("obtener productos")]
+        [HttpGet ("ObtenerProductos")]
         public IEnumerable<Product> GetProducts()
         {
             return _myDatabase.Products;
