@@ -6,12 +6,13 @@ import { AuthDto } from '../models/auth-dto';
 import { RegisterDto } from '../models/register-dto';
 import { routes } from '../app.routes';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router) { }
 
   async login(
     authData: AuthDto,
@@ -27,7 +28,9 @@ export class AuthService {
         sessionStorage.setItem('token', this.api.jwt);
       }
     }
+    const decoded = jwtDecode(this.api.jwt);
 
+    console.log(decoded);
     return result;
   }
 
