@@ -30,8 +30,4 @@ export class LoginComponent {
       console.log(this.jwt)
     }
   }
-
-  private saveToken(token: string): void {
-    localStorage.setItem(this.jwt, token)
-  }
 }

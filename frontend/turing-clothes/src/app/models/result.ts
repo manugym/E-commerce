@@ -1,4 +1,7 @@
 export class Result<T = void> {
+    message(arg0: string, message: any) {
+      throw new Error('Method not implemented.');
+    }
     success: boolean;
     statusCode: number;
     error: string;

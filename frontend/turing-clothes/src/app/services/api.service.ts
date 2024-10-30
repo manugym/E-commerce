@@ -30,7 +30,7 @@ export class ApiService {
   }
 
   async post<T = void>(path: string, body: Object = {}, contentType = null): Promise<Result<T>> {
-    const url = `${this.BASE_URL}Auth/login`;
+    const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.post(url, body, {
       headers: this.getHeader(contentType),
       observe: 'response'
@@ -61,39 +61,30 @@ export class ApiService {
   }
 
   private async sendRequest<T = void>(request$: Observable<HttpResponse<any>>): Promise<Result<T>> {
-    let result: Result<T>;
-
     try {
       const response = await lastValueFrom(request$);
       const statusCode = response.status;
-
+  
       if (response.ok) {
         const data = response.body as T;
-
-        if (data == undefined) {
-          result = Result.success(statusCode);
-        } else {
-          result = Result.success(statusCode, data);
-        }
+        return data === undefined ? Result.success(statusCode) : Result.success(statusCode, data);
       } else {
-        result = result = Result.error(statusCode, response.statusText);
+        return Result.error(statusCode, response.statusText || 'Unexpected error');
       }
     } catch (exception) {
       if (exception instanceof HttpErrorResponse) {
-        result = Result.error(exception.status, exception.statusText);
+        return Result.error(exception.status, exception.message || exception.statusText);
       } else {
-        result = Result.error(-1, exception.message);
+        return Result.error(-1, exception.message || 'Unknown error');
       }
     }
-
-    return result;
   }
 
   private getHeader(accept = null, contentType = null): HttpHeaders {
     let header: any = {};
-
+    const token = this.jwt || localStorage.getItem("token")
     // Para cuando haya que poner un JWT
-    header['Authorization'] = `Bearer ${this.jwt}`;
+    header['Authorization'] = `Bearer ${token}`;
 
     if (accept)
       header['Accept'] = accept;
