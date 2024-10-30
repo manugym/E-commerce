@@ -59,6 +59,7 @@ namespace TuringClothes
             builder.Services.AddScoped<MyDatabase>();
             builder.Services.AddScoped<AuthRepository>();
 
+
             if (builder.Environment.IsDevelopment())
             {
                 //Permite CORS
@@ -73,6 +74,8 @@ namespace TuringClothes
                 });
             }
             var app = builder.Build();
+
+            app.UseStaticFiles();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment()) { 
