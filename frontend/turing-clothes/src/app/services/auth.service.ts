@@ -4,14 +4,14 @@ import { Result } from '../models/result';
 import { AuthResponse } from '../models/auth-response';
 import { AuthDto } from '../models/auth-dto';
 import { RegisterDto } from '../models/register-dto';
-import { LoginComponent } from '../pages/login/login.component';
+import { routes } from '../app.routes';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  logueado: boolean = false;
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private router: Router) {}
 
   async login(
     authData: AuthDto,
@@ -20,14 +20,11 @@ export class AuthService {
     const result = await this.api.post<AuthResponse>('Auth/Login', authData);
     if (result.success) {
       this.api.jwt = result.data.accessToken;
-      console.log(this.api.jwt);
 
       if (remember) {
         localStorage.setItem('token', this.api.jwt);
       } else {
-        /**
-         * AQUÍ HE PENSADO EN GUARDARLO EN SESSION STORAGE
-         */
+        sessionStorage.setItem('token', this.api.jwt);
       }
     }
 
@@ -39,25 +36,32 @@ export class AuthService {
     if (result.success) {
       this.api.jwt = result.data.accessToken;
 
-      localStorage.setItem('token', this.api.jwt);
+      sessionStorage.setItem('token', this.api.jwt);
+
+      alert('Usuario registrado correctamente.');
+
+      this.router.navigate(['/home']);
+    } else {
+      alert('Ha habido un problema al registrar el usuario.');
     }
 
     return result;
   }
 
   isLoggedIn(): boolean {
-    if (this.api.jwt !== '' || localStorage.getItem('token') !== null) {
-      console.log('true');
+    if (
+      sessionStorage.getItem('token') !== null ||
+      localStorage.getItem('token') !== null
+    ) {
       return true;
     }
-    console.log('false');
     return false;
   }
 
   logout() {
     this.api.jwt = '';
-    console.log(`Jwt: ${this.api.jwt}`);
     localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
   }
 
   async getSecretMessage(): Promise<Result<string>> {

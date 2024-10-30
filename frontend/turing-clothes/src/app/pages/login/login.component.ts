@@ -9,21 +9,15 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
-
-
-
 export class LoginComponent {
-  email: string = "";
-  password: string = "";
+  email: string = '';
+  password: string = '';
   jwt: string = '';
   remember: boolean = false;
-  
 
-
-  constructor(private authService: AuthService, private router: Router) { }
-
+  constructor(private authService: AuthService, private router: Router) {}
 
   async submit() {
     const authData: AuthDto = { Email: this.email, Password: this.password };
@@ -31,12 +25,11 @@ export class LoginComponent {
 
     if (result.success) {
       this.jwt = result.data.accessToken;
-      this.router.navigate(['/home'])
+      this.router.navigate(['/home']);
     }
   }
 
   logout() {
-    this.authService.logout()
+    this.authService.logout();
   }
-
 }
