@@ -74,7 +74,36 @@
                 Role = "Alumno"
             }
             };
+
+            Product[] products ={
+                new Product
+                {
+                    Name = "Camiseta",
+                    Description = "Una bonita camiseta blanca",
+                    Price = 20,
+                    Stock = 100,
+                    Image = "C:/ruta"
+                },
+                new Product
+                {
+                    Name = "Vestido",
+                    Description = "Un vestido largo Turing",
+                    Price = 30,
+                    Stock = 200,
+                    Image = "C:/ruta"
+                },
+                new Product
+                {
+                    Name = "Sudadera",
+                    Description = "Lo mejor contra el frio",
+                    Price = 40,
+                    Stock = 50,
+                    Image = "C:/ruta"
+                }
+
+            };
             _context.Users.AddRange(users);
+            _context.Products.AddRange(products);
             _context.SaveChanges();
             Console.WriteLine("datos insertados en la db");
         }
