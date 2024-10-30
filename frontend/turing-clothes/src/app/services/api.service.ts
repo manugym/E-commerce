@@ -1,23 +1,29 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { Observable, lastValueFrom } from 'rxjs';
 import { Result } from '../models/result';
 
-
-
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
-
   private BASE_URL = environment.apiUrl;
   jwt: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  async get<T = void>(path: string, params: any = {}, responseType = null): Promise<Result<T>> {
+  async get<T = void>(
+    path: string,
+    params: any = {},
+    responseType = null
+  ): Promise<Result<T>> {
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.get(url, {
       params: new HttpParams({ fromObject: params }),
@@ -29,21 +35,29 @@ export class ApiService {
     return this.sendRequest<T>(request$);
   }
 
-  async post<T = void>(path: string, body: Object = {}, contentType = null): Promise<Result<T>> {
+  async post<T = void>(
+    path: string,
+    body: Object = {},
+    contentType = null
+  ): Promise<Result<T>> {
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.post(url, body, {
       headers: this.getHeader(contentType),
-      observe: 'response'
+      observe: 'response',
     });
 
     return this.sendRequest<T>(request$);
   }
 
-  async put<T = void>(path: string, body: Object = {}, contentType = null): Promise<Result<T>> {
+  async put<T = void>(
+    path: string,
+    body: Object = {},
+    contentType = null
+  ): Promise<Result<T>> {
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.put(url, body, {
       headers: this.getHeader(contentType),
-      observe: 'response'
+      observe: 'response',
     });
 
     return this.sendRequest<T>(request$);
@@ -54,26 +68,36 @@ export class ApiService {
     const request$ = this.http.delete(url, {
       params: new HttpParams({ fromObject: params }),
       headers: this.getHeader(),
-      observe: 'response'
+      observe: 'response',
     });
 
     return this.sendRequest<T>(request$);
   }
 
-  private async sendRequest<T = void>(request$: Observable<HttpResponse<any>>): Promise<Result<T>> {
+  private async sendRequest<T = void>(
+    request$: Observable<HttpResponse<any>>
+  ): Promise<Result<T>> {
     try {
       const response = await lastValueFrom(request$);
       const statusCode = response.status;
-  
+
       if (response.ok) {
         const data = response.body as T;
-        return data === undefined ? Result.success(statusCode) : Result.success(statusCode, data);
+        return data === undefined
+          ? Result.success(statusCode)
+          : Result.success(statusCode, data);
       } else {
-        return Result.error(statusCode, response.statusText || 'Unexpected error');
+        return Result.error(
+          statusCode,
+          response.statusText || 'Unexpected error'
+        );
       }
     } catch (exception) {
       if (exception instanceof HttpErrorResponse) {
-        return Result.error(exception.status, exception.message || exception.statusText);
+        return Result.error(
+          exception.status,
+          exception.message || exception.statusText
+        );
       } else {
         return Result.error(-1, exception.message || 'Unknown error');
       }
@@ -82,17 +106,14 @@ export class ApiService {
 
   private getHeader(accept = null, contentType = null): HttpHeaders {
     let header: any = {};
-    const token = this.jwt || localStorage.getItem("token")
+    const token = this.jwt || localStorage.getItem('token');
     // Para cuando haya que poner un JWT
     header['Authorization'] = `Bearer ${token}`;
 
-    if (accept)
-      header['Accept'] = accept;
+    if (accept) header['Accept'] = accept;
 
-    if (contentType)
-      header['Content-Type'] = contentType;
+    if (contentType) header['Content-Type'] = contentType;
 
     return new HttpHeaders(header);
   }
-
 }
