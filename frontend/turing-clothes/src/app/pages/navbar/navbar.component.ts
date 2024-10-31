@@ -15,11 +15,11 @@ export class NavbarComponent {
   }
 
   isLoguedIn(): boolean {
-    return this.authService.isLoggedIn();
+    return this.authService.isLoggedIn;
   }
 
   getLogedUsername(){
-    return this.authService.decodedJson.unique_name
+    return this.authService.decodedToken.unique_name
   }
 
   logout() {
