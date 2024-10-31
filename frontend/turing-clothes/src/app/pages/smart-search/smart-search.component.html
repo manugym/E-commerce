@@ -1,8 +1,8 @@
 <section class="container mt-4">
   <form (ngSubmit)="search()" class="mb-4">
-    <div class="input-group">
+    <div class="input-group w-50 mx-auto">
     <input type="text" class="form-control"  placeholder="Busca productos..." [(ngModel)]="query" [ngModelOptions]="{standalone: true}" />
-    <button class="btn btn-primary" type="submit">Buscar</button>
+    <button class="btn btn-primary bi bi-search" type="submit"></button>
     </div>
   </form>
 
