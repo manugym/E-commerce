@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { RegisterDto } from '../../models/register-dto';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,7 @@ export class RegisterComponent {
 
   myForm: FormGroup;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder) {
+  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) {
 
     this.myForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -42,21 +43,24 @@ export class RegisterComponent {
 
   async submit() {
     const authData: RegisterDto = {
-      name: this.myForm.get('name').toString(),
-      surname: this.myForm.get('surname').toString(),
-      email: this.myForm.get('email').toString(),
-      password: this.myForm.get('password').toString(),
-      address: this.myForm.get('address').toString(),
+      name: this.myForm.get('name').value,
+      surname: this.myForm.get('surname').value,
+      email: this.myForm.get('email').value,
+      password: this.myForm.get('password').value,
+      address: this.myForm.get('address').value,
     };
     
     if (this.myForm.valid) {
-      alert('Usuario registrado correctamente')
       const result = await this.authService.register(authData);
+      if (result.success) {
+        alert('Usuario registrado correctamente.');
+        
+        this.router.navigate(['/home'])
+      }
     } else {
       // El formulario no es válido
       alert('Formulario no válido');
     }
       
-    
   }
 }
