@@ -2,7 +2,7 @@
 <section>
   <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%;">
     <div class="container flex-wrap flex-lg-nowrap" style="width: 100%;">
-      <a class="navbar-brand" href="home">Turing Clothes</a>
+      <a class="navbar-brand" [routerLink]="'home'" routerLinkActive="router-link-active">Turing Clothes</a>
 
       <!-- Botón para dispositivos móviles -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -14,16 +14,16 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="home">Inicio</a>
+            <a class="nav-link active" aria-current="page" [routerLink]="'home'">Inicio</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="catalog">Catálogo</a>
+            <a class="nav-link active" aria-current="page" [routerLink]="'catalog'">Catálogo</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="test-page">Testing</a>
+            <a class="nav-link" [routerLink]="'test-page'">Testing</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#!">Sobre nosotros</a>
+            <a class="nav-link" [routerLink]="'aboutus'">Sobre nosotros</a>
           </li>
         </ul>
 
@@ -35,7 +35,7 @@
             <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
           </button>
           <div class="pt-2">
-            <p>Bienvenido, username.</p>
+            <p>Bienvenido, {{getLogedUsername()}}.</p>
           </div>
           <div>
             <button class="btn btn-outline-dark me-2 ms-2" (click)="logout()">Cerrar sesión</button>
@@ -48,7 +48,7 @@
 } @else {
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%;">
   <div class="container flex-wrap flex-lg-nowrap" style="width: 100%;">
-    <a class="navbar-brand" href="home">Turing Clothes</a>
+    <a class="navbar-brand" [routerLink]="'home'">Turing Clothes</a>
 
     <!-- Botón para dispositivos móviles -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -60,13 +60,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="home">Inicio</a>
+          <a class="nav-link active" aria-current="page" [routerLink]="'home'">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="catalog">Catálogo</a>
+          <a class="nav-link active" aria-current="page" [routerLink]="'catalog'">Catálogo</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#!">Sobre nosotros</a>
+          <a class="nav-link" [routerLink]="'aboutus'">Sobre nosotros</a>
         </li>
       </ul>
 
@@ -79,7 +79,7 @@
         </button>
 
         <!-- Botón de login -->
-        <a class="btn btn-outline-dark bg-primary" href="login">
+        <a class="btn btn-outline-dark bg-primary" [routerLink]="'login'">
           <span class="badge text-white ms-1 rounded-pill">Iniciar sesión</span>
         </a>
       </div>

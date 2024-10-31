@@ -7,11 +7,14 @@ import { RegisterDto } from '../models/register-dto';
 import { routes } from '../app.routes';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { NavbarComponent } from '../pages/navbar/navbar.component';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  decodedJson: any = null;
   constructor(private api: ApiService, private router: Router) { }
 
   async login(
@@ -21,16 +24,16 @@ export class AuthService {
     const result = await this.api.post<AuthResponse>('Auth/Login', authData);
     if (result.success) {
       this.api.jwt = result.data.accessToken;
+      this.decodedJson = jwtDecode(this.api.jwt);
 
       if (remember) {
         localStorage.setItem('token', this.api.jwt);
-      } else {
-        sessionStorage.setItem('token', this.api.jwt);
       }
+    } else {
+      alert("El usuario o la contraseña son incorrectos.")
     }
-    const decoded = jwtDecode(this.api.jwt);
+    
 
-    console.log(decoded);
     return result;
   }
 
@@ -38,34 +41,25 @@ export class AuthService {
     const result = await this.api.post<AuthResponse>('Auth/Register', authData);
     if (result.success) {
       this.api.jwt = result.data.accessToken;
-
-      sessionStorage.setItem('token', this.api.jwt);
-
-      alert('Usuario registrado correctamente.');
-
-      this.router.navigate(['/home']);
-    } else {
-      alert('Ha habido un problema al registrar el usuario.');
+      this.decodedJson = jwtDecode(this.api.jwt);
+            
+      return result;
+      //this.router.navigate(['/home']);
     }
 
+    alert('Ha habido un problema al registrar el usuario.');
     return result;
   }
 
   isLoggedIn(): boolean {
-    if (
-      sessionStorage.getItem('token') !== null ||
-      localStorage.getItem('token') !== null
-    ) {
-      return true;
-    }
-    return false;
+    return this.decodedJson != null;
   }
 
   logout() {
     this.api.jwt = '';
-    localStorage.removeItem('token');
-    sessionStorage.removeItem('token');
+    this.decodedJson = null;
   }
+
 
   async getSecretMessage(): Promise<Result<string>> {
     const result = await this.api.get<string>('Auth');
