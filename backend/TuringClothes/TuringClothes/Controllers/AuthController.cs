@@ -100,6 +100,7 @@ namespace TuringClothes.Controllers
                 Claims = new Dictionary<string, object>
                     {
                         { "id", user.Id },
+                        { ClaimTypes.Name, user.Name},
                         { ClaimTypes.Email, user.Email },
                         { ClaimTypes.Role, user.Role }
 
