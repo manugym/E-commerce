@@ -1,6 +1,0 @@
-@TuringClothes_HostAddress = http://localhost:5078
-
-GET {{TuringClothes_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
