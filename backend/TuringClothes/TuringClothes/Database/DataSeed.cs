@@ -78,28 +78,93 @@
             Product[] products ={
                 new Product
                 {
+                    Name = "Sudadera blanca cuello redondo",
+                    Description = "Lo mejor contra el frio",
+                    Price = 30,
+                    Stock = 50,
+                    Image = "images/Sudadera-cuello-redondo-clásica.png"
+                },
+                new Product
+                {
                     Name = "Camiseta",
                     Description = "Una bonita camiseta blanca",
                     Price = 20,
                     Stock = 100,
-                    Image = "C:/ruta"
+                    Image = "images/camisetaBlanca.png"
                 },
                 new Product
                 {
-                    Name = "Vestido",
+                    Name = "Vestido largo",
                     Description = "Un vestido largo Turing",
-                    Price = 30,
+                    Price = 26,
                     Stock = 200,
-                    Image = "C:/ruta"
+                    Image = "images/Vestido-Largo.jpg"
                 },
                 new Product
                 {
-                    Name = "Sudadera",
+                    Name = "Cazadora marrón efecto ante",
                     Description = "Lo mejor contra el frio",
                     Price = 40,
                     Stock = 50,
-                    Image = "C:/ruta"
-                }
+                    Image = "images/cazadoraAnte.png"
+                },
+                new Product
+                {
+                    Name = "Polo gris hombre",
+                    Description = "Lo mejor contra el frio",
+                    Price = 20,
+                    Stock = 50,
+                    Image = "images/Polo-hombre.png"
+                },
+                new Product
+                {
+                    Name = "Camiseta negra con cuello redondo",
+                    Description = "Lo mejor contra el frio",
+                    Price = 20,
+                    Stock = 50,
+                    Image = "images/Camiseta-cuello-redondo-black.png"
+                },
+                new Product
+                {
+                    Name = "Chaqueta de traje",
+                    Description = "Lo mejor contra el frio",
+                    Price = 35,
+                    Stock = 30,
+                    Image = "images/chaqueta-traje.png"
+                },
+                new Product
+                {
+                    Name = "Traje beige",
+                    Description = "Lo mejor contra el frio",
+                    Price = 80,
+                    Stock = 30,
+                    Image = "images/Traje-beige.jpg"
+                },
+                new Product
+                {
+                    Name = "Cazadora negra mujer",
+                    Description = "Lo mejor contra el frio",
+                    Price = 30,
+                    Stock = 50,
+                    Image = "images/cazadora-negra-mujer.png"
+                },
+                new Product
+                {
+                    Name = "Blazer efecto piel",
+                    Description = "Lo mejor contra el frio",
+                    Price = 35,
+                    Stock = 50,
+                    Image = "images/blazer-efecto-piel.png"
+                },
+                new Product
+                {
+                    Name = "Calcetines",
+                    Description = "Lo mejor contra el frio",
+                    Price = 6,
+                    Stock = 40,
+                    Image = "images/calcetines.png"
+                },
+
 
             };
             _context.Users.AddRange(users);
