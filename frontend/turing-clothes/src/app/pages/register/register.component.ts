@@ -28,6 +28,8 @@ export class RegisterComponent {
   ) {
     this.myForm = this.createForm();
   }
+  
+  registerHints: Boolean = false;
 
   private createForm(): FormGroup {
     return this.formBuilder.group(
@@ -71,6 +73,7 @@ export class RegisterComponent {
       }
     } else {
       // El formulario no es válido
+      this.registerHints = true;
       alert('Formulario no válido');
     }
   }
