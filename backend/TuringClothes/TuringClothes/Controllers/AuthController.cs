@@ -85,6 +85,14 @@ namespace TuringClothes.Controllers
             return Ok(new { message = "Esto es un secreto que nadie puede saber..." });
         }
 
+        [HttpGet("users")]
+        public IActionResult Users()
+        {
+            // Envuelve el string en un objeto JSON
+            return Ok(new { message = "Esto es un secreto que nadie puede saber..." });
+        }
+
+
         [HttpGet("user by email")]
         public async Task<User?> GetUserByEmail(string mail)
         {
@@ -100,6 +108,7 @@ namespace TuringClothes.Controllers
                 Claims = new Dictionary<string, object>
                     {
                         { "id", user.Id },
+                        { ClaimTypes.Name, user.Name},
                         { ClaimTypes.Email, user.Email },
                         { ClaimTypes.Role, user.Role }
 

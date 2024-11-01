@@ -2,46 +2,38 @@
 using System.Globalization;
 using System.Text;
 using F23.StringSimilarity;
+using TuringClothes.Database;
 
 namespace TuringClothes.Services
 {
     public class SmartSearchService
     {
         private const double THRESHOLD = 0.75;
-        private static readonly string[] ITEMS = [
-            "Blusa",
-            "Camisa",
-            "Camiseta",
-            "Calcetines",
-            "Pantalón",
-            "Polo",
-            "Sudadera",
-            "Vaquero",
-            "Vestido"
-            ];
         private readonly INormalizedStringSimilarity _stringSimilarityComparer;
-        public SmartSearchService()
+        private readonly MyDatabase _myDatabase;
+        public SmartSearchService(MyDatabase myDatabase)
         {
             _stringSimilarityComparer = new JaroWinkler();
+            _myDatabase = myDatabase;
         }
 
-        public IEnumerable<string> Search(string query)
+        public IEnumerable<Product> Search(string query)
         {
-            IEnumerable<string> result;
+            IEnumerable<Product> result;
             if (string.IsNullOrWhiteSpace(query))
             {
-                result = ITEMS;
+                result = _myDatabase.Products.ToList();
             }
             else
             {
                 string[] queryKeys = GetKeys(ClearText(query));
-                List<string> matches = new List<string>();
-                foreach (string item in ITEMS)
+                List<Product> matches = new List<Product>();
+                foreach (Product product in _myDatabase.Products)
                 {
-                    string[] itemKeys = GetKeys(ClearText(item));
+                    string[] itemKeys = GetKeys(ClearText(product.Name));
                     if (IsMatch(queryKeys, itemKeys))
                     {
-                        matches.Add(item);
+                        matches.Add(product);
                     }
                 }
                 result = matches;
