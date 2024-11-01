@@ -10,10 +10,10 @@
 
       <div *ngIf="myForm.get('name').invalid" class="error">
         <div *ngIf="myForm.get('name').hasError('required')">
-          Nombre es obligatorio.
+          El nombre es obligatorio.
         </div>
       </div>
-  
+
 
       <div class="mb-3">
         <label for="exampleFormControlInput1" class="form-label">Apellido</label>
@@ -22,7 +22,7 @@
 
       <div *ngIf="myForm.get('surname').invalid" class="error">
         <div *ngIf="myForm.get('surname').hasError('required')">
-          El apellido es obligatorio.
+          Debe introducir un apellido como mínimo.
         </div>
       </div>
 
@@ -33,21 +33,22 @@
 
       <div *ngIf="myForm.get('email').invalid" class="error">
         <div *ngIf="myForm.get('email').hasError('required')">
-          Correo electrónico es obligatorio.
+          El correo electrónico es obligatorio.
         </div>
         <div *ngIf="myForm.get('email').hasError('email')">
-          Tiene que ser un email.
+          Tiene que ser un email válido.
         </div>
       </div>
 
       <div class=" mb-3">
-        <label for="inputPassword5" class="form-label">Contraseña</label>
-        <input type="password" formControlName="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
+        <label for="inputPassword" class="form-label">Contraseña</label>
+        <input type="password" formControlName="password" id="inputPassword5" class="form-control"
+          aria-describedby="passwordHelpBlock">
       </div>
-      
+
       <div *ngIf="myForm.get('password').invalid" class="error">
         <div *ngIf="myForm.get('password').hasError('required')">
-          Contraseña es obligatorio.
+          La contraseña es obligatoria.
         </div>
         <div *ngIf="myForm.get('password').hasError('minlength')">
           La contraseña debe tener mínimo 6 caracteres.
@@ -55,8 +56,9 @@
       </div>
 
       <div class=" mb-3">
-        <label for="inputPassword5" class="form-label">Confirmar contraseña</label>
-        <input type="password" formControlName="confirmPassword" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
+        <label for="inputPassword" class="form-label">Confirmar contraseña</label>
+        <input type="password" formControlName="confirmPassword" id="inputPasswordConfirm" class="form-control"
+          aria-describedby="passwordHelpBlock">
       </div>
 
       <div *ngIf="myForm.get('confirmPassword').invalid" class="error">
@@ -76,7 +78,7 @@
         </div>
       </div>
 
-      <input type="submit" class="btn btn-primary w-100" value="ingresar"/>
+      <input type="submit" class="btn btn-primary w-100" value="Registrarse" />
     </form>
   </div>
 </div>
