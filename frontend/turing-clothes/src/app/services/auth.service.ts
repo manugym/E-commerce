@@ -4,7 +4,6 @@ import { Result } from '../models/result';
 import { AuthResponse } from '../models/auth-response';
 import { AuthDto } from '../models/auth-dto';
 import { RegisterDto } from '../models/register-dto';
-import { routes } from '../app.routes';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
@@ -12,64 +11,69 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private api: ApiService, private router: Router) { }
+  private readonly TOKEN_KEY = 'token';
+  decodedToken: any = null;
+  
+  constructor(private api: ApiService, private router: Router) {}
 
-  async login(
-    authData: AuthDto,
-    remember: boolean
-  ): Promise<Result<AuthResponse>> {
+  async login(authData: AuthDto, remember: boolean): Promise<Result<AuthResponse>> {
     const result = await this.api.post<AuthResponse>('Auth/Login', authData);
+    
     if (result.success) {
-      this.api.jwt = result.data.accessToken;
-
-      if (remember) {
-        localStorage.setItem('token', this.api.jwt);
-      } else {
-        sessionStorage.setItem('token', this.api.jwt);
-      }
+      this.setSession(result.data.accessToken, remember);
+    } else {
+      this.handleError("El usuario o la contraseña son incorrectos.");
     }
-    const decoded = jwtDecode(this.api.jwt);
 
-    console.log(decoded);
     return result;
   }
 
   async register(authData: RegisterDto): Promise<Result<AuthResponse>> {
     const result = await this.api.post<AuthResponse>('Auth/Register', authData);
+    
     if (result.success) {
-      this.api.jwt = result.data.accessToken;
-
-      sessionStorage.setItem('token', this.api.jwt);
-
-      alert('Usuario registrado correctamente.');
-
-      this.router.navigate(['/home']);
+      this.setSession(result.data.accessToken, true);
     } else {
-      alert('Ha habido un problema al registrar el usuario.');
+      this.handleError("Ha habido un problema al registrar el usuario.");
     }
 
     return result;
   }
 
-  isLoggedIn(): boolean {
-    if (
-      sessionStorage.getItem('token') !== null ||
-      localStorage.getItem('token') !== null
-    ) {
-      return true;
+  private setSession(token: string, remember: boolean): void {
+    this.api.jwt = token;
+    this.decodedToken = this.decodeJwt(token);
+    
+    if (remember) {
+      localStorage.setItem(this.TOKEN_KEY, token);
     }
-    return false;
   }
 
-  logout() {
+  private decodeJwt(token: string): any {
+    try {
+      return jwtDecode(token);
+    } catch (error) {
+      console.error("Error decodificando el token JWT:", error);
+      return null;
+    }
+  }
+
+  private handleError(message: string): void {
+    alert(message);
+  }
+
+  get isLoggedIn(): boolean {
+    return this.decodedToken;
+  }
+
+  logout(): void {
     this.api.jwt = '';
-    localStorage.removeItem('token');
-    sessionStorage.removeItem('token');
+    this.decodedToken = null;
+    localStorage.removeItem(this.TOKEN_KEY);
+    this.router.navigate(['/login']);
   }
 
   async getSecretMessage(): Promise<Result<string>> {
-    const result = await this.api.get<string>('Auth');
-
-    return result;
+    return await this.api.get<string>('Auth');
   }
 }
