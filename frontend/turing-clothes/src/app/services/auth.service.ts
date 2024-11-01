@@ -13,16 +13,19 @@ import { jwtDecode } from 'jwt-decode';
 export class AuthService {
   private readonly TOKEN_KEY = 'token';
   decodedToken: any = null;
-  
+
   constructor(private api: ApiService, private router: Router) {}
 
-  async login(authData: AuthDto, remember: boolean): Promise<Result<AuthResponse>> {
+  async login(
+    authData: AuthDto,
+    remember: boolean
+  ): Promise<Result<AuthResponse>> {
     const result = await this.api.post<AuthResponse>('Auth/Login', authData);
-    
+
     if (result.success) {
       this.setSession(result.data.accessToken, remember);
     } else {
-      this.handleError("El usuario o la contraseña son incorrectos.");
+      this.handleError('El usuario o la contraseña son incorrectos.');
     }
 
     return result;
@@ -30,11 +33,11 @@ export class AuthService {
 
   async register(authData: RegisterDto): Promise<Result<AuthResponse>> {
     const result = await this.api.post<AuthResponse>('Auth/Register', authData);
-    
+
     if (result.success) {
       this.setSession(result.data.accessToken, true);
     } else {
-      this.handleError("Ha habido un problema al registrar el usuario.");
+      this.handleError('Ha habido un problema al registrar el usuario.');
     }
 
     return result;
@@ -43,7 +46,7 @@ export class AuthService {
   private setSession(token: string, remember: boolean): void {
     this.api.jwt = token;
     this.decodedToken = this.decodeJwt(token);
-    
+
     if (remember) {
       localStorage.setItem(this.TOKEN_KEY, token);
     }
@@ -53,7 +56,7 @@ export class AuthService {
     try {
       return jwtDecode(token);
     } catch (error) {
-      console.error("Error decodificando el token JWT:", error);
+      console.error('Error decodificando el token JWT:', error);
       return null;
     }
   }

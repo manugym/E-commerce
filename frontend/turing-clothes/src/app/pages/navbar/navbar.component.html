@@ -1,11 +1,26 @@
 <section>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%;">
-    <div class="container flex-wrap flex-lg-nowrap" style="width: 100%;">
-      <a class="navbar-brand" [routerLink]="'home'" routerLinkActive="router-link-active">Turing Clothes</a>
+  <nav
+    class="navbar navbar-expand-lg navbar-light bg-light"
+    style="width: 100%"
+  >
+    <div class="container flex-wrap flex-lg-nowrap" style="width: 100%">
+      <a
+        class="navbar-brand"
+        [routerLink]="'home'"
+        routerLinkActive="router-link-active"
+        >Turing Clothes</a
+      >
 
       <!-- Botón para dispositivos móviles -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -14,10 +29,17 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
           <!-- Links comunes -->
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" [routerLink]="'home'">Inicio</a>
+            <a class="nav-link active" aria-current="page" [routerLink]="'home'"
+              >Inicio</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" [routerLink]="'catalog'">Catálogo</a>
+            <a
+              class="nav-link active"
+              aria-current="page"
+              [routerLink]="'catalog'"
+              >Catálogo</a
+            >
           </li>
           <li class="nav-item">
             <a class="nav-link" [routerLink]="'aboutus'">Sobre nosotros</a>
@@ -44,10 +66,14 @@
           <div class="pt-2">
             <p>Bienvenido, {{ getLogedUsername() }}.</p>
           </div>
-          <button class="btn btn-outline-dark me-2 ms-2" (click)="logout()">Cerrar sesión</button>
+          <button class="btn btn-outline-dark me-2 ms-2" (click)="logout()">
+            Cerrar sesión
+          </button>
           } @else {
           <a class="btn btn-outline-dark bg-primary" [routerLink]="'login'">
-            <span class="badge text-white ms-1 rounded-pill">Iniciar sesión</span>
+            <span class="badge text-white ms-1 rounded-pill"
+              >Iniciar sesión</span
+            >
           </a>
           }
         </div>
