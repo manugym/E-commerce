@@ -6,7 +6,9 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using TuringClothes.Database;
+using TuringClothes.Model;
 using TuringClothes.Repository;
+using TuringClothes.Services;
 
 namespace TuringClothes
 {
@@ -58,6 +60,8 @@ namespace TuringClothes
 
             builder.Services.AddScoped<MyDatabase>();
             builder.Services.AddScoped<AuthRepository>();
+            builder.Services.AddScoped<ProductFilterDto>();
+            builder.Services.AddScoped<ProductoService>();
 
 
             if (builder.Environment.IsDevelopment())
