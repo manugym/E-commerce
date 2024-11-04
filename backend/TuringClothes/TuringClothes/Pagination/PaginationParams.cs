@@ -4,6 +4,8 @@ namespace TuringClothes.Pagination
 {
     public class PaginationParams
     {
+        public string Query { get; set; }
+
         //necesario para la lógica del PageSize
         private const int MaxPageSize = 20;
 

@@ -1,6 +1,6 @@
 ﻿using TuringClothes.Database;
-using TuringClothes.Pagination;
 using TuringClothes.Enums;
+using TuringClothes.Pagination;
 
 namespace TuringClothes.Services
 {
@@ -8,18 +8,20 @@ namespace TuringClothes.Services
     {
         private readonly MyDatabase _myDatabase;
 
-        private readonly PagedList _pagination;
-        public CatalogService(MyDatabase myDatabase, PagedList pagination)
+
+        private readonly SmartSearchService _smartSearchService;
+        public CatalogService(MyDatabase myDatabase, SmartSearchService smartSearchService)
         {
             _myDatabase = myDatabase;
-            _pagination = pagination;
+            _smartSearchService = smartSearchService;
         }
 
-        public async Task<PagedResults<Product>> GetPaginationCatalog(PaginationParams request)
+        public PagedResults<Product> GetPaginationCatalog(PaginationParams request)
         {
 
-            var query = _myDatabase.Products.AsQueryable();
-            
+            //var query = _myDatabase.Products.AsQueryable();
+            var query = _smartSearchService.Search(request.Query);
+
             // Aplica el ordenamiento basado en el parámetro 'OrderBy'
             query = request.OrderBy switch
             {
@@ -32,13 +34,29 @@ namespace TuringClothes.Services
                 _ => query // No hay orden si OrderBy es nulo
             };
 
-            return await _pagination.CreatePagedGenericResults<Product>(query,
-                request.PageNumber,
-                request.PageSize,
-                request.OrderBy,
-                request.Direction
-                );
+
+            var skipAmount = request.PageSize * (request.PageNumber - 1);
+
+            var totalNumberOfRecords = query.Count();
+
+            // Luego aplica la paginación
+            var results = query.Skip(skipAmount).Take(request.PageSize).ToList();
+
+            var totalPageCount = (int)Math.Ceiling((double)totalNumberOfRecords / request.PageSize);
+
+            return new PagedResults<Product>
+            {
+                Results = results,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                TotalNumberOfPages = totalPageCount,
+                TotalNumberOfRecords = totalNumberOfRecords
+            };
+
+
+
         }
+
 
     }
 }
