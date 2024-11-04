@@ -1,4 +1,6 @@
-﻿namespace TuringClothes.Pagination
+﻿using static TuringClothes.Enums.OrderCatalog;
+
+namespace TuringClothes.Pagination
 {
     public class PaginationParams
     {
@@ -12,10 +14,10 @@
         //lógica por si se necesita usar una paginación flexible de elementos. Posible paginación vista admin (mostrar users)
         public int PageSize
         {
-           get => _pageSize;
+            get => _pageSize;
             set => _pageSize = (value < MaxPageSize) ? value : MaxPageSize;
         }
-        public string? OrderBy { get; set; }
-        public bool OrderAsc { get; set; } = true;
+        public OrderField OrderBy { get; set; } = OrderField.None;
+        public OrderDirection Direction { get; set; } = OrderDirection.Ascending;
     }
 }

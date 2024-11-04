@@ -2,12 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using TuringClothes.Extensions;
+using TuringClothes.Enums;
 
 namespace TuringClothes.Pagination
 {
-    public class PagedList : IPagedList
+    public class PagedList
     {
-        public async Task<PagedResults<T>> CreatePagedGenericResults<T>(IQueryable<T> queryable, int page, int pageSize, string orderBy, bool ascending)
+        public async Task<PagedResults<T>> CreatePagedGenericResults<T>(IQueryable<T> queryable, int page, int pageSize, OrderCatalog.OrderField orderBy, OrderCatalog.OrderDirection direction)
         {
             var skipAmount = pageSize * (page - 1);
 
@@ -16,10 +17,10 @@ namespace TuringClothes.Pagination
             IQueryable<T> orderedQuery;
 
             // Si se proporciona el orden por el que ordenar
-            if (!string.IsNullOrWhiteSpace(orderBy))
+            if (orderBy != OrderCatalog.OrderField.None)
             {
                 // Aplica la ordenación según el nombre de la propiedad y la dirección
-                orderedQuery = queryable.OrderByPropertyOrField(orderBy, ascending);
+                orderedQuery = queryable.OrderByPropertyOrField(orderBy.ToString(), direction == OrderCatalog.OrderDirection.Ascending);
             }
             else
             {

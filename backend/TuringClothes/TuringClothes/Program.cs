@@ -62,7 +62,7 @@ namespace TuringClothes
             builder.Services.AddScoped<AuthRepository>();
 
             builder.Services.AddScoped<CatalogService>();
-            builder.Services.AddScoped<IPagedList, PagedList>();
+            builder.Services.AddScoped<PagedList>();
 
             if (builder.Environment.IsDevelopment())
             {
