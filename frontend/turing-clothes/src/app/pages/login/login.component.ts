@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { AuthDto } from '../../models/auth-dto';
 import { Router } from '@angular/router';
+import  Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-login',
@@ -16,6 +18,7 @@ export class LoginComponent {
   password: string = '';
   jwt: string = '';
   remember: boolean = false;
+  registerHints: Boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -26,8 +29,13 @@ export class LoginComponent {
     if (result.success) {
       this.jwt = result.data.accessToken;
       this.router.navigate(['/home']);
-    }
-  }
+      Swal.fire({
+        icon: 'success',
+        text: 'Login Correcto',
+        showConfirmButton: true
+        });
+    
+  }}
 
   logout() {
     this.authService.logout();

@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import  Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -67,14 +68,22 @@ export class RegisterComponent {
     if (this.myForm.valid) {
       const result = await this.authService.register(authData);
       if (result.success) {
-        alert('Usuario registrado correctamente.');
-
+        Swal.fire({
+          icon: 'success',
+          text: 'Registro Correcto',
+          showConfirmButton: true
+          });
         this.router.navigate(['/home']);
       }
     } else {
       // El formulario no es válido
       this.registerHints = true;
-      alert('Formulario no válido');
+      Swal.fire({
+        icon: 'error',
+        text: 'Registro erroneo',
+        showConfirmButton: true
+        });
+      }
     }
   }
-}
+
