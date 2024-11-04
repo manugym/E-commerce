@@ -1,8 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 using TuringClothes.Database;
 using TuringClothes.Model;
+using TuringClothes.Pagination;
 using TuringClothes.Services;
+
+
 
 namespace TuringClothes.Controllers
 {
@@ -11,13 +18,15 @@ namespace TuringClothes.Controllers
     public class CatalogController : ControllerBase
     {
         private readonly MyDatabase _myDatabase;
-        private readonly ProductoService _productoService;
-
-
-        public CatalogController(MyDatabase myDatabase, ProductoService productoService)
-        {
+        private readonly CatalogService _catalogService;
+        
+       
+        public CatalogController(MyDatabase myDatabase, CatalogService catalogService) 
+        { 
             _myDatabase = myDatabase;
-            _productoService = productoService;
+            _catalogService = catalogService; 
+            
+
         }
 
         [HttpGet("ObtenerProductos")]
@@ -26,15 +35,17 @@ namespace TuringClothes.Controllers
             return _myDatabase.Products;
         }
 
-            
-        [HttpGet("filtrar")]
-        public async Task<IActionResult> FiltrarProductos([FromQuery] ProductFilterDto filtros)
-        {
-        var productos = await _productoService.FiltrarProductosAsync(filtros);
-        return Ok(productos);
-        }
-        
 
+
+        [AllowAnonymous]
+        [HttpGet ("ProductosPaginados")]
+        public async Task<ActionResult<PagedResults<Product>>> GetPagination([FromQuery] PaginationParams paginationQuery)
+        {
+            var results = await _catalogService.GetPaginationCatalog(paginationQuery);
+            return Ok(results);
+        }
+       
+        
 
     }
 }
