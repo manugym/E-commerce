@@ -39,9 +39,9 @@ namespace TuringClothes.Controllers
 
         [AllowAnonymous]
         [HttpGet ("ProductosPaginados")]
-        public async Task<ActionResult<PagedResults<Product>>> GetPagination([FromQuery] PaginationParams paginationQuery)
+        public  ActionResult<PagedResults<Product>> GetPagination([FromQuery] PaginationParams paginationQuery)
         {
-            var results = await _catalogService.GetPaginationCatalog(paginationQuery);
+            var results = _catalogService.GetPaginationCatalog(paginationQuery);
             return Ok(results);
         }
        
