@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using TuringClothes.Database;
 using TuringClothes.Pagination;
+
 using TuringClothes.Repository;
 using TuringClothes.Services;
 
@@ -40,7 +41,7 @@ namespace TuringClothes
 
             builder.Services.AddAuthentication().AddJwtBearer(options =>
             {
-                string key = "bdisub678kji@m32iods/3bjk970kjbhvytdtjvÒkpokop";
+                string key = "bdisub678kji@m32iods/3bjk970kjbhvytdtjv√±kpokop";
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = false,
@@ -60,6 +61,8 @@ namespace TuringClothes
 
             builder.Services.AddScoped<MyDatabase>();
             builder.Services.AddScoped<AuthRepository>();
+            builder.Services.AddScoped<ProductFilterDto>();
+            builder.Services.AddScoped<ProductoService>();
 
             builder.Services.AddScoped<CatalogService>();
             builder.Services.AddScoped<PagedList>();
@@ -99,7 +102,7 @@ namespace TuringClothes
 
             app.MapControllers();
 
-            //crea la base de datos si no est· ya creada
+            //crea la base de datos si no est√° ya creada
             using (IServiceScope scope = app.Services.CreateScope())
             {
 

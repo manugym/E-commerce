@@ -10,6 +10,7 @@ using TuringClothes.Pagination;
 using TuringClothes.Services;
 
 
+
 namespace TuringClothes.Controllers
 {
     [Route("api/[controller]")]
@@ -25,13 +26,15 @@ namespace TuringClothes.Controllers
             _myDatabase = myDatabase;
             _catalogService = catalogService; 
             
+
         }
 
-        [HttpGet ("ObtenerProductos")]
+        [HttpGet("ObtenerProductos")]
         public IEnumerable<Product> GetProducts()
         {
             return _myDatabase.Products;
         }
+
 
 
         [AllowAnonymous]
@@ -43,5 +46,6 @@ namespace TuringClothes.Controllers
         }
        
         
+
     }
 }
