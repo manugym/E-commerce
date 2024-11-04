@@ -6,6 +6,7 @@ import { AuthDto } from '../models/auth-dto';
 import { RegisterDto } from '../models/register-dto';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root',
@@ -62,7 +63,11 @@ export class AuthService {
   }
 
   private handleError(message: string): void {
-    alert(message);
+    Swal.fire({
+      icon: 'error',
+      text: 'Login Incorrecto',
+      showConfirmButton: true
+  });
   }
 
   get isLoggedIn(): boolean {

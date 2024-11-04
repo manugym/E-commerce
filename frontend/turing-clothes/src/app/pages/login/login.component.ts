@@ -34,13 +34,7 @@ export class LoginComponent {
         text: 'Login Correcto',
         showConfirmButton: true
         });
-    }else{
-      this.registerHints = true;
-      Swal.fire({
-        icon: 'error',
-        text: 'Login Incorrecto',
-        showConfirmButton: true
-    });
+    
   }}
 
   logout() {
