@@ -1,70 +1,88 @@
-<app-smart-search></app-smart-search>
-<!-- Section-->
-<section class="py-5">
-  <div class="container px-4 px-lg-5 mt-5">
-    <div
-      class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
-    >
-      @for (product of productList; track product.id) {
-      <div class="col mb-5">
-        <div class="card h-100">
-          <!-- Product Badge (Limited Stock) -->
-          @if (product.stock < 10) {
-          <div
-            class="badge bg-dark text-white position-absolute"
-            style="top: 0.5rem; right: 0.5rem"
-          >
-            Limited Stock
-          </div>
-          }
+<section class="container mt-4">
+  <!-- Formulario de búsqueda -->
+  <form (ngSubmit)="getPagedResults()" class="mb-4">
+    <div class="input-group w-50 mx-auto">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Busca productos..."
+        [(ngModel)]="query"
+        [ngModelOptions]="{ standalone: true }"
+      />
+      <button class="btn btn-primary" type="submit">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </form>
 
-          <!-- Product image-->
-          <img
-            class="card-img-top"
-            src="{{ product.image }}"
-            alt="{{ product.name }}"
-          />
+  <!-- Filtros de orden -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Ordenar por -->
+    <div class="dropdown">
+      <button
+        class="btn btn-outline-secondary dropdown-toggle"
+        type="button"
+        id="sortDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {{ paginationParams.orderBy === 0 ? "Nombre" : "Precio" }}
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+        <li>
+          <a class="dropdown-item" (click)="setOrderBy(0)">Nombre</a>
+        </li>
+        <li>
+          <a class="dropdown-item" (click)="setOrderBy(1)">Precio</a>
+        </li>
+      </ul>
+    </div>
 
-          <!-- Product details-->
-          <div class="card-body p-4">
-            <div class="text-center">
-              <!-- Product name-->
-              <h5 class="fw-bolder">{{ product.name }}</h5>
+    <!-- Dirección de orden (Ascendente/Descendente) -->
+    <button class="btn btn-outline-secondary" (click)="toggleDirection()">
+      <i [class]="isAscending ? 'bi bi-arrow-up' : 'bi bi-arrow-down'"></i>
+      {{ isAscending ? "Ascendente" : "Descendente" }}
+    </button>
+  </div>
 
-              <!-- Product price with conditional sale price-->
-              @if (product.stock < 10) {
-              <div>
-                <p class="text-danger">Precio: {{ product.price }} €</p>
+  <!-- Listado de resultados -->
+  <section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+      <div
+        class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
+      >
+        @for (item of items; track item.id) {
+        <div class="col mb-5">
+          <div class="card h-100">
+            <img
+              class="card-img-top"
+              src="{{ item.image }}"
+              alt="{{ item.name }}"
+            />
+            <div class="card-body p-4">
+              <div class="text-center">
+                <h5 class="fw-bolder">{{ item.name }}</h5>
+                <p class="text-danger">Precio: {{ item.price }} €</p>
+                <p>{{ item.stock }} in stock</p>
               </div>
-              } @else {
-              <b>Precio:</b> {{ product.price }} € }
-
-              <!-- Product stock availability -->
-              @if (product.stock > 0) {
-              <p>{{ product.stock }} in stock</p>
-              } @else {
-              <p class="text-danger">Out of stock</p>
-              }
             </div>
-          </div>
-
-          <!-- Product actions-->
-          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-            <div class="text-center">
-              @if (product.stock > 0) {
-              <a class="btn btn-outline-dark mt-auto" href="#"
-                >Añadir al carrito</a
-              >
-              } @else {
-              <a class="btn btn-outline-dark mt-auto disabled" href="#"
-                >Notifícame</a
-              >
-              }
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+              <div class="text-center">
+                @if (item.stock > 0) {
+                <a class="btn btn-outline-dark mt-auto" href="#">
+                  Añadir al carrito
+                </a>
+                } @else {
+                <a class="btn btn-outline-dark mt-auto disabled" href="#">
+                  Notifícame
+                </a>
+                }
+              </div>
             </div>
           </div>
         </div>
+        }
       </div>
-      }
     </div>
-  </div>
+  </section>
 </section>
