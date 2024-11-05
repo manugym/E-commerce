@@ -22,7 +22,7 @@ export class SmartSearchService {
   async getPagedResults(paginationParams: PaginationParams): Promise<Result<PagedResults>> {
     
     
-    const result = await this.api.get<PagedResults>('Catalog/ProductosPaginados', paginationParams);
+    const result = await this.api.get<PagedResults>('Catalog/ProductosPaginados', { params: paginationParams });
 
     return result;
   }
