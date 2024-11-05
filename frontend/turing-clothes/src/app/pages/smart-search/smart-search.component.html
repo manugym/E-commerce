@@ -61,8 +61,8 @@
 
   <!-- Listado de resultados -->
   <ul>
-    @for (item of items; track $index) {
-    <li>{{ item }}</li>
+    @for (item of items; track item.id) {
+    <img src="{{item.image}}">
     }
   </ul>
 </section>

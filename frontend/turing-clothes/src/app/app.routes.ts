@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { CatalogoComponent } from './pages/catalogo/catalogo.component';
+// import { CatalogoComponent } from './pages/catalogo/catalogo.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 import { FooterComponent } from './pages/footer/footer.component';
 import { TestPageComponent } from './pages/test-page/test-page.component';
 import { AboutusComponent } from './pages/aboutus/aboutus.component';
+import { CatalogoComponent } from './pages/catalogo/catalogo.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },

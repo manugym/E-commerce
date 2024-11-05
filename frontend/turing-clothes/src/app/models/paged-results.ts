@@ -5,5 +5,5 @@ export interface PagedResults {
   pageSize: number,
   totalNumberOfPages: number,
   totalNumberOfRecords: number,
-  resuls: ProductDto[]
+  results: ProductDto[]
 }

@@ -31,7 +31,7 @@ export class SmartSearchComponent implements OnInit {
 
   constructor(private smartSearchService: SmartSearchService) {}
   ngOnInit(): void {
-    this.getPagedResults();
+    // this.getPagedResults();
   }
 
   // async search() {
@@ -43,16 +43,23 @@ export class SmartSearchComponent implements OnInit {
   // }
 
   async getPagedResults() {
-    this.paginationParams.query = this.query;
 
-    const result = await this.smartSearchService.getPagedResults(
-      this.paginationParams
-    );
+    const result = await this.smartSearchService.getPagedResults({
+      query: this.query,
+      pageNumber: this.paginationParams.pageNumber,
+      orderBy: this.paginationParams.orderBy,
+      direction: this.paginationParams.direction,
+    });
 
     if (result.success) {
       this.pagedResults = result.data;
-      this.items = result.data.resuls
+      this.items = this.pagedResults.results;
+      this.items = result.data.results.map((product) => ({
+        ...product,
+        image: `https://localhost:7183/${product.image}`,
+      }));
     }
+    console.log(result)
   }
 
   /**
@@ -68,8 +75,7 @@ export class SmartSearchComponent implements OnInit {
   }
 
   toggleDirection() {
-    this.paginationParams.direction =
-      this.paginationParams.direction === 0 ? 1 : 0;
+    this.paginationParams.direction = this.paginationParams.direction === 0 ? 1 : 0;
     this.isAscending = this.paginationParams.direction === 0;
     this.getPagedResults();
   }
