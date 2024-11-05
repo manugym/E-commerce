@@ -164,30 +164,7 @@
                     Stock = 40,
                     Image = "images/calcetines.png"
                 },
-               new Product
-                {
-                    Name = "Camiseta ceñida",
-                    Description = "Para marcar el div",
-                    Price = 18,
-                    Stock = 25,
-                    Image = "images/camisetaPegada.png"
-                },
-               new Product
-                {
-                    Name = "Pantalones grises",
-                    Description = "Calentitos y comodos",
-                    Price = 32,
-                    Stock = 50,
-                    Image = "images/pantalonGris.png"
-                },
-               new Product
-                {
-                    Name = "Pantalones marrones",
-                    Description = "Muy cómodos",
-                    Price = 30,
-                    Stock = 40,
-                    Image = "images/pantalonMarron.png"
-                },
+
 
             };
             _context.Users.AddRange(users);
