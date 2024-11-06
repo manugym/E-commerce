@@ -24,19 +24,21 @@ export class CatalogoComponent {
   /**
    * Esto está puesto provisional. REQUIERE REVISIÓN DEL LÍDER.
    */
+  isAscending: boolean = true;
+
   paginationParams: PaginationParams = {
     query: '',
     pageNumber: 1,
     orderBy: 0, // Default: 0 (por ejemplo, precio)
     direction: 0, // Default: 0 (ascendente)
   };
-  isAscending: boolean;
-
+  
   pagedResults: PagedResults;
   constructor(private catalogService: CatalogService) {}
 
   ngOnInit() {
     this.getPagedResults();
+    this.isAscending = this.paginationParams.direction === 0;
   }
 
   async getPagedResults() {
