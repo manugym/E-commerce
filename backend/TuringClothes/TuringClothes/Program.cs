@@ -61,9 +61,9 @@ namespace TuringClothes
 
             builder.Services.AddScoped<MyDatabase>();
             builder.Services.AddScoped<AuthRepository>();
-
+       
             builder.Services.AddScoped<CatalogService>();
-            builder.Services.AddScoped<PagedList>();
+            builder.Services.AddScoped<SmartSearchService>();
 
             if (builder.Environment.IsDevelopment())
             {
