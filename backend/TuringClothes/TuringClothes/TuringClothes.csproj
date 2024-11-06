@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions\**" />
     <Compile Remove="Mapper\**" />
+    <Content Remove="Extensions\**" />
     <Content Remove="Mapper\**" />
+    <EmbeddedResource Remove="Extensions\**" />
     <EmbeddedResource Remove="Mapper\**" />
+    <None Remove="Extensions\**" />
     <None Remove="Mapper\**" />
   </ItemGroup>
 
@@ -27,10 +31,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.4.8" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

@@ -25,6 +25,7 @@ export class CatalogoComponent {
    * Esto está puesto provisional. REQUIERE REVISIÓN DEL LÍDER.
    */
   isAscending: boolean = true;
+  oldQuery: string = this.query;
 
   paginationParams: PaginationParams = {
     query: '',
@@ -44,6 +45,9 @@ export class CatalogoComponent {
 
   async getPagedResults() {
 
+    if (this.oldQuery !== this.query) {
+      this.paginationParams.pageNumber = 1;
+    }
     const result = await this.catalogService.getPagedResults({
       query: this.query,
       pageNumber: this.paginationParams.pageNumber,
