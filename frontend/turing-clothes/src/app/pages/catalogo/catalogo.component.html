@@ -62,7 +62,7 @@
             <div class="card-body p-4">
               <div class="text-center">
                 <h5 class="fw-bolder">{{ item.name }}</h5>
-                <p class="text-danger">Precio: {{ item.price }} €</p>
+                <p class="text-danger">Precio: {{ item.price/100 }} €</p>
                 <p>{{ item.stock }} in stock</p>
               </div>
             </div>
@@ -74,7 +74,7 @@
                 </a>
                 } @else {
                 <a class="btn btn-outline-dark mt-auto disabled" href="#">
-                  Notifícame
+                  Sin stock
                 </a>
                 }
               </div>
