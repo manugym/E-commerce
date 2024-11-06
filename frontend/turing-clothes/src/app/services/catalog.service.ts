@@ -13,10 +13,11 @@ export class CatalogService {
   constructor(private api: ApiService) {}
 
   async getPagedResults(paginationParams: PaginationParams): Promise<Result<PagedResults>> {
-    const result = await this.api.get<PagedResults>(`Catalog/ProductosPaginados?Query=${paginationParams.query}&PageNumber=${paginationParams.pageNumber}&OrderBy=${paginationParams.orderBy}&Direction=${paginationParams.direction}`, {
+    const result = await this.api.get<PagedResults>(`Catalog/ProductosPaginados?Query=${paginationParams.query}&PageNumber=${paginationParams.pageNumber}&OrderBy=${paginationParams.orderBy}&Direction=${paginationParams.direction}&PageSize=${paginationParams.pageSize}`, {
       params: {
         query: paginationParams.query,
         pageNumber: paginationParams.pageNumber.toString(),
+        pageSize: paginationParams.pageSize.toString(),
         orderBy: paginationParams.orderBy.toString(),
         direction: paginationParams.direction.toString(),
       },
