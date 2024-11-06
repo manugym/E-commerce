@@ -1,6 +1,6 @@
 ﻿using TuringClothes.Database;
-using TuringClothes.Enums;
 using TuringClothes.Pagination;
+using TuringClothes.Enums;
 
 namespace TuringClothes.Services
 {
@@ -8,20 +8,18 @@ namespace TuringClothes.Services
     {
         private readonly MyDatabase _myDatabase;
 
-
-        private readonly SmartSearchService _smartSearchService;
-        public CatalogService(MyDatabase myDatabase, SmartSearchService smartSearchService)
+        private readonly PagedList _pagination;
+        public CatalogService(MyDatabase myDatabase, PagedList pagination)
         {
             _myDatabase = myDatabase;
-            _smartSearchService = smartSearchService;
+            _pagination = pagination;
         }
 
-        public PagedResults<Product> GetPaginationCatalog(PaginationParams request)
+        public async Task<PagedResults<Product>> GetPaginationCatalog(PaginationParams request)
         {
 
-            //var query = _myDatabase.Products.AsQueryable();
-            var query = _smartSearchService.Search(request.Query);
-
+            var query = _myDatabase.Products.AsQueryable();
+            
             // Aplica el ordenamiento basado en el parámetro 'OrderBy'
             query = request.OrderBy switch
             {
@@ -34,29 +32,13 @@ namespace TuringClothes.Services
                 _ => query // No hay orden si OrderBy es nulo
             };
 
-
-            var skipAmount = request.PageSize * (request.PageNumber - 1);
-
-            var totalNumberOfRecords = query.Count();
-
-            // Luego aplica la paginación
-            var results = query.Skip(skipAmount).Take(request.PageSize).ToList();
-
-            var totalPageCount = (int)Math.Ceiling((double)totalNumberOfRecords / request.PageSize);
-
-            return new PagedResults<Product>
-            {
-                Results = results,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
-                TotalNumberOfPages = totalPageCount,
-                TotalNumberOfRecords = totalNumberOfRecords
-            };
-
-
-
+            return await _pagination.CreatePagedGenericResults<Product>(query,
+                request.PageNumber,
+                request.PageSize,
+                request.OrderBy,
+                request.Direction
+                );
         }
-
 
     }
 }
