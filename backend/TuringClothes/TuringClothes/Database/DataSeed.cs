@@ -141,7 +141,7 @@ namespace TuringClothes.Database
                     Description = "Lo mejor contra el frio",
                     Price = 80,
                     Stock = 30,
-                    Image = "images/Traje-beige.jpg"
+                    Image = "images/Traje-beige.png"
                 },
                 new Product
                 {
@@ -239,7 +239,38 @@ namespace TuringClothes.Database
                     Stock = 25,
                     Image = "images/jersey-punto-cuello-alto.png"
                 },
-
+                new Product
+                {
+                    Name = "Camisa gris mujer",
+                    Description = "Lo mejor contra el frio",
+                    Price = 20,
+                    Stock = 26,
+                    Image = "images/Camisa-gris-mujer.png"
+                },
+                new Product
+                {
+                    Name = "Pantalón recto tiro medio",
+                    Description = "Lo mejor contra el frio",
+                    Price = 37,
+                    Stock = 30,
+                    Image = "images/Pantalon-recto-tiro-medio.png"
+                },
+                new Product
+                {
+                    Name = "Vestido negro cinturón",
+                    Description = "Lo mejor contra el frio",
+                    Price = 45,
+                    Stock = 15,
+                    Image = "images/vestido-negro-cinturon.png"
+                },
+                new Product
+                {
+                    Name = "Bomber negra acolchada",
+                    Description = "Lo mejor contra el frio",
+                    Price = 38,
+                    Stock = 15,
+                    Image = "images/bomber-negra-acolchada.png"
+                },
 
             };
             _context.Users.AddRange(users);
