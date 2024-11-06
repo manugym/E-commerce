@@ -36,6 +36,7 @@ namespace TuringClothes.Controllers
         }
 
 
+
         [AllowAnonymous]
         [HttpGet ("ProductosPaginados")]
         public  ActionResult<PagedResults<Product>> GetPagination([FromQuery] PaginationParams paginationQuery)
@@ -43,7 +44,6 @@ namespace TuringClothes.Controllers
             var results = _catalogService.GetPaginationCatalog(paginationQuery);
             return Ok(results);
         }
-
        
         
 

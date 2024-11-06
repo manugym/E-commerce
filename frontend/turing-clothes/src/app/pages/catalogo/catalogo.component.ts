@@ -24,26 +24,34 @@ export class CatalogoComponent {
   /**
    * Esto está puesto provisional. REQUIERE REVISIÓN DEL LÍDER.
    */
+  isAscending: boolean = true;
+  oldQuery: string = this.query;
+
   paginationParams: PaginationParams = {
     query: '',
     pageNumber: 1,
+    pageSize: 8,
     orderBy: 0, // Default: 0 (por ejemplo, precio)
     direction: 0, // Default: 0 (ascendente)
   };
-  isAscending: boolean;
-
+  
   pagedResults: PagedResults;
   constructor(private catalogService: CatalogService) {}
 
   ngOnInit() {
     this.getPagedResults();
+    this.isAscending = this.paginationParams.direction === 0;
   }
 
   async getPagedResults() {
 
+    if (this.oldQuery !== this.query) {
+      this.paginationParams.pageNumber = 1;
+    }
     const result = await this.catalogService.getPagedResults({
       query: this.query,
       pageNumber: this.paginationParams.pageNumber,
+      pageSize: this.paginationParams.pageSize,
       orderBy: this.paginationParams.orderBy,
       direction: this.paginationParams.direction,
     });
@@ -55,6 +63,7 @@ export class CatalogoComponent {
         ...product,
         image: `https://localhost:7183/${product.image}`,
       }));
+      
     }
   }
 
@@ -100,4 +109,21 @@ export class CatalogoComponent {
       this.getPagedResults();
     }
   }
+
+  onProductsPerPageChange(value: number){
+    this.paginationParams.pageSize= value;
+    this.paginationParams.pageNumber= 1;
+    this.getPagedResults();  
+  }
+
+  /*reloadProducts(){
+    this.catalogService.getPagedResults(this.paginationParams)
+      .then((result) =>{
+        this.pagedResults = result.data;
+      })
+      .catch((error) =>{
+        console.error('Error al cargar productos:', error);
+      }
+      );
+  }*/
 }

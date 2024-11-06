@@ -26,11 +26,11 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        {{ paginationParams.orderBy === 0 ? "Nombre" : "Precio" }}
+        {{ paginationParams.orderBy === 2 ? "Nombre" : "Precio" }}
       </button>
       <ul class="dropdown-menu" aria-labelledby="sortDropdown">
         <li>
-          <a class="dropdown-item" (click)="setOrderBy(0)">Nombre</a>
+          <a class="dropdown-item" (click)="setOrderBy(2)">Nombre</a>
         </li>
         <li>
           <a class="dropdown-item" (click)="setOrderBy(1)">Precio</a>
@@ -62,7 +62,7 @@
             <div class="card-body p-4">
               <div class="text-center">
                 <h5 class="fw-bolder">{{ item.name }}</h5>
-                <p class="text-danger">Precio: {{ item.price }} €</p>
+                <p class="text-danger">Precio: {{ item.price/100 }} €</p>
                 <p>{{ item.stock }} in stock</p>
               </div>
             </div>
@@ -74,7 +74,7 @@
                 </a>
                 } @else {
                 <a class="btn btn-outline-dark mt-auto disabled" href="#">
-                  Notifícame
+                  Sin stock
                 </a>
                 }
               </div>
@@ -107,5 +107,16 @@
     <button class="btn btn-outline-secondary rounded-circle" (click)="nextPage()" [disabled]="paginationParams.pageNumber === pagedResults?.totalNumberOfPages">
       <i class="bi bi-chevron-right"></i>
     </button>
+  </div>
+
+  <!-- Selector de cantidad de productos -->
+  <div class=" mb-4 d-flex justify-content-center align-items-center gap-2 w-25 mx-auto">
+    <label for="productsPerPage" class="mb-0">Mostrar:</label>
+    <select id="productsPerPage" class="form-select form-select-sm" [(ngModel)]="paginationParams.pageSize" (click)="onProductsPerPageChange(paginationParams.pageSize)">
+      <option [value]="12">12</option>
+      <option [value]="18">18</option>
+      <option [value]="24">24</option>
+    </select>
+    <span>productos</span>
   </div>
 </section>
