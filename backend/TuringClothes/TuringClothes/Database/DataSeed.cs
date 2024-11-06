@@ -1,4 +1,7 @@
-﻿namespace TuringClothes.Database
+﻿using static System.Net.Mime.MediaTypeNames;
+using System.Xml.Linq;
+
+namespace TuringClothes.Database
 {
     public class DataSeed
     {
@@ -144,7 +147,7 @@
                 {
                     Name = "Cazadora negra mujer",
                     Description = "Lo mejor contra el frio",
-                    Price = 30,
+                    Price = 34,
                     Stock = 50,
                     Image = "images/cazadora-negra-mujer.png"
                 },
@@ -163,6 +166,78 @@
                     Price = 6,
                     Stock = 40,
                     Image = "images/calcetines.png"
+                },
+                new Product
+                {
+                    Name = "Chaqueta vaquera",
+                    Description = "Lo mejor contra el frio",
+                    Price = 36,
+                    Stock = 40,
+                    Image = "images/chaqueta-vaquera.png"
+                },
+                new Product
+                {
+                    Name = "Sudadera cremallera cuello",
+                    Description = "Lo mejor contra el frio",
+                    Price = 35,
+                    Stock = 60,
+                    Image = "images/sudadera-cremallera-cuello.png"
+                },
+                new Product
+                {
+                    Name = "Jersey canalé blanco",
+                    Description = "Lo mejor contra el frio",
+                    Price = 33,
+                    Stock = 25,
+                    Image = "images/jersey-canale-blanco.png"
+                },
+                new Product
+                {
+                    Name = "Jersey canalé oscuro",
+                    Description = "Lo mejor contra el frio",
+                    Price = 33,
+                    Stock = 25,
+                    Image = "images/jersey-canale-oscuro.png"
+                },
+                new Product
+                {
+                    Name = "Pantalón wide fit oscuro",
+                    Description = "Lo mejor contra el frio",
+                    Price = 40,
+                    Stock = 28,
+                    Image = "images/pantalon-wide-fit-negro.png"
+                },
+                new Product
+                {
+                    Name = "Pantalón vaquero hombre",
+                    Description = "Lo mejor contra el frio",
+                    Price = 40,
+                    Stock = 28,
+                    Image = "images/pantalon-vaquero-hombre.png"
+                },
+                new Product
+                {
+                    Name = "Chaleco negro mujer",
+                    Description = "Lo mejor contra el frio",
+                    Price = 40,
+                    Stock = 25,
+                    Image = "images/chaleco-negro-mujer.png"
+                },
+                new Product
+                {
+                    Name = "Pantalón recto soft",
+                    Description = "Lo mejor contra el frio",
+                    Price = 40,
+                    Stock = 25,
+                    Image = "images/pantalon-recto-soft.png"
+                },
+                new Product
+                {
+                    Name = "Jersey punto cuello alto",
+                    Description = "Lo mejor contra el frio",
+                    Price = 40,
+                    Stock = 25,
+                    Image = "images/jersey-punto-cuello-alto.png"
                 },
 
 
