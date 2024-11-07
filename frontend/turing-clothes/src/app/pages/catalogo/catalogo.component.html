@@ -113,6 +113,7 @@
   <div class=" mb-4 d-flex justify-content-center align-items-center gap-2 w-25 mx-auto">
     <label for="productsPerPage" class="mb-0">Mostrar:</label>
     <select id="productsPerPage" class="form-select form-select-sm" [(ngModel)]="paginationParams.pageSize" (click)="onProductsPerPageChange(paginationParams.pageSize)">
+      <option [value]="8">8</option>
       <option [value]="12">12</option>
       <option [value]="18">18</option>
       <option [value]="24">24</option>
