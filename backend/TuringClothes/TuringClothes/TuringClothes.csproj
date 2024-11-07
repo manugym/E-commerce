@@ -34,7 +34,13 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.4.8" />
-    <PackageReference Include="TorchSharp-cpu" Version="0.103.1" />
+    <PackageReference Include="TorchSharp-cpu" Version="0.101.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TuringModel1.mlnet">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
