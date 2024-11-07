@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [HeaderComponent, FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './catalogo.component.html',
   styleUrl: './catalogo.component.css',
 })
@@ -25,7 +25,7 @@ export class CatalogoComponent {
    * Esto está puesto provisional. REQUIERE REVISIÓN DEL LÍDER.
    */
   isAscending: boolean = true;
-  oldQuery: string = this.query;
+  oldQuery: string;
 
   paginationParams: PaginationParams = {
     query: '',
@@ -44,7 +44,7 @@ export class CatalogoComponent {
   }
 
   async getPagedResults() {
-
+    this.oldQuery = this.query
     if (this.oldQuery !== this.query) {
       this.paginationParams.pageNumber = 1;
     }
