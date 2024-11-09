@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { ProductDto } from '../../models/product-dto';
 import { CatalogService } from '../../services/catalog.service';
 import { CommonModule, NgFor } from '@angular/common';
@@ -37,7 +36,6 @@ export class CatalogoComponent implements OnInit {
   }
 
   async getPagedResults() {
-    
     if (this.oldQuery !== this.paginationParams.query) {
       this.paginationParams.pageNumber = 1;
     }

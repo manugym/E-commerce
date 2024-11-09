@@ -46,7 +46,7 @@ export class CatalogService {
   saveUserSettings(paginationParams: PaginationParams): void {
     console.log('Guardando configuraciones:', paginationParams);
     sessionStorage.setItem(this.storageKey, JSON.stringify(paginationParams));
-    console.log("Vista guardada", paginationParams);
+    console.log('Vista guardada', paginationParams);
   }
 
   getUserSettings(): PaginationParams {
@@ -55,9 +55,7 @@ export class CatalogService {
     if (settings) {
       try {
         const parsedSettings = JSON.parse(settings);
-
-          return parsedSettings;
-
+        return parsedSettings;
       } catch (e) {
         console.error('Error al parsear los ajustes del usuario:', e);
       }
