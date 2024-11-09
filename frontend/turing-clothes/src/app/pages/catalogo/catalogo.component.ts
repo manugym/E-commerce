@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { ProductDto } from '../../models/product-dto';
 import { CatalogService } from '../../services/catalog.service';
@@ -15,11 +15,9 @@ import { RouterLink } from '@angular/router';
   templateUrl: './catalogo.component.html',
   styleUrl: './catalogo.component.css',
 })
-export class CatalogoComponent {
-
+export class CatalogoComponent implements OnInit {
   productList: ProductDto[] = [];
   imageUrl: string[];
-  query: string = '';
   items: ProductDto[] = [];
   isAscending: boolean = true;
   oldQuery: string;
@@ -29,9 +27,10 @@ export class CatalogoComponent {
   constructor(private catalogService: CatalogService) {}
 
   ngOnInit() {
-
     const savedSettings = this.catalogService.getUserSettings();
+
     this.paginationParams = savedSettings;
+    this.oldQuery = this.paginationParams.query;
 
     this.getPagedResults();
     this.isAscending = this.paginationParams.direction === 0;
@@ -39,19 +38,15 @@ export class CatalogoComponent {
 
   async getPagedResults() {
     
-    if (this.oldQuery !== this.query) {
+    if (this.oldQuery !== this.paginationParams.query) {
       this.paginationParams.pageNumber = 1;
     }
 
-    const result = await this.catalogService.getPagedResults({
-      query: this.query,
-      pageNumber: this.paginationParams.pageNumber,
-      pageSize: this.paginationParams.pageSize,
-      orderBy: this.paginationParams.orderBy,
-      direction: this.paginationParams.direction,
-    });
+    this.oldQuery = this.paginationParams.query;
 
-    this.oldQuery = this.query
+    const result = await this.catalogService.getPagedResults(
+      this.paginationParams
+    );
 
     if (result.success) {
       this.pagedResults = result.data;
@@ -61,7 +56,6 @@ export class CatalogoComponent {
         ...product,
         image: `https://localhost:7183/${product.image}`,
       }));
-      
     }
   }
 
@@ -79,19 +73,22 @@ export class CatalogoComponent {
   }
 
   toggleDirection() {
-    this.paginationParams.direction = this.paginationParams.direction === 0 ? 1 : 0;
+    this.paginationParams.direction =
+      this.paginationParams.direction === 0 ? 1 : 0;
     this.isAscending = this.paginationParams.direction === 0;
     this.paginationParams.pageNumber = 1;
     this.getPagedResults();
   }
 
   nextPage() {
-    if (this.paginationParams.pageNumber < this.pagedResults.totalNumberOfPages) {
+    if (
+      this.paginationParams.pageNumber < this.pagedResults.totalNumberOfPages
+    ) {
       this.paginationParams.pageNumber++;
       this.getPagedResults();
     }
   }
-  
+
   previousPage() {
     if (this.paginationParams.pageNumber > 1) {
       this.paginationParams.pageNumber--;
@@ -100,7 +97,10 @@ export class CatalogoComponent {
   }
 
   getPageNumbers(): number[] {
-    return Array.from({ length: this.pagedResults?.totalNumberOfPages }, (_, i) => i + 1);
+    return Array.from(
+      { length: this.pagedResults?.totalNumberOfPages },
+      (_, i) => i + 1
+    );
   }
 
   goToPage(page: number) {
@@ -110,8 +110,8 @@ export class CatalogoComponent {
     }
   }
 
-  onProductsPerPageChange(value: number){
-    this.paginationParams.pageSize= value;
-    this.getPagedResults();  
+  onProductsPerPageChange(value: number) {
+    this.paginationParams.pageSize = value;
+    this.getPagedResults();
   }
 }
