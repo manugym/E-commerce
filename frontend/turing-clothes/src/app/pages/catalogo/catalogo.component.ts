@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [HeaderComponent, FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './catalogo.component.html',
   styleUrl: './catalogo.component.css',
 })
@@ -25,13 +25,13 @@ export class CatalogoComponent {
    * Esto está puesto provisional. REQUIERE REVISIÓN DEL LÍDER.
    */
   isAscending: boolean = true;
-  oldQuery: string = this.query;
+  oldQuery: string;
 
   paginationParams: PaginationParams = {
     query: '',
     pageNumber: 1,
     pageSize: 8,
-    orderBy: 0, // Default: 0 (por ejemplo, precio)
+    orderBy: 2, // Default: 0 (por ejemplo, precio)
     direction: 0, // Default: 0 (ascendente)
   };
   
@@ -44,7 +44,7 @@ export class CatalogoComponent {
   }
 
   async getPagedResults() {
-
+    
     if (this.oldQuery !== this.query) {
       this.paginationParams.pageNumber = 1;
     }
@@ -55,9 +55,11 @@ export class CatalogoComponent {
       orderBy: this.paginationParams.orderBy,
       direction: this.paginationParams.direction,
     });
+    this.oldQuery = this.query
 
     if (result.success) {
       this.pagedResults = result.data;
+      this.paginationParams.pageNumber = result.data.pageNumber;
       this.items = this.pagedResults.results;
       this.items = result.data.results.map((product) => ({
         ...product,
@@ -76,12 +78,14 @@ export class CatalogoComponent {
 
   setOrderBy(choice: number) {
     this.paginationParams.orderBy = choice;
+    this.paginationParams.pageNumber = 1;
     this.getPagedResults();
   }
 
   toggleDirection() {
     this.paginationParams.direction = this.paginationParams.direction === 0 ? 1 : 0;
     this.isAscending = this.paginationParams.direction === 0;
+    this.paginationParams.pageNumber = 1;
     this.getPagedResults();
   }
 
@@ -112,7 +116,7 @@ export class CatalogoComponent {
 
   onProductsPerPageChange(value: number){
     this.paginationParams.pageSize= value;
-    this.paginationParams.pageNumber= 1;
+    //this.paginationParams.pageNumber= 1;
     this.getPagedResults();  
   }
 

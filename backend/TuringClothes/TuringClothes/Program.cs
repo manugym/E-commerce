@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.ML;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -61,9 +62,13 @@ namespace TuringClothes
 
             builder.Services.AddScoped<MyDatabase>();
             builder.Services.AddScoped<AuthRepository>();
-       
+            builder.Services.AddScoped<ProductRepository>();
+
             builder.Services.AddScoped<CatalogService>();
             builder.Services.AddScoped<SmartSearchService>();
+
+            builder.Services.AddPredictionEnginePool<ModelInput, ModelOutput>()
+                .FromFile("TuringModel1.mlnet");
 
             if (builder.Environment.IsDevelopment())
             {
