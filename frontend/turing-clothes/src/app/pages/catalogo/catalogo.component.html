@@ -53,7 +53,7 @@
       >
         @for (item of items; track item.id) {
         <div class="col mb-5">
-          <div class="card h-100">
+          <a [routerLink]="['/product-details', item.id]" class="card h-100">
             <img
               class="card-img-top"
               src="{{ item.image }}"
@@ -79,7 +79,7 @@
                 }
               </div>
             </div>
-          </div>
+          </a>
         </div>
         }
       </div>
