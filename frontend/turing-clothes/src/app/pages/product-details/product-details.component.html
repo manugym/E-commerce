@@ -1,0 +1,95 @@
+@if (product) {
+<div class="container my-5">
+  <!-- Información del producto -->
+  <div class="row">
+    <!-- Columna para la imagen del producto -->
+    <div class="col-12 col-md-6 mb-4 mb-md-0 d-flex justify-content-center">
+      <div
+        class="product-image d-flex justify-content-center align-items-center bg-light"
+        style="height: 300px; max-width: 80%; overflow: hidden"
+      >
+        <img
+          [src]="product.image"
+          class="img-fluid"
+          style="max-height: 100%; max-width: 100%"
+          alt="{{ product.name }}"
+        />
+      </div>
+    </div>
+
+    <!-- Columna para la descripción y detalles del producto -->
+    <div class="col-12 col-md-6">
+      <h3>{{ product.name }}</h3>
+      <p class="text-muted">Código: {{ product.id }}</p>
+      <p>{{ product.description }}</p>
+
+      <!-- Precio y disponibilidad -->
+      <h4 class="text-danger">{{ (product.price / 100).toFixed(2) }} €</h4>
+      @if (product.stock > 0) {
+        <p class="text-success">Stock: {{ product.stock }}</p>
+      } @else {
+        <p class="text-danger">Stock: {{ product.stock }}</p>
+      }
+
+      <!-- Valoración -->
+      <div class="d-flex align-items-center mb-3">
+        <div class="text-warning">
+          <!-- Estrellas de valoración -->
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star"></i>
+        </div>
+        <span class="ms-2 text-muted">4.5 (128 reseñas)</span>
+      </div>
+
+      <!-- Selector de cantidad y botón de añadir al carrito -->
+      <div class="input-group mb-3" style="max-width: 160px">
+        <input type="number" class="form-control" min="1" max="50" value="1" />
+        <button class="btn btn-dark mt-3">Añadir al carrito</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reseñas -->
+  <div class="mt-5">
+    <h5>Reseñas</h5>
+    <div class="list-group">
+      <!-- Reseña 1 -->
+      <div
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <div>
+          <strong>Usuario1</strong>
+          <p class="mb-0">¡Excelente producto!</p>
+        </div>
+        <div class="text-warning">
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+        </div>
+      </div>
+
+      <!-- Reseña 2 -->
+      <div
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <div>
+          <strong>Usuario2</strong>
+          <p class="mb-0">Muy bueno, pero podría mejorar.</p>
+        </div>
+        <div class="text-warning">
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
