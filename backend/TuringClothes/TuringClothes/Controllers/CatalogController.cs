@@ -7,6 +7,7 @@ using System.Linq.Dynamic.Core;
 using TuringClothes.Database;
 using TuringClothes.Model;
 using TuringClothes.Pagination;
+using TuringClothes.Repository;
 using TuringClothes.Services;
 
 
@@ -19,22 +20,36 @@ namespace TuringClothes.Controllers
     {
         private readonly MyDatabase _myDatabase;
         private readonly CatalogService _catalogService;
+        private readonly ProductRepository _productRepository;
         
        
-        public CatalogController(MyDatabase myDatabase, CatalogService catalogService) 
+        public CatalogController(MyDatabase myDatabase, CatalogService catalogService, ProductRepository productRepository) 
         { 
             _myDatabase = myDatabase;
             _catalogService = catalogService; 
-            
+            _productRepository = productRepository;
 
         }
 
-        [HttpGet("ObtenerProductos")]
-        public IEnumerable<Product> GetProducts()
+
+
+        [HttpGet("GetProduct")]
+        public async Task<ActionResult<Product>> GetProductById(int id)
         {
-            return _myDatabase.Products;
-        }
+            try
+            {
+                var result = await _productRepository.GetProductById(id);
 
+                if (result == null) return NotFound();
+
+                return result;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
+        }
 
 
         [AllowAnonymous]

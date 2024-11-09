@@ -33,17 +33,24 @@ namespace TuringClothes.Services
                 : query.OrderByDescending(x => x.Name),
                 _ => query // No hay orden si OrderBy es nulo
             };
-
-
-            var skipAmount = request.PageSize * (request.PageNumber - 1);
-
             var totalNumberOfRecords = query.Count();
-
-            // Luego aplica la paginación
-            var results = query.Skip(skipAmount).Take(request.PageSize).ToList();
 
             var totalPageCount = (int)Math.Ceiling((double)totalNumberOfRecords / request.PageSize);
 
+            if (totalPageCount < request.PageNumber)
+            {
+                request.PageNumber = totalPageCount;
+            }
+
+            var skipAmount = request.PageSize * (request.PageNumber - 1);
+
+            
+            // Luego aplica la paginación
+            var results = query.Skip(skipAmount).Take(request.PageSize).ToList();
+
+            
+
+            
             return new PagedResults<Product>
             {
                 Results = results,
