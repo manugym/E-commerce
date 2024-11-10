@@ -62,20 +62,11 @@
             <div class="card-body p-4">
               <div class="text-center">
                 <h5 class="fw-bolder">{{ item.name }}</h5>
-                <p class="text-danger">Precio: {{ item.price/100 }} €</p>
-                <p>{{ item.stock }} in stock</p>
-              </div>
-            </div>
-            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-              <div class="text-center">
+                <p >Precio: {{ item.price/100 }} €</p>
                 @if (item.stock > 0) {
-                <a class="btn btn-outline-dark mt-auto" href="#">
-                  Añadir al carrito
-                </a>
+                  <p>{{ item.stock }} in stock</p>
                 } @else {
-                <a class="btn btn-outline-dark mt-auto disabled" href="#">
-                  Sin stock
-                </a>
+                  <p class="text-danger">{{ item.stock }} in stock</p>
                 }
               </div>
             </div>
