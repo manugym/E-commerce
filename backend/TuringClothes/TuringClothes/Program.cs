@@ -66,6 +66,9 @@ namespace TuringClothes
 
             builder.Services.AddScoped<CatalogService>();
             builder.Services.AddScoped<SmartSearchService>();
+            builder.Services.AddScoped<ReviewService>();
+            
+
 
             builder.Services.AddPredictionEnginePool<ModelInput, ModelOutput>()
                 .FromFile("TuringModel1.mlnet");
