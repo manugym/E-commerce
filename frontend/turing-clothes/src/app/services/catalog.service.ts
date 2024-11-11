@@ -44,9 +44,7 @@ export class CatalogService {
   }
 
   saveUserSettings(paginationParams: PaginationParams): void {
-    console.log('Guardando configuraciones:', paginationParams);
     sessionStorage.setItem(this.storageKey, JSON.stringify(paginationParams));
-    console.log('Vista guardada', paginationParams);
   }
 
   getUserSettings(): PaginationParams {
