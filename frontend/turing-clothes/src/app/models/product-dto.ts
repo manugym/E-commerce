@@ -1,3 +1,5 @@
+import { ReviewDto } from "./review-dto";
+
 export interface ProductDto {
   id: number;
 
@@ -10,4 +12,6 @@ export interface ProductDto {
   stock: number;
 
   image: string;
+  
+  reviews: ReviewDto[];
 }

@@ -1,61 +1,50 @@
-import { Component } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
+import { Component, OnInit } from '@angular/core';
 import { ProductDto } from '../../models/product-dto';
 import { CatalogService } from '../../services/catalog.service';
 import { CommonModule, NgFor } from '@angular/common';
 import { PaginationParams } from '../../models/pagination-params';
 import { PagedResults } from '../../models/paged-results';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './catalogo.component.html',
   styleUrl: './catalogo.component.css',
 })
-export class CatalogoComponent {
+export class CatalogoComponent implements OnInit {
   productList: ProductDto[] = [];
   imageUrl: string[];
-
-  query: string = '';
   items: ProductDto[] = [];
-
-  /**
-   * Esto está puesto provisional. REQUIERE REVISIÓN DEL LÍDER.
-   */
   isAscending: boolean = true;
   oldQuery: string;
-
-  paginationParams: PaginationParams = {
-    query: '',
-    pageNumber: 1,
-    pageSize: 8,
-    orderBy: 2, // Default: 0 (por ejemplo, precio)
-    direction: 0, // Default: 0 (ascendente)
-  };
-  
+  paginationParams: PaginationParams;
   pagedResults: PagedResults;
+
   constructor(private catalogService: CatalogService) {}
 
   ngOnInit() {
+    const savedSettings = this.catalogService.getUserSettings();
+
+    this.paginationParams = savedSettings;
+    this.oldQuery = this.paginationParams.query;
+
     this.getPagedResults();
     this.isAscending = this.paginationParams.direction === 0;
   }
 
   async getPagedResults() {
-    
-    if (this.oldQuery !== this.query) {
+    if (this.oldQuery !== this.paginationParams.query) {
       this.paginationParams.pageNumber = 1;
     }
-    const result = await this.catalogService.getPagedResults({
-      query: this.query,
-      pageNumber: this.paginationParams.pageNumber,
-      pageSize: this.paginationParams.pageSize,
-      orderBy: this.paginationParams.orderBy,
-      direction: this.paginationParams.direction,
-    });
-    this.oldQuery = this.query
+
+    this.oldQuery = this.paginationParams.query;
+
+    const result = await this.catalogService.getPagedResults(
+      this.paginationParams
+    );
 
     if (result.success) {
       this.pagedResults = result.data;
@@ -65,7 +54,6 @@ export class CatalogoComponent {
         ...product,
         image: `https://localhost:7183/${product.image}`,
       }));
-      
     }
   }
 
@@ -83,19 +71,22 @@ export class CatalogoComponent {
   }
 
   toggleDirection() {
-    this.paginationParams.direction = this.paginationParams.direction === 0 ? 1 : 0;
+    this.paginationParams.direction =
+      this.paginationParams.direction === 0 ? 1 : 0;
     this.isAscending = this.paginationParams.direction === 0;
     this.paginationParams.pageNumber = 1;
     this.getPagedResults();
   }
 
   nextPage() {
-    if (this.paginationParams.pageNumber < this.pagedResults.totalNumberOfPages) {
+    if (
+      this.paginationParams.pageNumber < this.pagedResults.totalNumberOfPages
+    ) {
       this.paginationParams.pageNumber++;
       this.getPagedResults();
     }
   }
-  
+
   previousPage() {
     if (this.paginationParams.pageNumber > 1) {
       this.paginationParams.pageNumber--;
@@ -104,7 +95,10 @@ export class CatalogoComponent {
   }
 
   getPageNumbers(): number[] {
-    return Array.from({ length: this.pagedResults?.totalNumberOfPages }, (_, i) => i + 1);
+    return Array.from(
+      { length: this.pagedResults?.totalNumberOfPages },
+      (_, i) => i + 1
+    );
   }
 
   goToPage(page: number) {
@@ -114,20 +108,8 @@ export class CatalogoComponent {
     }
   }
 
-  onProductsPerPageChange(value: number){
-    this.paginationParams.pageSize= value;
-    //this.paginationParams.pageNumber= 1;
-    this.getPagedResults();  
+  onProductsPerPageChange(value: number) {
+    this.paginationParams.pageSize = value;
+    this.getPagedResults();
   }
-
-  /*reloadProducts(){
-    this.catalogService.getPagedResults(this.paginationParams)
-      .then((result) =>{
-        this.pagedResults = result.data;
-      })
-      .catch((error) =>{
-        console.error('Error al cargar productos:', error);
-      }
-      );
-  }*/
 }

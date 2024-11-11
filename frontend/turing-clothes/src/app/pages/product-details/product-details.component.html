@@ -1,0 +1,101 @@
+@if (product) {
+<div class="container my-5">
+  <!-- Información del producto -->
+  <div class="row">
+    <!-- Columna para la imagen del producto -->
+    <div class="col-12 col-md-6 mb-4 mb-md-0 d-flex justify-content-center">
+      <div
+        class="product-image d-flex justify-content-center align-items-center bg-light"
+        style="height: 300px; max-width: 80%; overflow: hidden"
+      >
+        <img
+          [src]="product.image"
+          class="img-fluid"
+          style="max-height: 100%; max-width: 100%"
+          alt="{{ product.name }}"
+        />
+      </div>
+    </div>
+
+    <!-- Columna para la descripción y detalles del producto -->
+    <div class="col-12 col-md-6">
+      <h3>{{ product.name }}</h3>
+      <p class="text-muted">Código: {{ product.id }}</p>
+      <p>{{ product.description }}</p>
+
+      <!-- Precio y disponibilidad -->
+      <h4 class="text-danger">{{ (product.price / 100).toFixed(2) }} €</h4>
+      @if (product.stock > 0) {
+        <p class="text-success">Stock: {{ product.stock }}</p>
+      } @else {
+        <p class="text-danger">Stock: {{ product.stock }}</p>
+      }
+
+      <!-- Valoración -->
+      <div class="d-flex align-items-center mb-3">
+        <div class="text-warning">
+          <!-- Estrellas de valoración -->
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star"></i>
+        </div>
+        <span class="ms-2 text-muted">4.5 (128 reseñas)</span>
+      </div>
+
+      <!-- Selector de cantidad y botón de añadir al carrito -->
+      <div class="input-group mb-3" style="max-width: 160px">
+        <input type="number" class="form-control" min="1" max="50" value="1" />
+        @if (product.stock > 0) {
+          <button class="btn btn-dark mt-3">Añadir al carrito</button>
+        } @else {
+          <button class="btn btn-dark mt-auto disabled">Sin stock</button>
+        }
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Reseñas -->
+  <div class="mt-5 mx-auto">
+    <h5>Reseñas</h5>
+    @if (product.reviews.length > 0) {
+      <div class="list-group">
+      @for (review of product.reviews; track review.id) {
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{review.userId}}</strong>
+            <p class="mb-0">{{review.texto}}</p>
+          </div>
+        <div class="text-warning">
+          @if (review.rating==1) {
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          }
+          @else if (review.rating==0) {
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+          } @else {
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+          }
+        </div>
+        </div>
+      }
+      </div>
+    } @else {
+        <p>No hay reseñas disponibles para este producto.</p>
+      }
+  </div>
+</div>
+}
