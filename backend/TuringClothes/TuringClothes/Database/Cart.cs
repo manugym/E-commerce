@@ -6,6 +6,6 @@
 
         public long UserId { get; set; }
 
-        public ICollection<CartDetail> Details { get; set; } = new List<CartDetail>();
+        public ICollection<CartDetail> Details { get; set; }
     }
 }

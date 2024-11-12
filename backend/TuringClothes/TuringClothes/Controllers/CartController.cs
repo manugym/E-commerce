@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TuringClothes.Database;
 using TuringClothes.Repository;
@@ -20,7 +21,7 @@ namespace TuringClothes.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCart(long id)
+        public async Task<ActionResult> GetCart(long id)
         {
             var cart = await _cartRepository.GetCart(id);
             if (cart == null)
@@ -28,6 +29,22 @@ namespace TuringClothes.Controllers
                 return NotFound();
             }
             return Ok(cart);
+        }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<ActionResult> AddItem(long id)
+        {
+            var userId = User.FindFirst("id")?.Value;
+
+            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var userIdLong))
+            {
+                return Unauthorized("Invalid user ID.");
+            }
+
+            var cart = _cartRepository.AddItemToCar(id, userIdLong);
+
+            return Ok("Product added");
         }
     }
 }
