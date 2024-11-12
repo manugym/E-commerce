@@ -7,6 +7,6 @@
         public long CartId { get; set; }
         public long ProductId { get; set; }
 
-        public int amount { get; set; }
+        public int Amount { get; set; }
     }
 }
