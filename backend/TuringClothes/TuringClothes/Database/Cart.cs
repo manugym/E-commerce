@@ -6,6 +6,6 @@
 
         public long UserId { get; set; }
 
-        ICollection<Product> Products { get; set; }
+        public ICollection<CartDetail> Details { get; set; }
     }
 }
