@@ -20,7 +20,7 @@ export class ProductDetailsComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id') as unknown as number;
 
     const result = await this.catalogService.getProductDetailsById(id);
-
+    
     result.data.image = `https://localhost:7183/${result.data.image}`;
     this.product = result.data;
   }

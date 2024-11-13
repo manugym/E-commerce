@@ -1,7 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-using System.Xml.Linq;
-
-namespace TuringClothes.Database
+﻿namespace TuringClothes.Database
 {
     public class DataSeed
     {
@@ -109,7 +106,8 @@ namespace TuringClothes.Database
                     Description = "Lo mejor contra el frio",
                     Price = 4000,
                     Stock = 50,
-                    Image = "images/cazadoraAnte.png"
+                    Image = "images/cazadoraAnte.png",
+
                 },
                 new Product
                 {
@@ -270,11 +268,75 @@ namespace TuringClothes.Database
                     Price = 3850,
                     Stock = 15,
                     Image = "images/bomber-negra-acolchada.png"
-                },
-
+                }
             };
+
+            Review[] reviews = {
+                new Review
+                {
+                    ProductId = 4,
+                    UserId = 1,
+                    Texto = "Me ha encantado, muy recomendada",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 1
+                },
+                new Review
+                {
+                    ProductId = 4,
+                    UserId = 3,
+                    Texto = "Esta bien pero mejorable",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 0
+                },
+                new Review
+                {
+                    ProductId = 6,
+                    UserId = 2,
+                    Texto = "Todo genial, muy cómodo",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 1
+                },
+                new Review
+                {
+                    ProductId = 7,
+                    UserId = 5,
+                    Texto = "Lo odio, no me gusta",
+                    DateTime = DateTime.UtcNow,
+                    Rating = -1
+                }
+            };
+            Cart[] carts = {
+                new Cart
+                {
+                    Id = 1,
+                    UserId= 1,
+                    Details = new List<CartDetail>
+        {
+            new CartDetail
+            {
+                Id = 1,
+                CartId = 1,
+                ProductId = 10,
+                Amount = 2
+            },
+            new CartDetail
+            {
+
+                Id = 2,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            }
+
+                }
+                }
+            };
+
+
             _context.Users.AddRange(users);
             _context.Products.AddRange(products);
+            _context.Reviews.AddRange(reviews);
+            _context.Carts.AddRange(carts);
             _context.SaveChanges();
             Console.WriteLine("datos insertados en la db");
         }
