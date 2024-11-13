@@ -1,7 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-using System.Xml.Linq;
-
-namespace TuringClothes.Database
+﻿namespace TuringClothes.Database
 {
     public class DataSeed
     {
@@ -110,7 +107,7 @@ namespace TuringClothes.Database
                     Price = 4000,
                     Stock = 50,
                     Image = "images/cazadoraAnte.png",
-                    
+
                 },
                 new Product
                 {
@@ -308,10 +305,38 @@ namespace TuringClothes.Database
                     Rating = -1
                 }
             };
+            Cart[] carts = {
+                new Cart
+                {
+                    Id = 1,
+                    UserId= 1,
+                    Details = new List<CartDetail>
+        {
+            new CartDetail
+            {
+                Id = 1,
+                CartId = 1,
+                ProductId = 10,
+                Amount = 2
+            },
+            new CartDetail
+            {
+
+                Id = 2,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            }
+
+                }
+                }
+            };
+
 
             _context.Users.AddRange(users);
             _context.Products.AddRange(products);
             _context.Reviews.AddRange(reviews);
+            _context.Carts.AddRange(carts);
             _context.SaveChanges();
             Console.WriteLine("datos insertados en la db");
         }
