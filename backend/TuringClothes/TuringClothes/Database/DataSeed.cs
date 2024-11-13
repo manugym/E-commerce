@@ -82,7 +82,7 @@
                     Description = "Lo mejor contra el frio",
                     Price = 2699,
                     Stock = 50,
-                    Image = "images/camiseta-blanca.png"
+                    Image = "images/sudadera-blanca.png"
                 },
                 new Product
                 {
@@ -90,7 +90,7 @@
                     Description = "Una bonita camiseta blanca",
                     Price = 2050,
                     Stock = 100,
-                    Image = "images/sudadera-blanca.png"
+                    Image = "images/camiseta-blanca.png"
                 },
                 new Product
                 {
@@ -305,115 +305,115 @@
                     Rating = -1
                 },
                            
-        new Review
-        {
+                new Review
+                {
            
-            ProductId = 1,
-            UserId = 1,
-            Texto = "No me agrada",
-            DateTime = DateTime.UtcNow,
-            Rating = -1
-        },
-    new Review {
+                    ProductId = 1,
+                    UserId = 1,
+                    Texto = "No me agrada",
+                    DateTime = DateTime.UtcNow,
+                    Rating = -1
+                },
+                new Review {
             
-            ProductId = 1,
-            UserId = 2,
-            Texto = "Me encanta",
-            DateTime = DateTime.UtcNow,
-            Rating = 1
-        },
-    new Review {
-            ProductId = 1,
-            UserId = 3,
-            Texto = "No está mal",
-            DateTime = DateTime.UtcNow,
-            Rating = 0
-        },
-    new Review {
-            ProductId = 1,
-            UserId = 4,
-            Texto = "Bomba",
-            DateTime = DateTime.UtcNow,
-            Rating = 1
-        },
-    new Review {
-            ProductId = 2,
-            UserId = 1,
-            Texto = "No me agrada",
-            DateTime = DateTime.UtcNow,
-            Rating = -1
-        },
-    new Review {
-            ProductId = 2,
-            UserId = 2,
-            Texto = "Basura",
-            DateTime = DateTime.UtcNow,
-            Rating = -1
-        },
-    new Review {
-            ProductId = 2,
-            UserId = 3,
-            Texto = "Alucinante",
-            DateTime = DateTime.UtcNow,
-            Rating = 1
-        },
-    new Review {
-            ProductId = 3,
-            UserId = 1,
-            Texto = "Malisimo",
-            DateTime = DateTime.UtcNow,
-            Rating = -1
-        },
-    new Review {
-            ProductId = 3,
-            UserId = 2,
-            Texto = "No me agrada",
-            DateTime = DateTime.UtcNow,
-            Rating = -1
-        },
-    new Review {
-            ProductId = 3,
-            UserId = 3,
-            Texto = "Me fascina",
-            DateTime = DateTime.UtcNow,
-            Rating = 1
-        },
-    new Review {
-            ProductId = 4,
-            UserId = 1,
-            Texto = "No me agrada",
-            DateTime = DateTime.UtcNow,
-            Rating = -1
-        },
-    new Review {
-            ProductId = 4,
-            UserId = 2,
-            Texto = "Lo mejor",
-            DateTime = DateTime.UtcNow,
-            Rating = 1
-        },
-    new Review {
-            ProductId = 4,
-            UserId = 3,
-            Texto = "No está mal",
-            DateTime = DateTime.UtcNow,
-            Rating = 0
-        },
-    new Review {
-            ProductId = 4,
-            UserId = 4,
-            Texto = "Mejor de lo esperado",
-            DateTime = DateTime.UtcNow,
-            Rating = 1
-        },
-    new Review {
-            ProductId = 4,
-            UserId = 5,
-            Texto = "No me agrada",
-            DateTime = DateTime.UtcNow,
-            Rating = -1
-        },
-};
+                    ProductId = 1,
+                    UserId = 2,
+                    Texto = "Me encanta",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 1
+                },
+                new Review {
+                    ProductId = 1,
+                    UserId = 3,
+                    Texto = "No está mal",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 0
+                },
+                new Review {
+                    ProductId = 1,
+                    UserId = 4,
+                    Texto = "Bomba",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 1
+                },
+                new Review {
+                    ProductId = 2,
+                    UserId = 1,
+                    Texto = "No me agrada",
+                    DateTime = DateTime.UtcNow,
+                    Rating = -1
+                },
+                new Review {
+                    ProductId = 2,
+                    UserId = 2,
+                    Texto = "Basura",
+                    DateTime = DateTime.UtcNow,
+                    Rating = -1
+                },
+                new Review {
+                    ProductId = 2,
+                    UserId = 3,
+                    Texto = "Alucinante",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 1
+                },
+                new Review {
+                    ProductId = 3,
+                    UserId = 1,
+                    Texto = "Malisimo",
+                    DateTime = DateTime.UtcNow,
+                    Rating = -1
+                },
+                new Review {
+                    ProductId = 3,
+                    UserId = 2,
+                    Texto = "No me agrada",
+                    DateTime = DateTime.UtcNow,
+                    Rating = -1
+                },
+                new Review {
+                    ProductId = 3,
+                    UserId = 3,
+                    Texto = "Me fascina",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 1
+                },
+                new Review {
+                    ProductId = 4,
+                    UserId = 1,
+                    Texto = "No me agrada",
+                    DateTime = DateTime.UtcNow,
+                    Rating = -1
+                },
+                new Review {
+                    ProductId = 4,
+                    UserId = 2,
+                    Texto = "Lo mejor",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 1
+                },
+                new Review {
+                    ProductId = 4,
+                    UserId = 3,
+                    Texto = "No está mal",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 0
+                },
+                new Review {
+                    ProductId = 4,
+                    UserId = 4,
+                    Texto = "Mejor de lo esperado",
+                    DateTime = DateTime.UtcNow,
+                    Rating = 1
+                },
+                new Review {
+                    ProductId = 4,
+                    UserId = 5,
+                    Texto = "No me agrada",
+                    DateTime = DateTime.UtcNow,
+                    Rating = -1
+                }
+            };
         
             Cart[] carts = {
                 new Cart
