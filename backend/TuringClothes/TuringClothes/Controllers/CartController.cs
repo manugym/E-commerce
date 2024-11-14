@@ -20,19 +20,21 @@ namespace TuringClothes.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("GetCart")]
         public async Task<ActionResult> GetCart(long id)
         {
+
+
             var cart = await _cartRepository.GetCart(id);
             if (cart == null)
             {
-                return NotFound();
+                return NotFound("Cart not found");
             }
             return Ok(cart);
         }
 
         [Authorize]
-        [HttpPut]
+        [HttpPut("AddItem")]
         public async Task<ActionResult> AddItem(long id)
         {
             var userId = User.FindFirst("id")?.Value;
@@ -42,9 +44,46 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            var cart = _cartRepository.AddItemToCar(id, userIdLong);
+            await _cartRepository.AddItemToCar(id, userIdLong);
 
             return Ok("Product added");
+        }
+
+        [Authorize]
+        [HttpDelete("RemoveItem")]
+        public async Task<ActionResult> RemoveItem(long id)
+        {
+            var userId = User.FindFirst("id")?.Value;
+
+            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var userIdLong))
+            {
+                return Unauthorized("Invalid user ID.");
+            }
+
+            await _cartRepository.RemoveItemFromCart(id, userIdLong);
+
+            return Ok("Product removed");
+        }
+
+        [Authorize]
+        [HttpPost("UpdateItem")]
+        public async Task<ActionResult> UpdateCart(long id, int amount)
+        {
+            var userId = User.FindFirst("id")?.Value;
+
+            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var userIdLong))
+            {
+                return Unauthorized("Invalid user ID.");
+            }
+
+            var result = await _cartRepository.UpdateItemInCart(id, amount, 1);
+
+            if (!result)
+            {
+                return BadRequest("Failed to update the cart");
+            }
+                
+            return Ok("Cart updated");
         }
     }
 }
