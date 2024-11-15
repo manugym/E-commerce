@@ -444,7 +444,9 @@
 
 
             _context.Users.AddRange(users);
+            _context.SaveChanges();
             _context.Products.AddRange(products);
+            _context.SaveChanges();
             _context.Reviews.AddRange(reviews);
             _context.Carts.AddRange(carts);
             _context.SaveChanges();
