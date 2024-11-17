@@ -26,4 +26,11 @@ export class CartComponent implements OnInit {
     console.log(this.cart)
     return result;
   }
+  
+
+  getTotal(): number {
+    return this.cart?.details?.reduce((total, item) => {
+      return total + (item.product.price * item.amount);
+    }, 0);
+  }
 }
