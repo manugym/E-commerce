@@ -1,18 +1,17 @@
 ﻿using TuringClothes.Database;
 using TuringClothes.Enums;
 using TuringClothes.Pagination;
+using TuringClothes.Repository;
 
 namespace TuringClothes.Services
 {
     public class CatalogService
     {
-        private readonly MyDatabase _myDatabase;
-
-
+        private readonly IUnitofWork _unitofWork;
         private readonly SmartSearchService _smartSearchService;
-        public CatalogService(MyDatabase myDatabase, SmartSearchService smartSearchService)
+        public CatalogService(MyDatabase myDatabase, SmartSearchService smartSearchService, IUnitofWork unitOfWork)
         {
-            _myDatabase = myDatabase;
+            _unitofWork = unitOfWork;
             _smartSearchService = smartSearchService;
         }
 
