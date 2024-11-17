@@ -83,7 +83,15 @@ export class CartComponent implements OnInit {
     return null;
   }
 
-  removeProduct() {
-    
+  async removeProduct(productId: number) {
+    const result = await this.cartService.removeProduct(productId);
+    console.log(result);
+    if (result.success) {
+      console.log('Producto actualizado correctamente');
+      this.getCart();
+      return result;
+    }
+    console.log('Error al actualizar el producto');
+    return result;
   }
 }

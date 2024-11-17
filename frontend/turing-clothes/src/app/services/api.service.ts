@@ -64,11 +64,15 @@ export class ApiService {
     return this.sendRequest<T>(request$);
   }
 
-  async delete<T = void>(path: string, params: any = {}): Promise<Result<T>> {
+  async delete<T = void>(
+    path: string,
+    params: any = {},
+    contentType: string | null = 'application/json'
+  ): Promise<Result<T>> {
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.delete(url, {
       params: new HttpParams({ fromObject: params }),
-      headers: this.getHeader(),
+      headers: this.getHeader(contentType),
       observe: 'response',
     });
 

@@ -66,12 +66,15 @@ namespace TuringClothes.Repository
             var cartDetails = cart.Details.FirstOrDefault(d => d.ProductId == productId);
             if (cartDetails != null)
             {
-                cartDetails.Amount -= 1;
+                cart.Details.Remove(cartDetails);
 
-                if (cartDetails.Amount == 0)
-                {
-                    cart.Details.Remove(cartDetails);
-                }
+
+                //cartDetails.Amount -= 1; // No puede ser esto así porque es duplicación de código. Esto ya se hace en el update.
+
+                //if (cartDetails.Amount == 0)
+                //{
+                //    cart.Details.Remove(cartDetails);
+                //}
             }
 
             await _myDatabase.SaveChangesAsync();
@@ -112,7 +115,8 @@ namespace TuringClothes.Repository
                 {
                     case 0:
 
-                        cart.Details.Remove(cartDetails);
+                        //cart.Details.Remove(cartDetails); // Para borrar vamos a usar el método remove
+                        cartDetails.Amount = 1;
                         break;
 
                     case > 0 when amount > product.Stock:

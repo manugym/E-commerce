@@ -68,7 +68,7 @@ namespace TuringClothes.Controllers
 
             await _cartRepository.RemoveItemFromCart(id, userIdLong);
 
-            return Ok("Product removed");
+            return Ok(new { message = "Product Removed" });
         }
 
         [Authorize]

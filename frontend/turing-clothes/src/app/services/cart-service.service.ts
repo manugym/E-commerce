@@ -20,12 +20,8 @@ export class CartServiceService {
     return result;
   }
 
-  // async increaseQuantity(productId: number): Promise<Result<string>> {
-  //   const result = await this.api.put<string>(`Cart/UpdateItem?id=${productId}`);
-  //   return result;
-  // }
-
-  decreaseQuantity() {
-    throw new Error('Method not implemented.');
+  async removeProduct(productId: number): Promise<Result<string>> {
+    const result = await this.api.delete<string>(`Cart/RemoveItem?id=${productId}`);
+    return result;
   }
 }

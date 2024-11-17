@@ -42,9 +42,13 @@
               style="width: 50px"
               [(ngModel)]="item.amount"
               [disabled]="item.amount >= item.product.stock"
-              (input)="item.amount = item.amount > item.product.stock ? item.product.stock : item.amount; 
-              updateQuantity(item.productId, item.amount)"
-              
+              (input)="
+                item.amount =
+                  item.amount > item.product.stock
+                    ? item.product.stock
+                    : item.amount;
+                updateQuantity(item.productId, item.amount)
+              "
             />
             <button
               class="btn btn-outline-secondary btn-sm me-2"
@@ -55,8 +59,10 @@
             </button>
 
             <span class="ms-3 fw-bold">{{ item.product.price / 100 }} €</span>
-            <button class="btn btn-danger btn-sm ms-3"
-            (click)="removeProduct()">
+            <button
+              class="btn btn-danger btn-sm ms-3"
+              (click)="removeProduct(item.productId)"
+            >
               <i class="bi bi-trash"></i>
             </button>
           </div>
