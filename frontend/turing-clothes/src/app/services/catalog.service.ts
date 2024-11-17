@@ -4,6 +4,7 @@ import { ProductDto } from '../models/product-dto';
 import { Result } from '../models/result';
 import { PaginationParams } from '../models/pagination-params';
 import { PagedResults } from '../models/paged-results';
+import { ReviewDto } from '../models/review-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -67,5 +68,9 @@ export class CatalogService {
       orderBy: 2,
       direction: 0,
     };
+  }
+
+  async addReview(review: ReviewDto): Promise<Result<any>>{
+    return await this.api.post<any>('Review', review);
   }
 }
