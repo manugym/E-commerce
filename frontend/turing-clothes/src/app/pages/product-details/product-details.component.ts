@@ -1,21 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductDto } from '../../models/product-dto';
 import { CatalogService } from '../../services/catalog.service';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { ReviewDto } from '../../models/review-dto';
+import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
 })
 export class ProductDetailsComponent implements OnInit {
 
   product: ProductDto | null = null;
+  reviewText: string = '';
 
-  constructor(private activatedRoute: ActivatedRoute, private catalogService: CatalogService) {}
+  constructor(private activatedRoute: ActivatedRoute, private catalogService: CatalogService, public authService: AuthService) {}
 
   async ngOnInit(): Promise<void> {
     const id = this.activatedRoute.snapshot.paramMap.get('id') as unknown as number;
@@ -24,6 +30,33 @@ export class ProductDetailsComponent implements OnInit {
     
     result.data.image = `https://localhost:7183/${result.data.image}`;
     this.product = result.data;
+    console.log(this.product);
   }
 
+  async confirmReview(): Promise<void> {
+    if (!this.product) return;
+
+    const review: ReviewDto = {
+      productId: this.product.id,
+      texto: this.reviewText,
+      id: 0,
+      userId: '',
+      rating: 0,
+      dateTime: '',
+      user: new User,
+      product: undefined
+    };
+    try {
+      const result = await this.catalogService.addReview(review);
+      if (result.success) {
+        Swal.fire('Reseña enviada');
+        this.reviewText = '';
+        this.product.reviews.push(result.data);
+      } else{
+        Swal.fire('No se pudo enviar la reseña')
+      }
+    } catch {
+      Swal.fire('Error')
+    }
+  }
 }
