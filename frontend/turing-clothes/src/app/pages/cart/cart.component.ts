@@ -12,8 +12,12 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './cart.component.css',
 })
 export class CartComponent implements OnInit {
-  cartDetail: CartDetail[];
-  cart: Cart;
+  cartDetail: CartDetail[] = [];
+  cart: Cart = {
+    id: null,
+    userId: null,
+    details: this.cartDetail
+  };
 
   constructor(private cartService: CartServiceService) {}
 
@@ -27,7 +31,6 @@ export class CartComponent implements OnInit {
       element.product.image = `https://localhost:7183/${element.product.image}`;
     });
     this.cart = result.data;
-    console.log(this.cart.details[0].product);
   }
 
   getTotal(): number {
@@ -38,12 +41,9 @@ export class CartComponent implements OnInit {
 
   async updateQuantity(productId: number, amount: number) {
     const result = await this.cartService.updateQuantity(productId, amount);
-    console.log(result);
     if (result.success) {
-      console.log('Producto añadido correctamente');
       return result;
     }
-    console.log('Error al actualizar el producto');
     return result;
   }
 
@@ -57,11 +57,9 @@ export class CartComponent implements OnInit {
 
     console.log(result);
     if (result.success) {
-      console.log('Producto añadido correctamente');
       await this.getCart();
       return result;
     }
-    console.log('Error al actualizar el producto');
     
     return result;
   }
@@ -75,11 +73,9 @@ export class CartComponent implements OnInit {
       );
       console.log(result);
       if (result.success) {
-        console.log('Producto actualizado correctamente');
         await this.getCart();
         return result;
       }
-      console.log('Error al actualizar el producto');
     }
     item.amount = item.product.stock;
     return null;
@@ -87,13 +83,10 @@ export class CartComponent implements OnInit {
 
   async removeProduct(productId: number) {
     const result = await this.cartService.removeProduct(productId);
-    console.log(result);
     if (result.success) {
-      console.log('Producto actualizado correctamente');
       this.getCart();
       return result;
     }
-    console.log('Error al actualizar el producto');
     return result;
   }
 }
