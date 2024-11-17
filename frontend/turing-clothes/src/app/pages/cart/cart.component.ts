@@ -58,10 +58,11 @@ export class CartComponent implements OnInit {
     console.log(result);
     if (result.success) {
       console.log('Producto añadido correctamente');
+      await this.getCart();
       return result;
     }
     console.log('Error al actualizar el producto');
-
+    
     return result;
   }
 
@@ -75,6 +76,7 @@ export class CartComponent implements OnInit {
       console.log(result);
       if (result.success) {
         console.log('Producto actualizado correctamente');
+        await this.getCart();
         return result;
       }
       console.log('Error al actualizar el producto');

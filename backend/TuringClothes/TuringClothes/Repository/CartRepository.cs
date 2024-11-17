@@ -117,8 +117,7 @@ namespace TuringClothes.Repository
                 {
                     case 0:
 
-                        //cart.Details.Remove(cartDetails); // Para borrar vamos a usar el método remove
-                        cartDetails.Amount = 1;
+                        cart.Details.Remove(cartDetails);
                         break;
 
                     case > 0 when amount > product.Stock:

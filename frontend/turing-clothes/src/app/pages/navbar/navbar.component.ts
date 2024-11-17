@@ -19,14 +19,11 @@ export class NavbarComponent implements OnInit{
   constructor(private authService: AuthService, private cartService: CartServiceService) {
   }
   async ngOnInit(): Promise<void> {
-    await this.getCartQuantity;
+    await this.cartService.getCart()
+      this.cartService.cartQuantity$.subscribe((quantity) => {
+      this.cartQuantity = quantity;
+    });
   }
-
-  async getCartQuantity(): Promise<void> {
-    await this.cartService.getCart(); // Actualiza la cantidad en el servicio
-    this.cartQuantity = this.cartService.cartQuantity;
-  }
-
 
   isLoguedIn(): boolean {
     return this.authService.isLoggedIn;

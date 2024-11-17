@@ -33,7 +33,7 @@
             <button
               class="btn btn-outline-secondary btn-sm me-2"
               (click)="decreaseQuantity(item)"
-              [disabled]="item.amount <= 1"
+              [disabled]="item.amount <= 0"
             >
               -
             </button>
