@@ -20,9 +20,10 @@ export class CartServiceService {
     return result;
   }
 
-  increaseQuantity() {
-    throw new Error('Method not implemented.');
-  }
+  // async increaseQuantity(productId: number): Promise<Result<string>> {
+  //   const result = await this.api.put<string>(`Cart/UpdateItem?id=${productId}`);
+  //   return result;
+  // }
 
   decreaseQuantity() {
     throw new Error('Method not implemented.');

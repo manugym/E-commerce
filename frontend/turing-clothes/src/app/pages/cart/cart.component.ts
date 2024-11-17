@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartDetail } from '../../models/cart-detail';
 import { Cart } from '../../models/cart';
 import { CartServiceService } from '../../services/cart-service.service';
-import { FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cart',
@@ -28,7 +28,6 @@ export class CartComponent implements OnInit {
     });
     this.cart = result.data;
     console.log(this.cart.details[0].product);
-    ;
   }
 
   getTotal(): number {
@@ -38,23 +37,53 @@ export class CartComponent implements OnInit {
   }
 
   async updateQuantity(productId: number, amount: number) {
-    console.log(productId)
-    const result = await this.cartService.updateQuantity(productId, amount)
-    console.log(result)
+    const result = await this.cartService.updateQuantity(productId, amount);
+    console.log(result);
     if (result.success) {
-      console.log("Producto añadido correctamente")
-      console.log(amount)
-      return result
+      console.log('Producto añadido correctamente');
+      return result;
     }
-    console.log("Error al actualizar el producto")
-    return result
+    console.log('Error al actualizar el producto');
+    return result;
   }
 
-  increaseQuantity(_t11: CartDetail) {
-    throw new Error('Method not implemented.');
+  async decreaseQuantity(item: any) {
+    item.amount--;
+
+    const result = await this.cartService.updateQuantity(
+      item.productId,
+      item.amount
+    );
+
+    console.log(result);
+    if (result.success) {
+      console.log('Producto añadido correctamente');
+      return result;
+    }
+    console.log('Error al actualizar el producto');
+
+    return result;
   }
 
-  decreaseQuantity(_t11: CartDetail) {
-    throw new Error('Method not implemented.');
+  async increaseQuantity(item: any) {
+    if (item.amount < item.product.stock) {
+      item.amount++;
+      const result = await this.cartService.updateQuantity(
+        item.productId,
+        item.amount
+      );
+      console.log(result);
+      if (result.success) {
+        console.log('Producto actualizado correctamente');
+        return result;
+      }
+      console.log('Error al actualizar el producto');
+    }
+    item.amount = item.product.stock;
+    return null;
+  }
+
+  removeProduct() {
+    
   }
 }

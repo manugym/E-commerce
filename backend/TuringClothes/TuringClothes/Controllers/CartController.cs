@@ -89,7 +89,7 @@ namespace TuringClothes.Controllers
                 return BadRequest("Failed to update the cart");
             }
                 
-            return Ok("Cart updated");
+            return Ok(new { message = "Cart updated" });
         }
     }
 }

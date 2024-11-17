@@ -86,12 +86,12 @@ namespace TuringClothes.Repository
             {
                 return false;
             }
-
+            Product product = await _productRepository.GetProductById(productId);
             var cartDetails = cart.Details.FirstOrDefault(d => d.ProductId == productId);
 
             if (cartDetails == null)
             {
-                if(amount > 0)
+                if (amount > 0)
                 {
                     var newDetails = new CartDetail
                     {
@@ -99,20 +99,35 @@ namespace TuringClothes.Repository
                         ProductId = productId,
                     };
                     cart.Details.Add(newDetails);
-                }          
-            } 
+                }
+            }
             else
             {
-                
-                if (amount == 0)
-                {
-                    cart.Details.Remove(cartDetails);
-                }
-                else if (cartDetails.Amount != amount)
-                {
-                    cartDetails.Amount = amount;
-                }
 
+                /*
+                 * ESTO LO HE TENIDO QUE MODIFICAR PARA PODER CONTROLAR QUE NO TE VACILEN CON EL STOCK
+                 */
+
+                switch (amount)
+                {
+                    case 0:
+
+                        cart.Details.Remove(cartDetails);
+                        break;
+
+                    case > 0 when amount > product.Stock:
+
+                        cartDetails.Amount = (int)product.Stock;
+                        break;
+
+                    default:
+
+                        if (cartDetails.Amount != amount)
+                        {
+                            cartDetails.Amount = amount;
+                        }
+                        break;
+                }
             }
 
             await _myDatabase.SaveChangesAsync();

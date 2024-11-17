@@ -16,39 +16,56 @@
         @for (item of cart.details; track item.id) {
         <div class="cart-item d-flex align-items-center mb-3">
           <img
-            src="{{item.product.image}}"
-            alt="{{item.product.name}}"
+            src="{{ item.product.image }}"
+            alt="{{ item.product.name }}"
             class="img-thumbnail"
             style="width: 90px; height: 90px"
           />
-          
-            <div class="ms-3">
-            <h6 class="mb-1">{{item.product.name}}</h6>
-            <small class="text-muted">{{item.product.stock + " in stock"}}</small>
+
+          <div class="ms-3">
+            <h6 class="mb-1">{{ item.product.name }}</h6>
+            <small class="text-muted">{{
+              item.product.stock + " in stock"
+            }}</small>
           </div>
-          
+
           <div class="ms-auto d-flex align-items-center">
-            
-            <button class="btn btn-outline-secondary btn-sm me-2" (click)="decreaseQuantity(item)">-</button>
+            <button
+              class="btn btn-outline-secondary btn-sm me-2"
+              (click)="decreaseQuantity(item)"
+              [disabled]="item.amount <= 1"
+            >
+              -
+            </button>
             <input
-              type="number"
               class="form-control form-control-sm text-center"
               style="width: 50px"
               [(ngModel)]="item.amount"
-              (input)="updateQuantity(item.productId, item.amount)"
+              [disabled]="item.amount >= item.product.stock"
+              (input)="item.amount = item.amount > item.product.stock ? item.product.stock : item.amount; 
+              updateQuantity(item.productId, item.amount)"
+              
             />
-            <button class="btn btn-outline-secondary btn-sm me-2" (click)="increaseQuantity(item)">+</button>
-            <span class="ms-3 fw-bold">{{(item.product.price/100)}} €</span>
-            <button class="btn btn-danger btn-sm ms-3">
+            <button
+              class="btn btn-outline-secondary btn-sm me-2"
+              (click)="increaseQuantity(item)"
+              [disabled]="item.amount >= item.product.stock"
+            >
+              +
+            </button>
+
+            <span class="ms-3 fw-bold">{{ item.product.price / 100 }} €</span>
+            <button class="btn btn-danger btn-sm ms-3"
+            (click)="removeProduct()">
               <i class="bi bi-trash"></i>
             </button>
           </div>
         </div>
-      }
+        }
         <hr />
         <div class="d-flex justify-content-between align-items-center">
           <h5>Total</h5>
-          <h5>{{getTotal()/100}} €</h5>
+          <h5>{{ getTotal() / 100 }} €</h5>
         </div>
         <div class="d-flex gap-2 mt-3">
           <button class="btn btn-dark w-100">Pagar con Tarjeta</button>
