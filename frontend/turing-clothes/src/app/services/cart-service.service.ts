@@ -14,4 +14,17 @@ export class CartServiceService {
 
     return result;
   }
+
+  async updateQuantity(productId: number, amount: number): Promise<Result<string>> {
+    const result = await this.api.post<string>(`Cart/UpdateItem?id=${productId}&amount=${amount}`);
+    return result;
+  }
+
+  increaseQuantity() {
+    throw new Error('Method not implemented.');
+  }
+
+  decreaseQuantity() {
+    throw new Error('Method not implemented.');
+  }
 }

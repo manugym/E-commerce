@@ -38,7 +38,8 @@ export class ApiService {
   async post<T = void>(
     path: string,
     body: Object = {},
-    contentType = null
+    // contentType = null
+    contentType: string | null = 'application/json'
   ): Promise<Result<T>> {
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.post(url, body, {

@@ -82,7 +82,7 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            var result = await _cartRepository.UpdateItemInCart(id, amount, 1);
+            var result = await _cartRepository.UpdateItemInCart(id, amount, userIdLong);
 
             if (!result)
             {

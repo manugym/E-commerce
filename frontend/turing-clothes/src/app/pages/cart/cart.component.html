@@ -28,12 +28,16 @@
           </div>
           
           <div class="ms-auto d-flex align-items-center">
+            
+            <button class="btn btn-outline-secondary btn-sm me-2" (click)="decreaseQuantity(item)">-</button>
             <input
               type="number"
               class="form-control form-control-sm text-center"
               style="width: 50px"
-              value="1"
+              [(ngModel)]="item.amount"
+              (input)="updateQuantity(item.productId, item.amount)"
             />
+            <button class="btn btn-outline-secondary btn-sm me-2" (click)="increaseQuantity(item)">+</button>
             <span class="ms-3 fw-bold">{{(item.product.price/100)}} €</span>
             <button class="btn btn-danger btn-sm ms-3">
               <i class="bi bi-trash"></i>
