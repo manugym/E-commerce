@@ -20,12 +20,18 @@ namespace TuringClothes.Controllers
 
         }
 
+        [Authorize]
         [HttpGet("GetCart")]
-        public async Task<ActionResult> GetCart(long id)
+        public async Task<ActionResult> GetCart()
         {
+            var userId = User.FindFirst("id")?.Value;
 
+            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var userIdLong))
+            {
+                return Unauthorized("Invalid user ID.");
+            }
 
-            var cart = await _cartRepository.GetCart(id);
+            var cart = await _cartRepository.GetCart(userIdLong);
             if (cart == null)
             {
                 return NotFound("Cart not found");

@@ -70,7 +70,7 @@ export class CatalogService {
     };
   }
 
-  async addReview(review: ReviewDto): Promise<Result<any>>{
+  async addReview(review: ReviewDto): Promise<Result<any>> {
     return await this.api.post<any>('Review', review);
   }
 }

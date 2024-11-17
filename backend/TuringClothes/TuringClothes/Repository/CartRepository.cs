@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TuringClothes.Controllers;
 using TuringClothes.Database;
 
 
@@ -9,15 +10,17 @@ namespace TuringClothes.Repository
     public class CartRepository
     {
         private readonly MyDatabase _myDatabase;
-        public CartRepository(MyDatabase database)
+        private readonly ProductRepository _productRepository;
+        public CartRepository(MyDatabase database, ProductRepository productRepository)
         {
             _myDatabase = database;
+            _productRepository = productRepository;
 
         }
 
         public async Task<Cart> GetCart(long id)
         {
-            var cart = await _myDatabase.Carts.Include(d => d.Details).FirstOrDefaultAsync(u => u.UserId == id);
+            var cart = await _myDatabase.Carts.Include(d => d.Details).ThenInclude(p => p.Product).FirstOrDefaultAsync(u => u.UserId == id);
 
             return cart;
         }

@@ -19,7 +19,7 @@ export class NavbarComponent {
   }
 
   getLogedUsername(){
-    return this.authService.decodedToken.unique_name
+    return this.authService.decodedToken.unique_name;
   }
 
   logout() {
