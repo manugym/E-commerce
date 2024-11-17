@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { RouterLink } from '@angular/router';
+import { CartComponent } from '../cart/cart.component';
+import { CartServiceService } from '../../services/cart-service.service';
+import { Result } from '../../models/result';
 
 @Component({
   selector: 'app-navbar',
@@ -9,10 +12,21 @@ import { RouterLink } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit{
+
   jsonDecodedName: string
-  constructor(private authService: AuthService) {
+  cartQuantity: number
+  constructor(private authService: AuthService, private cartService: CartServiceService) {
   }
+  async ngOnInit(): Promise<void> {
+    await this.getCartQuantity;
+  }
+
+  async getCartQuantity(): Promise<void> {
+    await this.cartService.getCart(); // Actualiza la cantidad en el servicio
+    this.cartQuantity = this.cartService.cartQuantity;
+  }
+
 
   isLoguedIn(): boolean {
     return this.authService.isLoggedIn;

@@ -39,6 +39,7 @@ namespace TuringClothes.Repository
                 _myDatabase.Carts.Add(cart);
             }
             var existingDetails = cart.Details.FirstOrDefault(d => d.ProductId == productId);
+            Product product = await _productRepository.GetProductById(productId);
 
             if (existingDetails != null)
             {
@@ -49,7 +50,8 @@ namespace TuringClothes.Repository
                 var cartDetails = new CartDetail
                 {
                     ProductId = productId,
-                    Amount = 1
+                    Amount = 1,
+                    Product = product
                 };
                 cart.Details.Add(cartDetails);
             }

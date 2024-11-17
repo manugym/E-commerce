@@ -8,6 +8,8 @@ import { ReviewDto } from '../../models/review-dto';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../models/user';
+import { Result } from '../../models/result';
+import { CartServiceService } from '../../services/cart-service.service';
 
 @Component({
   selector: 'app-product-details',
@@ -21,7 +23,7 @@ export class ProductDetailsComponent implements OnInit {
   product: ProductDto | null = null;
   reviewText: string = '';
 
-  constructor(private activatedRoute: ActivatedRoute, private catalogService: CatalogService, public authService: AuthService) {}
+  constructor(private activatedRoute: ActivatedRoute, private catalogService: CatalogService, public authService: AuthService, private cartService: CartServiceService) {}
 
   async ngOnInit(): Promise<void> {
     const id = this.activatedRoute.snapshot.paramMap.get('id') as unknown as number;
@@ -59,4 +61,16 @@ export class ProductDetailsComponent implements OnInit {
       Swal.fire('Error')
     }
   }
+
+  async addProductToCart(productId: number): Promise<Result<string>> {
+    const result = await this.cartService.addProductToCart(productId);
+    console.log(result);
+    if (result.success) {
+      console.log('Producto actualizado correctamente');
+      return result;
+    }
+    console.log('Error al actualizar el producto');
+    return result;
+  }
+  
 }

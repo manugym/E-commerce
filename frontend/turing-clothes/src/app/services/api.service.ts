@@ -53,7 +53,7 @@ export class ApiService {
   async put<T = void>(
     path: string,
     body: Object = {},
-    contentType = null
+    contentType: string | null = 'application/json'
   ): Promise<Result<T>> {
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.put(url, body, {

@@ -48,7 +48,7 @@
       <div class="input-group mb-3" style="max-width: 160px">
         <input type="number" class="form-control" min="1" max="50" value="1" />
         @if (product.stock > 0) {
-          <button class="btn btn-dark mt-3">Añadir al carrito</button>
+          <button class="btn btn-dark mt-3" (click)="addProductToCart(product.id)">Añadir al carrito</button>
         } @else {
           <button class="btn btn-dark mt-auto disabled">Sin stock</button>
         }
