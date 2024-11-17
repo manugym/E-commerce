@@ -41,7 +41,7 @@
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star"></i>
         </div>
-        <span class="ms-2 text-muted">4.5 (128 reseñas)</span>
+        <span class="ms-2 text-muted">({{product.reviews.length}})</span>
       </div>
 
       <!-- Selector de cantidad y botón de añadir al carrito -->
@@ -57,6 +57,32 @@
     </div>
   </div>
 
+  <!-- Escribir reseñas -->
+  <div class="mt-5">
+    <h5>Escribir una reseña</h5>
+     @if (authService.isLoggedIn) {
+      <form (ngSubmit)="confirmReview()">
+        <div class="mb-3">
+          <textarea
+            class="form-control"
+            id="reviewText"
+            rows="4"
+            [(ngModel)]="reviewText"
+            name="reviewText"
+            placeholder="Admite que te encanta..."
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          Enviar
+        </button>
+      </form>
+    } @else {
+        <p class="text-muted">Debes <a [routerLink]="['/login']">iniciar sesión</a> para escribir una reseña.</p>
+      }
+  </div>
+  
+
   <!-- Reseñas -->
   <div class="mt-5 mx-auto">
     <h5>Reseñas</h5>
@@ -65,7 +91,8 @@
       @for (review of product.reviews; track review.id) {
         <div class="list-group-item d-flex justify-content-between align-items-center">
           <div>
-            <strong>{{review.userId}}</strong>
+            <strong>{{review.user.name + " " + review.user.surname}}</strong>
+            <p class="text-muted mb-1">{{ review.dateTime | date:'dd/MM/yyyy' }}</p>
             <p class="mb-0">{{review.texto}}</p>
           </div>
         <div class="text-warning">

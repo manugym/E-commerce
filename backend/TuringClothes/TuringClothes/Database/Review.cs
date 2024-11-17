@@ -1,4 +1,6 @@
-﻿namespace TuringClothes.Database
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TuringClothes.Database
 {
 
     public class Review
@@ -14,6 +16,7 @@
         public DateTime DateTime { get; set; }
 
         public int Rating { get; set; }
-        
+
+        public User User { get; set; }
     }
 }

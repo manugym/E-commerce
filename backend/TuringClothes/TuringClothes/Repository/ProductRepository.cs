@@ -16,7 +16,7 @@ namespace TuringClothes.Repository
 
         public async Task<Product?> GetProductById(int id)
         {
-            return await _myDataBase.Products.Include(p => p.Reviews).FirstOrDefaultAsync(n => n.Id == id);
+            return await _myDataBase.Products.Include(p => p.Reviews).ThenInclude(r => r.User).FirstOrDefaultAsync(n => n.Id == id);
         }
     }
 }
