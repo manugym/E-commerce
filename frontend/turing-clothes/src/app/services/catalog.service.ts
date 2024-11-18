@@ -5,6 +5,7 @@ import { Result } from '../models/result';
 import { PaginationParams } from '../models/pagination-params';
 import { PagedResults } from '../models/paged-results';
 import { ReviewDto } from '../models/review-dto';
+import { CartServiceService } from './cart-service.service';
 
 @Injectable({
   providedIn: 'root',
@@ -41,6 +42,8 @@ export class CatalogService {
       `Catalog/GetProduct?id=${id}`
     );
 
+    result.data.image = `https://localhost:7183/${result.data.image}`;
+
     return result;
   }
 
@@ -70,7 +73,7 @@ export class CatalogService {
     };
   }
 
-  async addReview(review: ReviewDto): Promise<Result<any>>{
-    return await this.api.post<any>('Review', review);
+  async addReview(review: ReviewDto): Promise<Result<ReviewDto>> {
+    return await this.api.post<ReviewDto>('Review', review);
   }
 }
