@@ -70,8 +70,13 @@ export class ProductDetailsComponent implements OnInit {
   async buyNow(productId: number, quantity: number): Promise<void> {
     if (quantity > 0) {
       this.addProductToCart(productId, quantity);
-      await this.cartService.getCart();
-      await this.router.navigate(['/cart']);
+      if (this.authService.isLoggedIn) {
+        await this.router.navigate(['/cart']);
+        await this.cartService.getCart();
+      } else {
+        await this.router.navigate(['/local-cart']);
+      }
+      
     }
   }
 
