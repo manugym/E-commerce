@@ -21,8 +21,8 @@ export class CartComponent implements OnInit {
 
   constructor(private cartService: CartServiceService) {}
 
-  ngOnInit(): void {
-    this.getCart();
+  async ngOnInit(): Promise<void> {
+    await this.getCart();
   }
 
   async getCart() {
