@@ -19,9 +19,9 @@ namespace TuringClothes.Repository
         public ProductRepository ProductRepository => _productRepository ?? new ProductRepository(_context);
 
         public CartRepository CartRepository => _cartRepository ?? new CartRepository(_context);
-        public void SaveChanges()
+        public async Task<bool> SaveAsync() 
         {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

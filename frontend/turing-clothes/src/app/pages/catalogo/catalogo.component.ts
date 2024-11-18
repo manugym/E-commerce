@@ -6,6 +6,9 @@ import { PaginationParams } from '../../models/pagination-params';
 import { PagedResults } from '../../models/paged-results';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ReviewDto } from '../../models/review-dto';
+import { lastValueFrom } from 'rxjs';
+
 
 @Component({
   selector: 'app-catalogo',
@@ -22,6 +25,7 @@ export class CatalogoComponent implements OnInit {
   oldQuery: string;
   paginationParams: PaginationParams;
   pagedResults: PagedResults;
+  productReviews: { [productid: number]: number } = {};
 
   constructor(private catalogService: CatalogService) {}
 
@@ -54,9 +58,59 @@ export class CatalogoComponent implements OnInit {
         ...product,
         image: `https://localhost:7183/${product.image}`,
       }));
+      this.items.forEach((product) => this.loadProductReviews(product.id));
     }
+  } catch (error) {
+    console.error('Error al obtener los productos:', error);
   }
 
+  loadProductReviews(productId: number): void {
+    
+    this.items.forEach((product) => {this.catalogService.getProductReviews(productId).subscribe(
+      (reviews: ReviewDto[]) => {
+        console.log(`Reviews for product ID ${productId}:`, reviews); // Muestra los datos de reseñas
+        if (reviews && reviews.length > 0) {
+          const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
+          this.productReviews[product.id] = averageRating;  // Asegúrate de que esto está actualizando el valor
+          console.log('Ratings en productReviews:', this.productReviews);
+          
+        } else {
+          this.productReviews[productId] = 0; // Establece 0 si no hay reseñas
+        }
+      },
+      (error) => {
+        console.error(`Error fetching reviews for product ID ${productId}:`, error);
+        this.productReviews[productId] = 0; // Establece 0 en caso de error
+      }
+    );})
+    
+}
+
+getStarArray(rating: number): number[] {
+  
+  // Rounding down the rating to the nearest integer
+  const filledStars = Math.floor(rating);  // Número de estrellas llenas
+  const emptyStars = 5 - filledStars;      // Número de estrellas vacías
+  const halfStar = rating % 1 > 0.5 ? 1 : 0;  // Determinamos si hay medio estrella
+
+  console.log('Rating:', rating);
+  console.log('Filled Stars:', filledStars);
+  console.log('Half Star:', halfStar);
+  console.log('Empty Stars:', emptyStars);
+
+  const stars = [];
+  for (let i = 0; i < filledStars; i++) {
+    stars.push(1);  // Estrella llena
+  }
+  if (halfStar) stars.push(0.5);  // Medio estrella si es necesario
+  for (let i = 0; i < emptyStars; i++) {
+    stars.push(0);  // Estrella vacía
+  }
+
+  console.log('Stars array:', stars);
+  return stars;
+}
+       
   /**
    * Ordenar por precio: 0.
    * Ordenar por nombre: 1.
@@ -69,6 +123,12 @@ export class CatalogoComponent implements OnInit {
     this.paginationParams.pageNumber = 1;
     this.getPagedResults();
   }
+
+  round(value: number): number {
+    return Math.round(value);
+  }
+  
+
 
   toggleDirection() {
     this.paginationParams.direction =
@@ -112,4 +172,6 @@ export class CatalogoComponent implements OnInit {
     this.paginationParams.pageSize = value;
     this.getPagedResults();
   }
+ 
 }
+  

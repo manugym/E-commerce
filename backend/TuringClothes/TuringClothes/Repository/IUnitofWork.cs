@@ -7,6 +7,6 @@ namespace TuringClothes.Repository
         UserRepository UserRepository { get; }
         ProductRepository ProductRepository { get; }
         CartRepository CartRepository { get; }
-        void SaveChanges();
+        Task<bool> SaveAsync();
     }
 }
