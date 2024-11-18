@@ -20,12 +20,18 @@ namespace TuringClothes.Controllers
 
         }
 
+        [Authorize]
         [HttpGet("GetCart")]
-        public async Task<ActionResult> GetCart(long id)
+        public async Task<ActionResult> GetCart()
         {
+            var userId = User.FindFirst("id")?.Value;
 
+            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var userIdLong))
+            {
+                return Unauthorized("Invalid user ID.");
+            }
 
-            var cart = await _cartRepository.GetCart(id);
+            var cart = await _cartRepository.GetCart(userIdLong);
             if (cart == null)
             {
                 return NotFound("Cart not found");
@@ -35,7 +41,7 @@ namespace TuringClothes.Controllers
 
         [Authorize]
         [HttpPut("AddItem")]
-        public async Task<ActionResult> AddItem(long id)
+        public async Task<ActionResult> AddItem(long id, int quantity)
         {
             var userId = User.FindFirst("id")?.Value;
 
@@ -44,7 +50,7 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            await _cartRepository.AddItemToCar(id, userIdLong);
+            await _cartRepository.AddItemToCart(id, userIdLong, quantity);
 
             return Ok("Product added");
         }
@@ -62,7 +68,7 @@ namespace TuringClothes.Controllers
 
             await _cartRepository.RemoveItemFromCart(id, userIdLong);
 
-            return Ok("Product removed");
+            return Ok(new { message = "Product Removed" });
         }
 
         [Authorize]
@@ -76,14 +82,14 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            var result = await _cartRepository.UpdateItemInCart(id, amount, 1);
+            var result = await _cartRepository.UpdateItemInCart(id, amount, userIdLong);
 
             if (!result)
             {
                 return BadRequest("Failed to update the cart");
             }
                 
-            return Ok("Cart updated");
+            return Ok(new { message = "Cart updated" });
         }
     }
 }

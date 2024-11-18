@@ -1,10 +1,10 @@
 <div
   class="container-fluid login-container d-flex justify-content-center align-items-center my-5"
-  style="height: 100vh"
+  style="min-height: 100vh"
 >
   <div
-    class="login-form shadow p-4 bg-white rounded"
-    style="min-width: 100px; width: 400px; max-width: 85%"
+    class="login-form shadow p-4 bg-white rounded w-100"
+    style="max-width: 500px"
   >
     <h3 class="text-center mb-4">Registro de Usuario</h3>
     <form [formGroup]="myForm" (ngSubmit)="submit()">
@@ -118,7 +118,12 @@
         </div>
       </div>
 
-      <input type="submit" class="btn btn-primary w-100" value="Registrarse" />
+      <input
+        type="submit"
+        class="btn bg-dark btn-light w-100 text-white"
+        value="Registrarse"
+      />
+      <!-- ESTO ESTÁ POR VER LA ANIMACIÓN NO SE VE-->
     </form>
   </div>
 </div>

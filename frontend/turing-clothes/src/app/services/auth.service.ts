@@ -15,7 +15,19 @@ export class AuthService {
   private readonly TOKEN_KEY = 'token';
   decodedToken: any = null;
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router) {
+    this.loadTokenFromStorage();
+  }
+
+  private loadTokenFromStorage(): void {
+    const token =
+      sessionStorage.getItem(this.TOKEN_KEY) ||
+      localStorage.getItem(this.TOKEN_KEY);
+    if (token) {
+      this.api.jwt = token;
+      this.decodedToken = this.decodeJwt(token);
+    }
+  }
 
   async login(
     authData: AuthDto,
@@ -50,6 +62,8 @@ export class AuthService {
 
     if (remember) {
       localStorage.setItem(this.TOKEN_KEY, token);
+    } else {
+      sessionStorage.setItem(this.TOKEN_KEY, token);
     }
   }
 
@@ -66,18 +80,19 @@ export class AuthService {
     Swal.fire({
       icon: 'error',
       text: 'Login Incorrecto',
-      showConfirmButton: true
-  });
+      showConfirmButton: true,
+    });
   }
 
   get isLoggedIn(): boolean {
-    return this.decodedToken;
+    return !!this.decodedToken;
   }
 
   logout(): void {
     this.api.jwt = '';
     this.decodedToken = null;
     localStorage.removeItem(this.TOKEN_KEY);
+    sessionStorage.removeItem(this.TOKEN_KEY);
     this.router.navigate(['/login']);
   }
 

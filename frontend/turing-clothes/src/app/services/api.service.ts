@@ -38,7 +38,8 @@ export class ApiService {
   async post<T = void>(
     path: string,
     body: Object = {},
-    contentType = null
+    // contentType = null
+    contentType: string | null = 'application/json'
   ): Promise<Result<T>> {
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.post(url, body, {
@@ -52,7 +53,7 @@ export class ApiService {
   async put<T = void>(
     path: string,
     body: Object = {},
-    contentType = null
+    contentType: string | null = 'application/json'
   ): Promise<Result<T>> {
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.put(url, body, {
@@ -63,11 +64,15 @@ export class ApiService {
     return this.sendRequest<T>(request$);
   }
 
-  async delete<T = void>(path: string, params: any = {}): Promise<Result<T>> {
+  async delete<T = void>(
+    path: string,
+    params: any = {},
+    contentType: string | null = 'application/json'
+  ): Promise<Result<T>> {
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.delete(url, {
       params: new HttpParams({ fromObject: params }),
-      headers: this.getHeader(),
+      headers: this.getHeader(contentType),
       observe: 'response',
     });
 

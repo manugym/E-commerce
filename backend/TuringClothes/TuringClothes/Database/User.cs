@@ -24,7 +24,5 @@ namespace TuringClothes.Database
         [DefaultValue("user")]
         public string Role { get; set; }
 
-
-
     }
 }
