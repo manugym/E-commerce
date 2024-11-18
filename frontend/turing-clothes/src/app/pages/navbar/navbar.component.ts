@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { CartComponent } from '../cart/cart.component';
 import { CartServiceService } from '../../services/cart-service.service';
 import { Result } from '../../models/result';
+import { LocalCartComponent } from '../local-cart/local-cart.component';
 
 @Component({
   selector: 'app-navbar',
