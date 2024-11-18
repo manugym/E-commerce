@@ -41,7 +41,7 @@ namespace TuringClothes.Controllers
 
         [Authorize]
         [HttpPut("AddItem")]
-        public async Task<ActionResult> AddItem(long id)
+        public async Task<ActionResult> AddItem(long id, int quantity)
         {
             var userId = User.FindFirst("id")?.Value;
 
@@ -50,7 +50,7 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            await _cartRepository.AddItemToCar(id, userIdLong);
+            await _cartRepository.AddItemToCart(id, userIdLong, quantity);
 
             return Ok("Product added");
         }

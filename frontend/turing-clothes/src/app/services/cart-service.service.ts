@@ -39,8 +39,8 @@ export class CartServiceService implements OnInit{
     return result;
   }
   
-  async addProductToCart(productId: number): Promise<Result<string>> {
-    const result = await this.api.put<string>(`Cart/AddItem?id=${productId}`);
+  async addProductToCart(productId: number, quantity: number): Promise<Result<string>> {
+    const result = await this.api.put<string>(`Cart/AddItem?id=${productId}&quantity=${quantity}`);
     return result;
   }
 

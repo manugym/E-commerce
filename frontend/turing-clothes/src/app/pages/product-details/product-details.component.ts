@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductDto } from '../../models/product-dto';
 import { CatalogService } from '../../services/catalog.service';
 import { CommonModule } from '@angular/common';
@@ -21,12 +21,14 @@ import { CartServiceService } from '../../services/cart-service.service';
 export class ProductDetailsComponent implements OnInit {
   product: ProductDto | null = null;
   reviewText: string = '';
+  quantity: number = 1;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private catalogService: CatalogService,
     public authService: AuthService,
-    private cartService: CartServiceService
+    private cartService: CartServiceService,
+    private router: Router
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -41,7 +43,6 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   async confirmReview(): Promise<void> {
-    if (!this.product) return;
 
     const review: ReviewDto = {
       productId: this.product.id,
@@ -67,7 +68,14 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-  async addProductToCart(productId: number): Promise<Result<string>> {
+  async buyNow(productId: number, quantity: number): Promise<void> {
+    if (quantity > 0) {
+      this.addProductToCart(productId, quantity);
+      await this.router.navigate(['/cart']);
+    }
+  }
+
+  async addProductToCart(productId: number, quantity: number): Promise<Result<string>> {
     if (!this.authService.isLoggedIn) {
       const product = (
         await this.catalogService.getProductDetailsById(productId)
@@ -84,7 +92,7 @@ export class ProductDetailsComponent implements OnInit {
       if (existingDetail) {
         // Si el producto ya está en el carrito, incrementa la cantidad (respetando el stock)
         existingDetail.amount = Math.min(
-          existingDetail.amount + 1,
+          existingDetail.amount + quantity,
           product.stock
         );
       } else {
@@ -93,14 +101,14 @@ export class ProductDetailsComponent implements OnInit {
           id: localCart.details.length + 1, // Generar un nuevo ID para el detalle
           productId: product.id,
           product,
-          amount: 1,
+          amount: quantity,
           cartId: null, // No tiene carrito asociado porque es local
         });
       }
       localStorage.setItem('localCart', JSON.stringify(localCart));
       return Result.success(200, 'Producto agregado al carrito');
     }
-    const result = await this.cartService.addProductToCart(productId);
+    const result = await this.cartService.addProductToCart(productId, quantity);
     console.log(result);
     if (result.success) {
       await this.cartService.getCart();

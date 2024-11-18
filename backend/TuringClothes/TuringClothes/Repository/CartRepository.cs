@@ -25,7 +25,7 @@ namespace TuringClothes.Repository
             return cart;
         }
 
-        public async Task<Cart> AddItemToCar(long productId, long userId)
+        public async Task<Cart> AddItemToCart(long productId, long userId, int quantity)
         {
             var cart = await GetCart(userId);
 
@@ -43,14 +43,14 @@ namespace TuringClothes.Repository
 
             if (existingDetails != null)
             {
-                existingDetails.Amount += 1;
+                existingDetails.Amount += quantity;
             }
             else
             {
                 var cartDetails = new CartDetail
                 {
                     ProductId = productId,
-                    Amount = 1,
+                    Amount = quantity,
                     Product = product
                 };
                 cart.Details.Add(cartDetails);
