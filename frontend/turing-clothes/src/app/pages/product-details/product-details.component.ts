@@ -16,23 +16,28 @@ import { CartServiceService } from '../../services/cart-service.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './product-details.component.html',
-  styleUrl: './product-details.component.css'
+  styleUrl: './product-details.component.css',
 })
 export class ProductDetailsComponent implements OnInit {
-
   product: ProductDto | null = null;
   reviewText: string = '';
 
-  constructor(private activatedRoute: ActivatedRoute, private catalogService: CatalogService, public authService: AuthService, private cartService: CartServiceService) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private catalogService: CatalogService,
+    public authService: AuthService,
+    private cartService: CartServiceService
+  ) {}
 
   async ngOnInit(): Promise<void> {
-    const id = this.activatedRoute.snapshot.paramMap.get('id') as unknown as number;
+    const id = this.activatedRoute.snapshot.paramMap.get(
+      'id'
+    ) as unknown as number;
 
     const result = await this.catalogService.getProductDetailsById(id);
-    
+
     result.data.image = `https://localhost:7183/${result.data.image}`;
     this.product = result.data;
-    console.log(this.product);
   }
 
   async confirmReview(): Promise<void> {
@@ -45,8 +50,8 @@ export class ProductDetailsComponent implements OnInit {
       userId: '',
       rating: 0,
       dateTime: '',
-      user: new User,
-      product: undefined
+      user: new User(),
+      product: undefined,
     };
     try {
       const result = await this.catalogService.addReview(review);
@@ -54,15 +59,47 @@ export class ProductDetailsComponent implements OnInit {
         Swal.fire('Reseña enviada');
         this.reviewText = '';
         this.product.reviews.push(result.data);
-      } else{
-        Swal.fire('No se pudo enviar la reseña')
+      } else {
+        Swal.fire('No se pudo enviar la reseña');
       }
     } catch {
-      Swal.fire('Error')
+      Swal.fire('Error');
     }
   }
 
   async addProductToCart(productId: number): Promise<Result<string>> {
+    if (!this.authService.isLoggedIn) {
+      const product = (
+        await this.catalogService.getProductDetailsById(productId)
+      ).data;
+
+      // Obtener el carrito local actual o inicializar uno nuevo
+      const localCart = JSON.parse(localStorage.getItem('localCart')) || { details: [] };
+
+      // Buscar si el producto ya existe en el carrito
+      const existingDetail = localCart.details.find(
+        (detail: any) => detail.productId === productId
+      );
+
+      if (existingDetail) {
+        // Si el producto ya está en el carrito, incrementa la cantidad (respetando el stock)
+        existingDetail.amount = Math.min(
+          existingDetail.amount + 1,
+          product.stock
+        );
+      } else {
+        // Si el producto no está en el carrito, agrégalo
+        localCart.details.push({
+          id: localCart.details.length + 1, // Generar un nuevo ID para el detalle
+          productId: product.id,
+          product,
+          amount: 1,
+          cartId: null, // No tiene carrito asociado porque es local
+        });
+      }
+      localStorage.setItem('localCart', JSON.stringify(localCart));
+      return Result.success(200, 'Producto agregado al carrito');
+    }
     const result = await this.cartService.addProductToCart(productId);
     console.log(result);
     if (result.success) {
@@ -71,5 +108,4 @@ export class ProductDetailsComponent implements OnInit {
     }
     return result;
   }
-  
 }
