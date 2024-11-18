@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TuringClothes.Controllers;
 using TuringClothes.Database;
 
 
@@ -9,20 +10,22 @@ namespace TuringClothes.Repository
     public class CartRepository
     {
         private readonly MyDatabase _myDatabase;
-        public CartRepository(MyDatabase database)
+        private readonly ProductRepository _productRepository;
+        public CartRepository(MyDatabase database, ProductRepository productRepository)
         {
             _myDatabase = database;
+            _productRepository = productRepository;
 
         }
 
         public async Task<Cart> GetCart(long id)
         {
-            var cart = await _myDatabase.Carts.Include(d => d.Details).FirstOrDefaultAsync(u => u.UserId == id);
+            var cart = await _myDatabase.Carts.Include(d => d.Details).ThenInclude(p => p.Product).FirstOrDefaultAsync(u => u.UserId == id);
 
             return cart;
         }
 
-        public async Task<Cart> AddItemToCar(long productId, long userId)
+        public async Task<Cart> AddItemToCart(long productId, long userId, int quantity)
         {
             var cart = await GetCart(userId);
 
@@ -36,17 +39,19 @@ namespace TuringClothes.Repository
                 _myDatabase.Carts.Add(cart);
             }
             var existingDetails = cart.Details.FirstOrDefault(d => d.ProductId == productId);
+            Product product = await _productRepository.GetProductById(productId);
 
             if (existingDetails != null)
             {
-                existingDetails.Amount += 1;
+                existingDetails.Amount += quantity;
             }
             else
             {
                 var cartDetails = new CartDetail
                 {
                     ProductId = productId,
-                    Amount = 1
+                    Amount = quantity,
+                    Product = product
                 };
                 cart.Details.Add(cartDetails);
             }
@@ -63,12 +68,15 @@ namespace TuringClothes.Repository
             var cartDetails = cart.Details.FirstOrDefault(d => d.ProductId == productId);
             if (cartDetails != null)
             {
-                cartDetails.Amount -= 1;
+                cart.Details.Remove(cartDetails);
 
-                if (cartDetails.Amount == 0)
-                {
-                    cart.Details.Remove(cartDetails);
-                }
+
+                //cartDetails.Amount -= 1; // No puede ser esto así porque es duplicación de código. Esto ya se hace en el update.
+
+                //if (cartDetails.Amount == 0)
+                //{
+                //    cart.Details.Remove(cartDetails);
+                //}
             }
 
             await _myDatabase.SaveChangesAsync();
@@ -83,12 +91,12 @@ namespace TuringClothes.Repository
             {
                 return false;
             }
-
+            Product product = await _productRepository.GetProductById(productId);
             var cartDetails = cart.Details.FirstOrDefault(d => d.ProductId == productId);
 
             if (cartDetails == null)
             {
-                if(amount > 0)
+                if (amount > 0)
                 {
                     var newDetails = new CartDetail
                     {
@@ -96,20 +104,35 @@ namespace TuringClothes.Repository
                         ProductId = productId,
                     };
                     cart.Details.Add(newDetails);
-                }          
-            } 
+                }
+            }
             else
             {
-                
-                if (amount == 0)
-                {
-                    cart.Details.Remove(cartDetails);
-                }
-                else if (cartDetails.Amount != amount)
-                {
-                    cartDetails.Amount = amount;
-                }
 
+                /*
+                 * ESTO LO HE TENIDO QUE MODIFICAR PARA PODER CONTROLAR QUE NO TE VACILEN CON EL STOCK
+                 */
+
+                switch (amount)
+                {
+                    case 0:
+
+                        cart.Details.Remove(cartDetails);
+                        break;
+
+                    case > 0 when amount > product.Stock:
+
+                        cartDetails.Amount = (int)product.Stock;
+                        break;
+
+                    default:
+
+                        if (cartDetails.Amount != amount)
+                        {
+                            cartDetails.Amount = amount;
+                        }
+                        break;
+                }
             }
 
             await _myDatabase.SaveChangesAsync();
