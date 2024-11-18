@@ -48,74 +48,49 @@
   <!-- Listado de resultados -->
   <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
-      <div
-        class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
-      >
-        @for (item of items; track item.id) {
-        <div class="col mb-5">
-          <a [routerLink]="['/product-details', item.id]" class="card h-100">
-            <img
-              class="card-img-top"
-              src="{{ item.image }}"
-              alt="{{ item.name }}"
-            />
-            <div class="card-body p-4">
-              <div class="text-center">
-                <h5 class="fw-bolder">{{ item.name }}</h5>
-                <p >Precio: {{ item.price/100 }} €</p>
-                @if (item.stock > 0) {
-                  <p>{{ item.stock }} in stock</p>}
-                  @else {
-                    <p class="text-danger">{{ item.stock }} in stock</p>
-                  }  
-                    <!-- Mostrar las estrellas según el rating calculado -->
-                    <div *ngIf="productReviews[item.id] !== undefined">
-                      <div class="stars">
-                        <i *ngFor="let star of getStarArray(productReviews[item.id])"
-                          [ngClass]="{
-                            'bi-star-fill': star === 1,
-                            'bi-star-half': star === 0.5,
-                            'bi-star': star === 0
-                          }">
-                        </i>
-                      </div>
-                    </div>
-                    <p *ngIf="productReviews[item.id] === undefined">Cargando reseñas...</p>
+      <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        <div *ngFor="let item of items">
+          <div class="col mb-5">
+            <a [routerLink]="['/product-details', item.id]" class="card h-100">
+              <img class="card-img-top" src="{{ item.image }}" alt="{{ item.name }}" />
+              <div class="card-body p-4">
+                <div class="text-center">
+                  <h5 class="fw-bolder">{{ item.name }}</h5>
+                  <p>Precio: {{ item.price / 100 }} €</p>
+                  <i *ngFor="let star of getStarArray(productReviews[item.id])" 
+                  [ngClass]="{
+                    'bi bi-star-fill': star === 1,
+                    'bi bi-star-half': star === 0.5,
+                    'bi bi-star': star === 0
+                  }">
+               </i>
                 </div>
               </div>
             </a>
           </div>
-              
-        }
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- Paginación y selector de productos por página (sin cambios) -->
   <div class="pagination-buttons mb-4 d-flex justify-content-center align-items-center gap-2">
-    <!-- Botón de Anterior -->
     <button class="btn btn-outline-secondary rounded-circle" (click)="previousPage()" [disabled]="paginationParams.pageNumber === 1">
       <i class="bi bi-chevron-left"></i>
     </button>
-  
-    <!-- Botones numerados para cada página -->
-    @if (pagedResults){
-      @for (page of getPageNumbers(); track page) {
-        <button
-          class="btn btn-outline-secondary rounded-circle"
-          [ngClass]="{ 'btn-secondary text-white': paginationParams.pageNumber === page, 'btn-outline-primary': paginationParams.pageNumber !== page }"
-          (click)="goToPage(page)">
-          {{ page }}
-        </button>
-      }
-    }
-  
-    <!-- Botón de Siguiente -->
+
+    <button *ngFor="let page of getPageNumbers()" class="btn btn-outline-secondary rounded-circle" 
+            [ngClass]="{ 'btn-secondary text-white': paginationParams.pageNumber === page, 'btn-outline-primary': paginationParams.pageNumber !== page }"
+            (click)="goToPage(page)">
+      {{ page }}
+    </button>
+
     <button class="btn btn-outline-secondary rounded-circle" (click)="nextPage()" [disabled]="paginationParams.pageNumber === pagedResults?.totalNumberOfPages">
       <i class="bi bi-chevron-right"></i>
     </button>
   </div>
 
-  <!-- Selector de cantidad de productos -->
-  <div class=" mb-4 d-flex justify-content-center align-items-center gap-2 w-25 mx-auto">
+  <div class="mb-4 d-flex justify-content-center align-items-center gap-2 w-25 mx-auto">
     <label for="productsPerPage" class="mb-0">Mostrar:</label>
     <select id="productsPerPage" class="form-select form-select-sm" [(ngModel)]="paginationParams.pageSize" (click)="onProductsPerPageChange(paginationParams.pageSize)">
       <option [value]="8">8</option>

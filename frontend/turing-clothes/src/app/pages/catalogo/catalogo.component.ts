@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ReviewDto } from '../../models/review-dto';
 import { lastValueFrom } from 'rxjs';
-
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-catalogo',
@@ -25,19 +25,33 @@ export class CatalogoComponent implements OnInit {
   oldQuery: string;
   paginationParams: PaginationParams;
   pagedResults: PagedResults;
-  productReviews: { [productid: number]: number } = {};
+  productReviews: { [key: number]: number } = {};
 
-  constructor(private catalogService: CatalogService) {}
+  constructor(private catalogService: CatalogService, private cdr : ChangeDetectorRef) {}
 
   ngOnInit() {
     const savedSettings = this.catalogService.getUserSettings();
 
     this.paginationParams = savedSettings;
     this.oldQuery = this.paginationParams.query;
-
+    
+      this.loadProductsAndReviews();
+    
     this.getPagedResults();
     this.isAscending = this.paginationParams.direction === 0;
   }
+
+  loadProductsAndReviews(): void {
+    // Aquí debes tener alguna forma de cargar los productos. Si tienes productos ya, asignarlos a 'this.items'.
+    // Si no, usa el servicio de productos (si lo tienes, por ejemplo, getProducts()).
+
+    // Supongamos que los productos ya están cargados en 'this.items'.
+    // Para cada producto, cargamos sus reseñas:
+    this.items.forEach((product) => {
+      this.loadProductReviews(product.id); // Obtener reseñas para cada producto
+    });
+  }
+
 
   async getPagedResults() {
     if (this.oldQuery !== this.paginationParams.query) {
@@ -65,52 +79,43 @@ export class CatalogoComponent implements OnInit {
   }
 
   loadProductReviews(productId: number): void {
-    
-    this.items.forEach((product) => {this.catalogService.getProductReviews(productId).subscribe(
-      (reviews: ReviewDto[]) => {
-        console.log(`Reviews for product ID ${productId}:`, reviews); // Muestra los datos de reseñas
-        if (reviews && reviews.length > 0) {
-          const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
-          this.productReviews[product.id] = averageRating;  // Asegúrate de que esto está actualizando el valor
-          console.log('Ratings en productReviews:', this.productReviews);
+    this.catalogService.getProductReviews(productId).subscribe(
+      (reviews: ReviewDto[] | number) => {  // Puede recibir un array de reseñas o un promedio directo
+        if (typeof reviews === 'number') {
+          // Caso en el que recibimos el rating promedio directamente
+          this.productReviews[productId] = reviews;
+          console.log(`Product ID: ${productId}, Directly Assigned Average Rating: ${reviews}`);
+        } else if (reviews && reviews.length > 0) {
+          // Caso en el que recibimos un array de reseñas y calculamos el promedio
+          const totalRating = reviews.reduce((acc, review) => acc + (review.rating || 0), 0);
+          const averageRating = totalRating / reviews.length;
           
+          this.productReviews[productId] = averageRating;
+          console.log(`Product ID: ${productId}, Calculated Average Rating: ${averageRating}`);
         } else {
-          this.productReviews[productId] = 0; // Establece 0 si no hay reseñas
+          // Si no hay reseñas, asigna 0
+          this.productReviews[productId] = 0;
+          console.log(`Product ID: ${productId} has no reviews, setting rating to 0`);
         }
       },
       (error) => {
-        console.error(`Error fetching reviews for product ID ${productId}:`, error);
-        this.productReviews[productId] = 0; // Establece 0 en caso de error
+        console.error(`Error al obtener reseñas para el producto ${productId}:`, error);
+        this.productReviews[productId] = 0;
       }
-    );})
-    
-}
+    );
+  }
 
-getStarArray(rating: number): number[] {
+  getStarArray(rating: number): number[] {
+    const filledStars = Math.floor(rating);
+    const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - filledStars - halfStar;
   
-  // Rounding down the rating to the nearest integer
-  const filledStars = Math.floor(rating);  // Número de estrellas llenas
-  const emptyStars = 5 - filledStars;      // Número de estrellas vacías
-  const halfStar = rating % 1 > 0.5 ? 1 : 0;  // Determinamos si hay medio estrella
-
-  console.log('Rating:', rating);
-  console.log('Filled Stars:', filledStars);
-  console.log('Half Star:', halfStar);
-  console.log('Empty Stars:', emptyStars);
-
-  const stars = [];
-  for (let i = 0; i < filledStars; i++) {
-    stars.push(1);  // Estrella llena
+    const stars = Array(filledStars).fill(1);   // Estrellas llenas
+    if (halfStar) stars.push(0.5);              // Medio estrella si es necesario
+    stars.push(...Array(emptyStars).fill(0));   // Estrellas vacías
+  
+    return stars;
   }
-  if (halfStar) stars.push(0.5);  // Medio estrella si es necesario
-  for (let i = 0; i < emptyStars; i++) {
-    stars.push(0);  // Estrella vacía
-  }
-
-  console.log('Stars array:', stars);
-  return stars;
-}
-       
   /**
    * Ordenar por precio: 0.
    * Ordenar por nombre: 1.

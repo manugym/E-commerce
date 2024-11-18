@@ -58,7 +58,7 @@ export class CatalogService {
     const url = `https://localhost:7183/api/Review?productId=${productId}`;
     console.log('Requesting reviews from:', url); // Para verificar en consola
     return this.http.get<ReviewDto[]>(url);
-}
+  }
 
   getUserSettings(): PaginationParams {
     const settings = sessionStorage.getItem(this.storageKey);
@@ -86,5 +86,4 @@ export class CatalogService {
     return await this.api.post<any>('Review', review);
   }
     
-  
 }
