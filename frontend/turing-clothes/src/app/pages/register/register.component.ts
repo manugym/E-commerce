@@ -11,6 +11,7 @@ import {
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import  Swal from 'sweetalert2';
+import { CartServiceService } from '../../services/cart-service.service';
 
 @Component({
   selector: 'app-register',
@@ -25,7 +26,8 @@ export class RegisterComponent {
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private cartService: CartServiceService
   ) {
     this.myForm = this.createForm();
   }
@@ -73,6 +75,7 @@ export class RegisterComponent {
           text: 'Registro Correcto',
           showConfirmButton: true
           });
+          await this.cartService.syncCarts()
         this.router.navigate(['/home']);
       }
     } else {
