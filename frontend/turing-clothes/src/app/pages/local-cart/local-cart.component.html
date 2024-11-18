@@ -32,7 +32,7 @@
           <div class="ms-auto d-flex align-items-center">
             <button
               class="btn btn-outline-secondary btn-sm me-2"
-              (click)="decreaseQuantity(item)"
+              (click)="decreaseQuantity(item.productId)"
               [disabled]="item.amount <= 0"
             >
               -
@@ -52,7 +52,7 @@
             />
             <button
               class="btn btn-outline-secondary btn-sm me-2"
-              (click)="increaseQuantity(item)"
+              (click)="increaseQuantity(item.productId)"
               [disabled]="item.amount >= item.product.stock"
             >
               +

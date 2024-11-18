@@ -38,7 +38,6 @@ export class ProductDetailsComponent implements OnInit {
 
     const result = await this.catalogService.getProductDetailsById(id);
 
-    result.data.image = `https://localhost:7183/${result.data.image}`;
     this.product = result.data;
   }
 
@@ -71,6 +70,7 @@ export class ProductDetailsComponent implements OnInit {
   async buyNow(productId: number, quantity: number): Promise<void> {
     if (quantity > 0) {
       this.addProductToCart(productId, quantity);
+      await this.cartService.getCart();
       await this.router.navigate(['/cart']);
     }
   }

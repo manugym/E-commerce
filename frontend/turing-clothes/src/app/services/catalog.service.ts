@@ -42,6 +42,8 @@ export class CatalogService {
       `Catalog/GetProduct?id=${id}`
     );
 
+    result.data.image = `https://localhost:7183/${result.data.image}`;
+
     return result;
   }
 
@@ -70,8 +72,6 @@ export class CatalogService {
       direction: 0,
     };
   }
-
-
 
   async addReview(review: ReviewDto): Promise<Result<ReviewDto>> {
     return await this.api.post<ReviewDto>('Review', review);
