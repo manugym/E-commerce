@@ -3,6 +3,8 @@ import { CartDetail } from '../../models/cart-detail';
 import { Cart } from '../../models/cart';
 import { CartServiceService } from '../../services/cart-service.service';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-cart',
@@ -12,6 +14,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './cart.component.css',
 })
 export class CartComponent implements OnInit {
+
   cartDetail: CartDetail[] = [];
   cart: Cart = {
     id: null,
@@ -19,7 +22,7 @@ export class CartComponent implements OnInit {
     details: this.cartDetail
   };
 
-  constructor(private cartService: CartServiceService) {}
+  constructor(private cartService: CartServiceService, private router: Router, private authService: AuthService) {}
 
   async ngOnInit(): Promise<void> {
     await this.getCart();
@@ -89,4 +92,8 @@ export class CartComponent implements OnInit {
     }
     return result;
   }
+
+  async goToCheckout() {
+      await this.router.navigate(['/checkout']);
+    }
 }
