@@ -77,6 +77,7 @@ export class RegisterComponent {
           });
           await this.cartService.syncCarts()
         this.router.navigate(['/home']);
+        await this.cartService.syncCarts();
       }
     } else {
       // El formulario no es válido
