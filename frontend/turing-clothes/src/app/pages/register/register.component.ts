@@ -75,6 +75,7 @@ export class RegisterComponent {
           text: 'Registro Correcto',
           showConfirmButton: true
           });
+          await this.cartService.syncCarts()
         this.router.navigate(['/home']);
         await this.cartService.syncCarts();
       }
