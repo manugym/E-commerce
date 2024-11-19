@@ -89,7 +89,12 @@ namespace TuringClothes.Repository
 
             if (cart == null)
             {
-                return false;
+                cart = new Cart
+                {
+                    UserId = userId,
+                    Details = new List<CartDetail>()
+                };
+                _myDatabase.Carts.Add(cart);
             }
             Product product = await _productRepository.GetProductById(productId);
             var cartDetails = cart.Details.FirstOrDefault(d => d.ProductId == productId);
