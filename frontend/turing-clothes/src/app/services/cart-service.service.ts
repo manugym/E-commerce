@@ -69,4 +69,23 @@ export class CartServiceService implements OnInit {
     });
     localStorage.removeItem('localCart');
   }
+
+  async saveToBackLocalCartToCheckout() {
+    const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
+    
+
+    
+    const orderDetailDto = localCart.details.map((detail) => ({
+      productId: detail.productId,
+      amount: detail.amount,
+    }));
+    console.log(orderDetailDto);
+
+    const result = await this.api.post<CartDetail>(
+      `Order/CreateTemporaryOrder`,
+      orderDetailDto
+    );
+    console.log(result);
+    return result;
+  }
 }
