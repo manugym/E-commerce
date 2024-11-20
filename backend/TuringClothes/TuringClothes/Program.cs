@@ -64,7 +64,6 @@ namespace TuringClothes
             builder.Services.AddScoped<AuthRepository>();
             builder.Services.AddScoped<ProductRepository>();
             builder.Services.AddScoped<CartRepository>();
-            builder.Services.AddScoped<TemporaryOrderRepository>();
             builder.Services.AddScoped<CatalogService>();
             builder.Services.AddScoped<SmartSearchService>();
             builder.Services.AddScoped<ReviewService>();
