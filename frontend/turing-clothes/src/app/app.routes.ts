@@ -9,6 +9,7 @@ import { CatalogoComponent } from './pages/catalogo/catalogo.component';
 import { CartComponent } from './pages/cart/cart.component';
 import { ProductDetailsComponent } from './pages/product-details/product-details.component';
 import { LocalCartComponent } from './pages/local-cart/local-cart.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   {path: 'product-details/:id', component: ProductDetailsComponent},
   {path: 'local-cart', component: LocalCartComponent},
   { path: 'cart', component: CartComponent },
+  { path: 'checkout', component: CheckoutComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'footer', component: FooterComponent},
