@@ -18,18 +18,20 @@ namespace TuringClothes.Repository
 
         }
 
-        public async Task AddTemporaryOrderAsync(long userId, ICollection<CartDetail> cartDetails)
+        public async Task<IEnumerable<TemporaryOrder>> GetAllTemporaryOrdersAsync()
         {
-            var orderDetails = cartDetails.Select(cart => new OrderDetail
-            {
-                ProductID = cart.ProductId,
-                Amount = cart.Amount,
-                Product = cart.Product
-            }).ToList();
+            return await _myDatabase.TemporaryOrders
+                .Include(order => order.Details)
+                .ToListAsync();
+        }
+
+        public async Task AddTemporaryOrderAsync(ICollection<OrderDetail> orderDetails)
+        //public async Task AddTemporaryOrderAsync(long userId, ICollection<CartDetail> cartDetails)
+        {
 
             var temporaryOrder = new TemporaryOrder
             {
-                UserId = userId,
+                //UserId = 
                 Details = orderDetails
             };
 

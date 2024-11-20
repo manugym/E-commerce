@@ -60,8 +60,6 @@ export class CartServiceService implements OnInit {
     return result;
   }
 
-
-
   async syncCarts() {
     const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
     localCart.details.forEach((element) => {
@@ -71,10 +69,14 @@ export class CartServiceService implements OnInit {
     localStorage.removeItem('localCart');
   }
 
-
   async saveToBackLocalCartToCheckout() {
-    const localCart = localStorage.getItem('localCart');
-    const result = this.api.post<CartDetail>(`Receive-cart`)
+    const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
 
+    const result = await this.api.post<CartDetail>(
+      `TemporaryOrder/Receive-cart`,
+      localCart
+    );
+    console.log(result);
+    return result;
   }
 }

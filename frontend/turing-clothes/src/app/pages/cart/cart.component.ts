@@ -14,15 +14,18 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './cart.component.css',
 })
 export class CartComponent implements OnInit {
-
   cartDetail: CartDetail[] = [];
   cart: Cart = {
     id: null,
     userId: null,
-    details: this.cartDetail
+    details: this.cartDetail,
   };
 
-  constructor(private cartService: CartServiceService, private router: Router, private authService: AuthService) {}
+  constructor(
+    private cartService: CartServiceService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.getCart();
@@ -63,7 +66,7 @@ export class CartComponent implements OnInit {
       await this.getCart();
       return result;
     }
-    
+
     return result;
   }
 
@@ -94,6 +97,17 @@ export class CartComponent implements OnInit {
   }
 
   async goToCheckout() {
+    if (this.authService.isLoggedIn) {
       await this.router.navigate(['/checkout']);
     }
+
+    console.log("Hola")
+    this.router.navigate['/home']
+
+    await this.cartService.saveToBackLocalCartToCheckout();
+  }
+
+  goToFail() {
+    console.log("Hola")
+  }
 }

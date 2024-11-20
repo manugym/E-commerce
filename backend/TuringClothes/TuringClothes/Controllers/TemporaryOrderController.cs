@@ -16,36 +16,65 @@ namespace TuringClothes.Controllers
         private readonly ProductRepository _productRepository;
         private readonly TemporaryOrderRepository _temporaryOrderRepository;
 
-        public TemporaryOrderController(CartRepository cartRepository)
+        public TemporaryOrderController(CartRepository cartRepository, TemporaryOrderRepository temporaryOrderRepository)
         {
             _cartRepository = cartRepository;
+            _temporaryOrderRepository = temporaryOrderRepository;
 
         }
 
-        [Authorize]
-        [HttpPost("Receive-cart")]
-        public async Task<IActionResult> GetLocalCartOrder([FromBody] ICollection<CartDetail> cartDetails)
+        [HttpGet("GetAllTemporaryOrders")]
+        public async Task<IActionResult> GetAllTemporaryOrders()
         {
-            var userId = User.FindFirst("id")?.Value;
-
-            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var userIdLong))
+            var temporaryOrders = await _temporaryOrderRepository.GetAllTemporaryOrdersAsync();
+            if (temporaryOrders == null)
             {
-                return Unauthorized("Invalid user ID.");
+                return BadRequest("No existen ordenes temporales.");
             }
-
-            if (cartDetails == null)
-            {
-                return BadRequest("El carrito enviado está vacío o no es válido.");
-            }
-
-            await _temporaryOrderRepository.AddTemporaryOrderAsync(userIdLong, cartDetails);
-            
-            return Ok(new
-            {
-                message = "Carrito procesado correctamente",
-                itemsProcessed = cartDetails.Count
-            });
+            return Ok(temporaryOrders);
         }
 
+        //[Authorize]
+        [HttpPost("Receive-cart")]
+        public async Task<IActionResult> GetLocalCartOrder([FromBody] localCartOrderCollection localCartOrderCollection)
+        {
+            try
+            {
+                if (localCartOrderCollection == null)
+                {
+                    return BadRequest("El carrito enviado está vacío o no es válido.");
+                }
+
+                ICollection<OrderDetail> orderDetails = new List<OrderDetail>();
+                
+
+                foreach (var cartDetail in localCartOrderCollection.Details)
+                {
+                    var orderDetail = new OrderDetail
+                    {
+                        ProductID = cartDetail.ProductId,
+                        Amount = cartDetail.Amount,
+                        TemporaryOrderID = 150,
+                        Product = cartDetail.Product
+                    };
+                    orderDetails.Add(orderDetail);
+                }
+
+                // Si se está utilizando un repositorio, por ejemplo:
+                await _temporaryOrderRepository.AddTemporaryOrderAsync(orderDetails);
+
+                return Ok(new
+                {
+                    message = "Carrito procesado correctamente",
+                    itemsProcessed = localCartOrderCollection.Details.Count
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error procesando la solicitud: {ex.Message}");
+                return StatusCode(500, new { message = "Error interno del servidor", error = ex.Message });
+            }
+
+        }
     }
 }

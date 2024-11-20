@@ -1,11 +1,14 @@
-﻿namespace TuringClothes.Database
+﻿using TuringClothes.Model;
+
+namespace TuringClothes.Database
 {
     public class TemporaryOrder
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
-        public long UserId { get; set; }
+        public long? UserId { get; set; }
 
-        public ICollection<OrderDetail> Details { get; set; }
+        public ICollection<OrderDetail> Details { get; set; } = new List<OrderDetail>();
+        //public ICollection<CartDetail> Details { get; set; } = new List<CartDetail>();
     }
 }
