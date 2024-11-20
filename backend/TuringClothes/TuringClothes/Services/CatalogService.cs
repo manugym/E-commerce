@@ -7,11 +7,11 @@ namespace TuringClothes.Services
 {
     public class CatalogService
     {
-        private readonly IUnitofWork _unitofWork;
+        private readonly MyDatabase _database;
         private readonly SmartSearchService _smartSearchService;
-        public CatalogService(MyDatabase myDatabase, SmartSearchService smartSearchService, IUnitofWork unitOfWork)
+        public CatalogService(MyDatabase myDatabase, SmartSearchService smartSearchService)
         {
-            _unitofWork = unitOfWork;
+            _database = myDatabase;
             _smartSearchService = smartSearchService;
         }
 

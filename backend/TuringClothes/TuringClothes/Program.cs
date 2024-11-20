@@ -67,7 +67,6 @@ namespace TuringClothes
             builder.Services.AddScoped<CatalogService>();
             builder.Services.AddScoped<SmartSearchService>();
             builder.Services.AddScoped<ReviewService>();
-            builder.Services.AddScoped<IUnitofWork, UnitOfWork>();
             
 
 
