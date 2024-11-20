@@ -32,8 +32,12 @@ export class LoginComponent {
       Swal.fire({
         icon: 'success',
         text: 'Login Correcto',
-        showConfirmButton: true
-        });
+        timer: 1100,
+        animation: true,
+        showConfirmButton: false,
+        position: 'top-right',
+        toast: true
+      });
     
   }}
 
