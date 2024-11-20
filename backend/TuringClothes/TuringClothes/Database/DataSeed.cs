@@ -304,10 +304,10 @@
                     DateTime = DateTime.UtcNow,
                     Rating = -1
                 },
-                           
+
                 new Review
                 {
-           
+
                     ProductId = 1,
                     UserId = 1,
                     Texto = "No me agrada",
@@ -315,7 +315,7 @@
                     Rating = -1
                 },
                 new Review {
-            
+
                     ProductId = 1,
                     UserId = 2,
                     Texto = "Me encanta",
@@ -414,7 +414,7 @@
                     Rating = -1
                 }
             };
-        
+
             Cart[] carts = {
                 new Cart
                 {
@@ -433,6 +433,129 @@
             {
 
                 Id = 2,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+                Id = 3,
+                CartId = 1,
+                ProductId = 10,
+                Amount = 2
+            },
+            new CartDetail
+            {
+
+                Id = 4,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+                Id = 5,
+                CartId = 1,
+                ProductId = 10,
+                Amount = 2
+            },
+            new CartDetail
+            {
+
+                Id = 6,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+                Id = 7,
+                CartId = 1,
+                ProductId = 10,
+                Amount = 2
+            },
+            new CartDetail
+            {
+
+                Id = 8,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+                Id = 9,
+                CartId = 1,
+                ProductId = 10,
+                Amount = 2
+            },
+            new CartDetail
+            {
+
+                Id = 10,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+                Id = 11,
+                CartId = 1,
+                ProductId = 10,
+                Amount = 2
+            },
+            new CartDetail
+            {
+
+                Id = 12,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+
+                Id = 13,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+
+                Id = 14,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+
+                Id = 15,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+
+                Id = 16,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+
+                Id = 17,
+                CartId = 1,
+                ProductId = 3,
+                Amount = 3
+            },
+            new CartDetail
+            {
+
+                Id = 18,
                 CartId = 1,
                 ProductId = 3,
                 Amount = 3

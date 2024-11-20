@@ -1,11 +1,8 @@
 <section>
-  <nav
-    class="navbar navbar-expand-lg navbar-light bg-light"
-    style="width: 100%"
-  >
+  <nav class="navbar navbar-expand-lg bg-dark" style="width: 100%">
     <div class="container flex-wrap flex-lg-nowrap" style="width: 100%">
       <a
-        class="navbar-brand"
+        class="navbar-brand text-white"
         [routerLink]="'home'"
         routerLinkActive="router-link-active"
         >Turing Clothes</a
@@ -29,25 +26,30 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
           <!-- Links comunes -->
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" [routerLink]="'home'"
+            <a
+              class="nav-link active text-white"
+              aria-current="page"
+              [routerLink]="'home'"
               >Inicio</a
             >
           </li>
           <li class="nav-item">
             <a
-              class="nav-link active"
+              class="nav-link active text-white"
               aria-current="page"
               [routerLink]="'catalog'"
               >Catálogo</a
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="'aboutus'">Sobre nosotros</a>
+            <a class="nav-link text-white" [routerLink]="'aboutus'"
+              >Sobre nosotros</a
+            >
           </li>
 
           <!-- Links condicionales según estado de sesión -->
           @if (isLoguedIn()) {
-          <li class="nav-item">
+          <li class="nav-item text-white">
             <a class="nav-link" [routerLink]="'test-page'">Testing</a>
           </li>
           }
@@ -55,23 +57,55 @@
 
         <!-- Sección de carrito y login/logout -->
         <div class="d-flex align-items-center">
+          @if (isLoguedIn()) {
           <!-- Botón de carrito -->
-          <a class="btn btn-outline-dark me-2" [routerLink]="'cart'">
+          <a
+            class="btn btn-outline-dark bg-white me-2"
+            onmouseover="this.classList.add('text-primary', 'border-primary')"
+            onmouseout="this.classList.remove('text-primary', 'border-primary')"
+            [routerLink]="'cart'"
+          >
             <i class="bi bi-bag"></i>
-            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+            <span class="badge bg-dark text-white ms-1 rounded-pill">{{
+              cartQuantity
+            }}</span>
           </a>
+          } @else {
+          <!-- Botón de carrito -->
+          <a
+            class="btn me-2 btn-outline-dark bg-white"
+            onmouseover="this.classList.add('text-primary', 'border-primary')"
+            onmouseout="this.classList.remove('text-primary', 'border-primary')"
+            [routerLink]="'local-cart'"
+          >
+            <i class="bi bi-bag text-black"></i>
+            <span class="badge bg-dark text-white ms-1 rounded-pill">{{
+              cartQuantity
+            }}</span>
+          </a>
+          }
 
           <!-- Sección condicional para usuario logueado/no logueado -->
           @if (isLoguedIn()) {
           <div class="pt-2">
-            <p>Bienvenido, {{ getLogedUsername() }}.</p>
+            <p class="text-white">Bienvenido, {{ getLogedUsername() }}.</p>
           </div>
-          <button class="btn btn-outline-dark me-2 ms-2" (click)="logout()">
+          <button
+            class="btn btn-outline-dark bg-white me-2 ms-2"
+            onmouseover="this.classList.add('text-primary', 'border-primary')"
+            onmouseout="this.classList.remove('text-primary', 'border-primary')"
+            (click)="logout()"
+          >
             Cerrar sesión
           </button>
           } @else {
-          <a class="btn btn-outline-dark bg-primary" [routerLink]="'login'">
-            <span class="badge text-white ms-1 rounded-pill"
+          <a
+            class="btn btn-outline-dark bg-white"
+            onmouseover="this.classList.add('text-primary', 'border-primary')"
+            onmouseout="this.classList.remove('text-primary', 'border-primary')"
+            [routerLink]="'login'"
+          >
+            <span class="badge text-black ms-1 rounded-pill"
               >Iniciar sesión</span
             >
           </a>

@@ -10,6 +10,8 @@ namespace TuringClothes.Database
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<TemporaryOrder> TemporaryOrders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Review> Reviews { get; set; }
 
         //Configura EF para crear un archivo de la base de datos Sqlite
