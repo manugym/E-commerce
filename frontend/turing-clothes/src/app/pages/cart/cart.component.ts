@@ -23,7 +23,7 @@ export class CartComponent implements OnInit {
     details: this.cartDetail
   };
 
-  constructor(private cartService: CartServiceService, private router: Router, private authService: AuthService, private checkoutService: CheckoutService) {}
+  constructor(private cartService: CartServiceService, private router: Router, private authService: AuthService) {}
 
   async ngOnInit(): Promise<void> {
     await this.getCart();
@@ -95,11 +95,6 @@ export class CartComponent implements OnInit {
   }
 
   async goToCheckout() {
-    await this.checkoutService.getEmbededCheckout();
-      //await this.router.navigate(['/checkout']);
-  }
-
-  async goToBlockchain() {
-      await this.router.navigate(['/blockchain']);
+      await this.router.navigate(['/checkout']);
   }
 }
