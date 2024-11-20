@@ -64,28 +64,14 @@
                 <h5 class="fw-bolder">{{ item.name }}</h5>
                 <p >Precio: {{ item.price/100 }} €</p>
                 @if (item.stock > 0) {
-                  <p>{{ item.stock }} in stock</p>}
-                  @else {
-                    <p class="text-danger">{{ item.stock }} in stock</p>
-                  }  
-                    <!-- Mostrar las estrellas según el rating calculado -->
-                    <div *ngIf="productReviews[item.id] !== undefined">
-                      <div class="stars">
-                        <i *ngFor="let star of getStarArray(productReviews[item.id])"
-                          [ngClass]="{
-                            'bi-star-fill': star === 1,
-                            'bi-star-half': star === 0.5,
-                            'bi-star': star === 0
-                          }">
-                        </i>
-                      </div>
-                    </div>
-                    <p *ngIf="productReviews[item.id] === undefined">Cargando reseñas...</p>
-                </div>
+                  <p>{{ item.stock }} in stock</p>
+                } @else {
+                  <p class="text-danger">{{ item.stock }} in stock</p>
+                }
               </div>
-            </a>
-          </div>
-              
+            </div>
+          </a>
+        </div>
         }
       </div>
     </div>

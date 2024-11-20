@@ -5,18 +5,14 @@ import { Result } from '../models/result';
 import { PaginationParams } from '../models/pagination-params';
 import { PagedResults } from '../models/paged-results';
 import { ReviewDto } from '../models/review-dto';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CatalogService {
   private storageKey = 'catalogSettings';
-  private apiUrl = 'https://localhost:7183/api';
-  baseUrl: any;
 
-  constructor(private api: ApiService, private http: HttpClient) {}
+  constructor(private api: ApiService) {}
 
   async getPagedResults(
     paginationParams: PaginationParams
@@ -43,7 +39,6 @@ export class CatalogService {
   async getProductDetailsById(id: number): Promise<Result<ProductDto>> {
     const result = await this.api.get<ProductDto>(
       `Catalog/GetProduct?id=${id}`
-      
     );
 
     return result;
@@ -52,13 +47,6 @@ export class CatalogService {
   saveUserSettings(paginationParams: PaginationParams): void {
     sessionStorage.setItem(this.storageKey, JSON.stringify(paginationParams));
   }
-
-  
-  getProductReviews(productId: number): Observable<ReviewDto[]> {
-    const url = `https://localhost:7183/api/Review?productId=${productId}`;
-    console.log('Requesting reviews from:', url); // Para verificar en consola
-    return this.http.get<ReviewDto[]>(url);
-}
 
   getUserSettings(): PaginationParams {
     const settings = sessionStorage.getItem(this.storageKey);
@@ -85,6 +73,4 @@ export class CatalogService {
   async addReview(review: ReviewDto): Promise<Result<any>>{
     return await this.api.post<any>('Review', review);
   }
-    
-  
 }
