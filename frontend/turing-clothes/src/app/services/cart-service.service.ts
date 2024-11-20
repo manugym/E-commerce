@@ -13,7 +13,6 @@ export class CartServiceService implements OnInit {
   cartDetail: CartDetail[];
   private cartQuantitySubject = new BehaviorSubject<number>(0);
   cartQuantity$ = this.cartQuantitySubject.asObservable();
-  isOrder: boolean;
 
   constructor(private api: ApiService, private authService: AuthService) {}
   ngOnInit(): void {
@@ -61,11 +60,13 @@ export class CartServiceService implements OnInit {
   }
 
   async syncCarts() {
+    // if (this.authService.isLoggedIn) {
+
+    // }
     const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
     localCart.details.forEach((element) => {
       this.updateQuantity(element.productId, element.amount);
     });
-
     localStorage.removeItem('localCart');
   }
 
