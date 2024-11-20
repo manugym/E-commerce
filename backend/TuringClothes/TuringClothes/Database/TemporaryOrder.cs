@@ -6,6 +6,6 @@
 
         public long UserId { get; set; }
 
-        public ICollection<OrderDetail> Details { get; set; }
+        public ICollection<TemporaryOrderDetail> Details { get; set; }
     }
 }
