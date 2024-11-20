@@ -5,7 +5,6 @@ import { CartServiceService } from '../../services/cart-service.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { CheckoutService } from '../../services/checkout.service';
 
 @Component({
   selector: 'app-cart',
@@ -96,5 +95,5 @@ export class CartComponent implements OnInit {
 
   async goToCheckout() {
       await this.router.navigate(['/checkout']);
-  }
+    }
 }
