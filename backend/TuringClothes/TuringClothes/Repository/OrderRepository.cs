@@ -16,17 +16,17 @@ namespace TuringClothes.Repository
             _cartRepository = cartRepository;
         }
 
-        public async Task<TemporaryOrder> TemporaryOrder ()
-        {
+        //public async Task<TemporaryOrder> TemporaryOrder ()
+        //{
 
-            var temp = await _cartRepository.GetCart(1);
-            var temporaryOrder = new TemporaryOrder
-            {
-                UserId = temp.UserId,
-                Details =
+        //    var temp = await _cartRepository.GetCart(1);
+        //    var temporaryOrder = new TemporaryOrder
+        //    {
+        //        UserId = temp.UserId,
+        //        Details =
                 
-            };
+        //    };
             
-        }
+        //}
     }
 }
