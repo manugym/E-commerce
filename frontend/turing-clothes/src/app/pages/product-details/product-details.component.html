@@ -87,20 +87,42 @@
   <div class="mt-5 mx-auto">
     <h5>Reseñas</h5>
     @if (product.reviews.length > 0) {
-      <div *ngIf="product">
-        <h5>{{ product.name }}</h5>
-        <div *ngFor="let review of product.reviews">
-          <strong>{{ review.user.name }}:</strong>
-          <div class="review-stars">
-            <!-- Aplicar las clases generadas para las estrellas -->
-            <i *ngFor="let starClass of getStarClasses(review.rating)" [ngClass]="starClass"></i>
+      <div class="list-group">
+      @for (review of product.reviews; track review.id) {
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{review.user.name + " " + review.user.surname}}</strong>
+            <p class="text-muted mb-1">{{ review.dateTime | date:'dd/MM/yyyy' }}</p>
+            <p class="mb-0">{{review.texto}}</p>
           </div>
-          <p>{{ review.texto }}</p>
+        <div class="text-warning">
+          @if (review.rating==1) {
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          }
+          @else if (review.rating==0) {
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+          } @else {
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+          }
         </div>
-      </div>  
-    }@else {
-      <p>No hay reseñas disponibles para este producto.</p>
-    }   
-    </div>
+        </div>
+      }
+      </div>
+    } @else {
+        <p>No hay reseñas disponibles para este producto.</p>
+      }
+  </div>
 </div>
 }

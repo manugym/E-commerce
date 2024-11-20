@@ -7,6 +7,7 @@ import { PagedResults } from '../../models/paged-results';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ReviewDto } from '../../models/review-dto';
+import { lastValueFrom } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
@@ -34,15 +35,20 @@ export class CatalogoComponent implements OnInit {
     this.paginationParams = savedSettings;
     this.oldQuery = this.paginationParams.query;
     
-    this.loadProductsAndReviews();
+      this.loadProductsAndReviews();
     
     this.getPagedResults();
     this.isAscending = this.paginationParams.direction === 0;
   }
 
   loadProductsAndReviews(): void {
+    // Aquí debes tener alguna forma de cargar los productos. Si tienes productos ya, asignarlos a 'this.items'.
+    // Si no, usa el servicio de productos (si lo tienes, por ejemplo, getProducts()).
+
+    // Supongamos que los productos ya están cargados en 'this.items'.
+    // Para cada producto, cargamos sus reseñas:
     this.items.forEach((product) => {
-      this.loadProductReviews(product.id); 
+      this.loadProductReviews(product.id); // Obtener reseñas para cada producto
     });
   }
 
@@ -74,38 +80,39 @@ export class CatalogoComponent implements OnInit {
 
   loadProductReviews(productId: number): void {
     this.catalogService.getProductReviews(productId).subscribe(
-      (reviews: ReviewDto[] | number) => {  
-                if (typeof reviews === 'number') {
+      (reviews: ReviewDto[] | number) => {  // Puede recibir un array de reseñas o un promedio directo
+        if (typeof reviews === 'number') {
+          // Caso en el que recibimos el rating promedio directamente
           this.productReviews[productId] = reviews;
           console.log(`Product ID: ${productId}, Directly Assigned Average Rating: ${reviews}`);
         } else if (reviews && reviews.length > 0) {
+          // Caso en el que recibimos un array de reseñas y calculamos el promedio
           const totalRating = reviews.reduce((acc, review) => acc + (review.rating || 0), 0);
           const averageRating = totalRating / reviews.length;
           
           this.productReviews[productId] = averageRating;
           console.log(`Product ID: ${productId}, Calculated Average Rating: ${averageRating}`);
         } else {
+          // Si no hay reseñas, asigna 0
           this.productReviews[productId] = 0;
           console.log(`Product ID: ${productId} has no reviews, setting rating to 0`);
         }
+      },
+      (error) => {
+        console.error(`Error al obtener reseñas para el producto ${productId}:`, error);
+        this.productReviews[productId] = 0;
       }
     );
   }
 
   getStarArray(rating: number): number[] {
-    if (isNaN(rating) || rating < 0) {
-      rating = 0;
-    }
-  
     const filledStars = Math.floor(rating);
-    const emptyStars = 5 - filledStars;
-    const halfStar = rating % 1 > 0.5 ? 1 : 0;
+    const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - filledStars - halfStar;
   
-    const stars = Array(filledStars).fill(1); 
-    if (halfStar) stars.push(0.5); 
-    while (stars.length < 5) {
-      stars.push(0); 
-    }
+    const stars = Array(filledStars).fill(1);   // Estrellas llenas
+    if (halfStar) stars.push(0.5);              // Medio estrella si es necesario
+    stars.push(...Array(emptyStars).fill(0));   // Estrellas vacías
   
     return stars;
   }
