@@ -145,4 +145,16 @@ export class LocalCartComponent implements OnInit {
       0
     );
   }
+
+
+  async goToCheckout() {
+    // if (this.authService.isLoggedIn) {
+    //   await this.router.navigate(['/checkout']);
+    // }
+
+    console.log("Hola")
+    // this.router.navigate['/home']
+
+    await this.cartService.saveToBackLocalCartToCheckout();
+  }
 }
