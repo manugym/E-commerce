@@ -18,5 +18,10 @@ namespace TuringClothes.Repository
         {
             return await _myDataBase.Products.Include(p => p.Reviews).ThenInclude(r => r.User).FirstOrDefaultAsync(n => n.Id == id);
         }
+
+        public async Task<Product?> GetProductByIdOrder(long id)
+        {
+            return await _myDataBase.Products.FirstOrDefaultAsync(n => n.Id == id);
+        }
     }
 }
