@@ -71,10 +71,18 @@ export class CartServiceService implements OnInit {
 
   async saveToBackLocalCartToCheckout() {
     const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
+    
+
+    
+    const orderDetailDto = localCart.details.map((detail) => ({
+      productId: detail.productId,
+      amount: detail.amount,
+    }));
+    console.log(orderDetailDto);
 
     const result = await this.api.post<CartDetail>(
-      `TemporaryOrder/Receive-cart`,
-      localCart
+      `Order/CreateTemporaryOrder`,
+      orderDetailDto
     );
     console.log(result);
     return result;
