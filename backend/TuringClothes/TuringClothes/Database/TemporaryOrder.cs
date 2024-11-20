@@ -8,6 +8,6 @@ namespace TuringClothes.Database
 
         public long UserId { get; set; }
 
-        public ICollection<OrderDetail> Details { get; set; } = new List<OrderDetail>();
+        public ICollection<OrderDetail> Details { get; set; }
     }
 }
