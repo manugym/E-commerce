@@ -8,14 +8,14 @@ namespace TuringClothes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class TemporaryOrderController : ControllerBase
     {
         private readonly MyDatabase _myDatabase;
-        private readonly OrderRepository _orderRepository;
+        private readonly TemporaryOrderRepository _orderRepository;
         private readonly CartRepository _cartRepository;
         private readonly ProductRepository _productRepository;
 
-        public OrderController(MyDatabase myDatabase, CartRepository cartRepository, ProductRepository productRepository, OrderRepository orderRepository)
+        public TemporaryOrderController(MyDatabase myDatabase, CartRepository cartRepository, ProductRepository productRepository, TemporaryOrderRepository orderRepository)
         {
             _myDatabase = myDatabase;
             _cartRepository = cartRepository;
@@ -24,15 +24,22 @@ namespace TuringClothes.Controllers
         }
 
         [HttpPost("CreateTemporaryOrder")]
-        public async Task<ActionResult<TemporaryOrder>> TemporaryOrder([FromBody] ICollection<OrderDetailDto> orderDetailsDto)
+        public async Task<ActionResult<TemporaryOrder>> CreateTemporaryOrder([FromBody] ICollection<OrderDetailDto> orderDetailsDto)
         {
             if (orderDetailsDto == null || !orderDetailsDto.Any())
             {
                 return BadRequest("Order details cannot be null or empty.");
             }
 
-            var temporaryOrder = await _orderRepository.TemporaryOrder(orderDetailsDto);
+            var temporaryOrder = await _orderRepository.CreateTemporaryOrder(orderDetailsDto);
 
+            return Ok(temporaryOrder);
+        }
+
+        [HttpGet("TemporaryOrder")]
+        public async Task<ActionResult<TemporaryOrder>> GetTemporaryOrder(long id)
+        {
+            var temporaryOrder = _orderRepository.GetTemporaryOrder(id);
             return Ok(temporaryOrder);
         }
     }
