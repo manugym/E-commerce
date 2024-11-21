@@ -37,7 +37,7 @@ namespace TuringClothes.Controllers
         }
 
         [HttpGet("embedded")]
-        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId)
+        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId, SessionCreateOptions options)
         {
             ProductOrderDto[] products = await GetAllProducts(temporaryOrderId);
             List<SessionLineItemOptions> lineItems = new List<SessionLineItemOptions>();
@@ -59,7 +59,7 @@ namespace TuringClothes.Controllers
                     Quantity = product.Amount,
                 });
             }
-            SessionCreateOptions options = new SessionCreateOptions
+            options = new SessionCreateOptions
             {
                 UiMode = "embedded",
                 Mode = "payment",
