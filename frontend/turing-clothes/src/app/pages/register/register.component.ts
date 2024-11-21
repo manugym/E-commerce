@@ -87,7 +87,7 @@ export class RegisterComponent {
       // El formulario no es válido
       this.registerHints = true;
       Swal.fire({
-        icon: 'success',
+        icon: 'error',
         text: 'Registro erroneo.',
         showConfirmButton: false,
         animation: true,
