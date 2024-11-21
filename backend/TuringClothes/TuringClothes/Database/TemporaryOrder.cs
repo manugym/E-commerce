@@ -1,4 +1,4 @@
-﻿using TuringClothes.Model;
+﻿using TuringClothes.Dtos;
 
 namespace TuringClothes.Database
 {

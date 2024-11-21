@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TuringClothes.Database;
-using TuringClothes.Model;
+using TuringClothes.Dtos;
 using TuringClothes.Repository;
 
 namespace TuringClothes.Controllers

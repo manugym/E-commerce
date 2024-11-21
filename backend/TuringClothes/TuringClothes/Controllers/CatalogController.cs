@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using TuringClothes.Database;
-using TuringClothes.Model;
+using TuringClothes.Dtos;
 using TuringClothes.Pagination;
 using TuringClothes.Repository;
 using TuringClothes.Services;

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Stripe.Checkout;
-using TuringClothes.Model;
+using TuringClothes.Dtos;
 
 namespace TuringClothes.Controllers
 {
@@ -114,10 +114,7 @@ namespace TuringClothes.Controllers
             return [
                 new ProductDto
             {
-                Name = "Rana epiléptica",
-                Description = "¡Presentamos la Rana Epiléptica! El DJ del estanque que transforma cualquier charca en una fiesta con sus saltos y croac descontrolados. ¡Lleva la diversión anfibia a otro nivel!",
-                Price = 100,
-                Image = Request.GetAbsoluteUrl("")
+                
             }
             ];
         }
