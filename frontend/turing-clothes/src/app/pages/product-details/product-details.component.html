@@ -46,15 +46,13 @@
 
       <!-- Selector de cantidad y botón de añadir al carrito -->
       <div class="input-group mb-3" style="max-width: 160px">
-        <input type="number" class="form-control" min="1" max="{{product.stock}}" [(ngModel)]="quantity" />
+        <input type="number" class="form-control" min="1" max="50" value="1" />
         @if (product.stock > 0) {
-          <button class="btn btn-dark mt-3" [disabled]="quantity < 1 || quantity > product.stock" (click)="addProductToCart(product.id, quantity)">Añadir al carrito</button>
-          <button class="btn btn-dark mt-3" [disabled]="quantity < 1 || quantity > product.stock" (click)="buyNow(product.id, quantity)"> 
-            <i class="bi bi-bag-check"></i> Comprar
-          </button>
+          <button class="btn btn-dark mt-3">Añadir al carrito</button>
         } @else {
           <button class="btn btn-dark mt-auto disabled">Sin stock</button>
         }
+        
       </div>
     </div>
   </div>
@@ -89,42 +87,20 @@
   <div class="mt-5 mx-auto">
     <h5>Reseñas</h5>
     @if (product.reviews.length > 0) {
-      <div class="list-group">
-      @for (review of product.reviews; track review.id) {
-        <div class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <strong>{{review.user.name + " " + review.user.surname}}</strong>
-            <p class="text-muted mb-1">{{ review.dateTime | date:'dd/MM/yyyy' }}</p>
-            <p class="mb-0">{{review.texto}}</p>
+      <div *ngIf="product">
+        <h5>{{ product.name }}</h5>
+        <div *ngFor="let review of product.reviews">
+          <strong>{{ review.user.name }}:</strong>
+          <div class="review-stars">
+            <!-- Aplicar las clases generadas para las estrellas -->
+            <i *ngFor="let starClass of getStarClasses(review.rating)" [ngClass]="starClass"></i>
           </div>
-        <div class="text-warning">
-          @if (review.rating==1) {
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          }
-          @else if (review.rating==0) {
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-          } @else {
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-          }
+          <p>{{ review.texto }}</p>
         </div>
-        </div>
-      }
-      </div>
-    } @else {
-        <p>No hay reseñas disponibles para este producto.</p>
-      }
-  </div>
+      </div>  
+    }@else {
+      <p>No hay reseñas disponibles para este producto.</p>
+    }   
+    </div>
 </div>
 }
