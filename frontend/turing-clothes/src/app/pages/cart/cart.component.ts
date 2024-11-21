@@ -99,16 +99,15 @@ export class CartComponent implements OnInit {
   }
 
   async goToCheckout() {
-    await this.checkoutService.getEmbededCheckout();
+    await this.cartService.saveToBackCartToCheckout(this.cart);
+    //await this.checkoutService.getEmbededCheckout();
 
     //await this.cartService.saveToBackLocalCartToCheckout();
-  }
-
-  goToFail() {
-    console.log("Hola")
   }
 
   async goToBlockchain() {
     await this.router.navigate(['/blockchain']);
   }
+
+
 }
