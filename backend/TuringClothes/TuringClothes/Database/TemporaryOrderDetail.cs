@@ -1,6 +1,6 @@
 ﻿namespace TuringClothes.Database
 {
-    public class OrderDetail
+    public class TemporaryOrderDetail
     {
         public int Id { get; set; }
         public long TemporaryOrderID { get; set; }

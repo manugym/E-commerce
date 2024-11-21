@@ -1,22 +1,20 @@
-﻿using TuringClothes.Database;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TuringClothes.Database;
 using TuringClothes.Model;
 
 namespace TuringClothes.Repository
 {
-    public class OrderRepository
+    public class TemporaryOrderRepository : Repository<TemporaryOrder, long>
     {
-        private readonly MyDatabase _myDatabase;
-        private readonly CartRepository _cartRepository;
         private readonly ProductRepository _productRepository;
-
-        public OrderRepository(MyDatabase myDatabase, CartRepository cartRepository, ProductRepository productRepository)
+        public TemporaryOrderRepository(MyDatabase myDatabase, ProductRepository productRepository) : base(myDatabase)
         {
             _myDatabase = myDatabase;
             _productRepository = productRepository;
-            _cartRepository = cartRepository;
         }
 
-        public async Task<TemporaryOrder> TemporaryOrder(ICollection<OrderDetailDto> orderDetailDto)
+        public async Task<TemporaryOrder> CreateTemporaryOrder(ICollection<OrderDetailDto> orderDetailDto)
         {
             using var transaction = await _myDatabase.Database.BeginTransactionAsync();
             try
@@ -26,7 +24,7 @@ namespace TuringClothes.Repository
                 var temporaryOrder = new TemporaryOrder
                 {
                     UserId = userId,
-                    Details = new List<OrderDetail>()
+                    Details = new List<TemporaryOrderDetail>()
                 };
 
                 _myDatabase.TemporaryOrders.Add(temporaryOrder);
@@ -43,7 +41,7 @@ namespace TuringClothes.Repository
 
                     if (product.Stock >= orderDetail.Amount)
                     {
-                        var newOrderDetail = new OrderDetail
+                        var newOrderDetail = new TemporaryOrderDetail
                         {
                             ProductID = product.Id,
                             Amount = orderDetail.Amount,
@@ -80,6 +78,13 @@ namespace TuringClothes.Repository
             }
             catch { await transaction.RollbackAsync(); 
                     throw; }
+        }
+
+        public async Task<TemporaryOrder> GetTemporaryOrder(long id)
+        {
+            return await _myDatabase.TemporaryOrders.Include(x => x.Details)
+                .ThenInclude(p=> p.Product)
+                .FirstOrDefaultAsync(n => n.Id == id);
         }
     }
 }
