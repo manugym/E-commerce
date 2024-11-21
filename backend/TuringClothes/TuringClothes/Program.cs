@@ -4,13 +4,14 @@ using Microsoft.Extensions.ML;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Stripe;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using TuringClothes.Database;
 using TuringClothes.Pagination;
-
 using TuringClothes.Repository;
 using TuringClothes.Services;
+using ReviewService = TuringClothes.Services.ReviewService;
 
 namespace TuringClothes
 {
@@ -67,11 +68,14 @@ namespace TuringClothes
             builder.Services.AddScoped<CatalogService>();
             builder.Services.AddScoped<SmartSearchService>();
             builder.Services.AddScoped<ReviewService>();
-            builder.Services.AddScoped<OrderRepository>();
+            builder.Services.AddScoped<TemporaryOrderRepository>();
 
 
             builder.Services.AddPredictionEnginePool<ModelInput, ModelOutput>()
                 .FromFile("TuringModel1.mlnet");
+
+            StripeConfiguration.ApiKey = "sk_test_51QJzkGRqNFmfQiA9GJ41Y9yoGmgUsXLzdV8mbk06Rtfj5Q7d5Z0F0foXulLkkIKeRGpyGy5L4zM6UwtbprVlNbp300qCldYM25";
+
 
             if (builder.Environment.IsDevelopment())
             {

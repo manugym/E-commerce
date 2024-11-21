@@ -29,9 +29,9 @@ namespace TuringClothes.Repository
 
         
 
-        public Task<TEntity> GetByIdAsync(TId id)
+        public async Task<TEntity> GetByIdAsync(TId id)
         {
-            throw new NotImplementedException();
+            return await _myDatabase.Set<TEntity>().FindAsync(id);
         }
 
         public IQueryable<TEntity> GetQueryable(bool asNoTracking = true)
