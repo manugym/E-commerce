@@ -1,4 +1,6 @@
-﻿namespace TuringClothes.Database
+﻿using TuringClothes.Model;
+
+namespace TuringClothes.Database
 {
     public class TemporaryOrder
     {

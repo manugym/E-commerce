@@ -5,6 +5,7 @@ import { CartServiceService } from '../../services/cart-service.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { CheckoutService } from '../../services/checkout.service';
 
 @Component({
   selector: 'app-cart',
@@ -14,15 +15,19 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './cart.component.css',
 })
 export class CartComponent implements OnInit {
-
   cartDetail: CartDetail[] = [];
   cart: Cart = {
     id: null,
     userId: null,
-    details: this.cartDetail
+    details: this.cartDetail,
   };
 
-  constructor(private cartService: CartServiceService, private router: Router, private authService: AuthService) {}
+  constructor(
+    private cartService: CartServiceService,
+    private router: Router,
+    private authService: AuthService,
+    private checkoutService: CheckoutService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.getCart();
@@ -63,7 +68,7 @@ export class CartComponent implements OnInit {
       await this.getCart();
       return result;
     }
-    
+
     return result;
   }
 
@@ -94,6 +99,16 @@ export class CartComponent implements OnInit {
   }
 
   async goToCheckout() {
-      await this.router.navigate(['/checkout']);
-    }
+    await this.checkoutService.getEmbededCheckout();
+
+    //await this.cartService.saveToBackLocalCartToCheckout();
+  }
+
+  goToFail() {
+    console.log("Hola")
+  }
+
+  async goToBlockchain() {
+    await this.router.navigate(['/blockchain']);
+  }
 }

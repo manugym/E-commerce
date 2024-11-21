@@ -40,9 +40,6 @@ export class LoginComponent implements OnInit {
         text: 'Login Correcto',
         showConfirmButton: true,
       });
-      if (this.cartService.isOrder) {
-        
-      }
       await this.cartService.syncCarts();
     }
   }
