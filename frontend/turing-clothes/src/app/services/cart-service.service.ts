@@ -5,6 +5,7 @@ import { Result } from '../models/result';
 import { CartDetail } from '../models/cart-detail';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,8 @@ export class CartServiceService implements OnInit {
   private cartQuantitySubject = new BehaviorSubject<number>(0);
   cartQuantity$ = this.cartQuantitySubject.asObservable();
 
-  constructor(private api: ApiService, private authService: AuthService) {}
+  constructor(private api: ApiService, private authService: AuthService, private router: Router
+  ) {}
   ngOnInit(): void {
     this.getCart();
   }
@@ -70,22 +72,31 @@ export class CartServiceService implements OnInit {
     localStorage.removeItem('localCart');
   }
 
-  async saveToBackLocalCartToCheckout() {
+  async saveToBackCartToCheckout(cart: Cart) {
+    if (this.authService.isLoggedIn) {
+      const orderDetailDto = cart.details.map((detail) => ({
+        productId: detail.productId,
+        amount: detail.amount,
+      }));
+  
+      const result = await this.api.post<CartDetail>(
+        `Order/CreateTemporaryOrder`,
+        orderDetailDto
+      );
+      this.router.navigate(['/checkout', result.data.id])
+      return result;
+    }
     const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
-    
-
     
     const orderDetailDto = localCart.details.map((detail) => ({
       productId: detail.productId,
       amount: detail.amount,
     }));
-    console.log(orderDetailDto);
 
     const result = await this.api.post<CartDetail>(
       `Order/CreateTemporaryOrder`,
       orderDetailDto
     );
-    console.log(result);
     return result;
   }
 }
