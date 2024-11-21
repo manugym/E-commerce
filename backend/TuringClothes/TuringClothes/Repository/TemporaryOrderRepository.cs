@@ -14,12 +14,11 @@ namespace TuringClothes.Repository
             _productRepository = productRepository;
         }
 
-        public async Task<TemporaryOrder> CreateTemporaryOrder(ICollection<OrderDetailDto> orderDetailDto)
+        public async Task<TemporaryOrder> CreateTemporaryOrder(ICollection<OrderDetailDto> orderDetailDto, long userId)
         {
             using var transaction = await _myDatabase.Database.BeginTransactionAsync();
             try
             {
-                long userId = 1;// cambiar luego con Authorize
 
                 var temporaryOrder = new TemporaryOrder
                 {

@@ -155,6 +155,6 @@ export class LocalCartComponent implements OnInit {
     console.log("Hola")
     // this.router.navigate['/home']
 
-    await this.cartService.saveToBackCartToCheckout(this.cart);
+    //await this.cartService.saveToBackCartToCheckout(this.cart);
   }
 }

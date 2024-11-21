@@ -19,7 +19,7 @@ export const routes: Routes = [
   {path: 'product-details/:id', component: ProductDetailsComponent},
   {path: 'local-cart', component: LocalCartComponent},
   { path: 'cart', component: CartComponent },
-  { path: 'checkout/:id', component: CheckoutComponent },
+  { path: 'checkout', component: CheckoutComponent },
   { path: 'blockchain', component: BlockchainComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
