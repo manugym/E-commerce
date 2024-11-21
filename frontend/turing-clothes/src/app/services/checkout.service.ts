@@ -12,12 +12,12 @@ export class CheckoutService {
 
   constructor(private api: ApiService) { }
 
-  getAllProducts(): Promise<Result<ProductDto[]>> {
-    return this.api.get<ProductDto[]>('checkout/products');
+  getAllProducts(temporaryOrderId: number): Promise<Result<ProductDto[]>> {
+    return this.api.get<ProductDto[]>(`Checkout/GetAllProductsDto?temporaryOrderId=${temporaryOrderId}`);
   }
 
-  getEmbededCheckout(): Promise<Result<CheckoutSession>> {
-    return this.api.get<CheckoutSession>('checkout/embedded');
+  getEmbededCheckout(temporaryOrderId: number): Promise<Result<CheckoutSession>> {
+    return this.api.get<CheckoutSession>(`checkout/embedded?temporaryOrderId=${temporaryOrderId}`);
   }
 
   getStatus(sessionId: string): Promise<Result<CheckoutSessionStatus>> {

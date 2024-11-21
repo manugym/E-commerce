@@ -10,6 +10,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes), 
     provideHttpClient(),
-    provideNgxStripe('pk_test_51QJzkAAUJNbJRYZNDtyX9gUSm6fQuG6rpbNmsrtfbxhy5cglUFErIcd5dIcl5eUbRjTUV7mrdW8llw8kU0zLUmRy00n77k5Nx0')
+    provideNgxStripe('pk_test_51QJzkGRqNFmfQiA9hwu67vH1c9KBiT08qdh3ffTQarVGTvRgwL5w6biM71SPNQcInumTXHZsVifVmDWo4A0USgyL00DSFkGb4m')
   ]
 };

@@ -37,7 +37,7 @@ namespace TuringClothes.Controllers
         }
 
         [HttpGet("embedded")]
-        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId, SessionCreateOptions options)
+        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId)
         {
             ProductOrderDto[] products = await GetAllProducts(temporaryOrderId);
             List<SessionLineItemOptions> lineItems = new List<SessionLineItemOptions>();
@@ -48,7 +48,7 @@ namespace TuringClothes.Controllers
                     PriceData = new SessionLineItemPriceDataOptions()
                     {
                         Currency = "eur",
-                        UnitAmount = (long)(product.Price * 100),
+                        UnitAmount = (long)(product.Price),
                         ProductData = new SessionLineItemPriceDataProductDataOptions()
                         {
                             Name = product.Name,
@@ -59,14 +59,14 @@ namespace TuringClothes.Controllers
                     Quantity = product.Amount,
                 });
             }
-            options = new SessionCreateOptions
+            SessionCreateOptions options = new SessionCreateOptions
             {
                 UiMode = "embedded",
                 Mode = "payment",
                 PaymentMethodTypes = ["card"],
                 LineItems = lineItems,
                 CustomerEmail = "correo_cliente@correo.es",
-                ReturnUrl = _settings.ClientBaseUrl + "/checkout?session_id={CHECKOUT_SESSION_ID}",
+                RedirectOnCompletion = "never"
             };
 
             SessionService service = new SessionService();

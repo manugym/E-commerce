@@ -6,6 +6,7 @@ import { CartDetail } from '../models/cart-detail';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { TemporaryOrder } from '../models/temporary-order';
 
 @Injectable({
   providedIn: 'root',
@@ -72,31 +73,32 @@ export class CartServiceService implements OnInit {
     localStorage.removeItem('localCart');
   }
 
-  async saveToBackCartToCheckout(cart: Cart) {
-    if (this.authService.isLoggedIn) {
-      const orderDetailDto = cart.details.map((detail) => ({
-        productId: detail.productId,
-        amount: detail.amount,
-      }));
+  async goToCheckout(cart: Cart) {
+    // if (this.authService.isLoggedIn) {
+      // const orderDetailDto = cart.details.map((detail) => ({
+      //   productId: detail.productId,
+      //   amount: detail.amount,
+      // }));
   
-      const result = await this.api.post<CartDetail>(
-        `Order/CreateTemporaryOrder`,
-        orderDetailDto
-      );
-      this.router.navigate(['/checkout', result.data.id])
-      return result;
-    }
-    const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
+      // const result = await this.api.post<TemporaryOrder>(
+      //   `TemporaryOrder/CreateTemporaryOrder`,
+      //   orderDetailDto
+      // );
+      
+      // this.router.navigate(['/checkout'], {queryParams: {temporaryId: result.data.id, payment: 'card'}})
+      // return result;
+    // }
+    // const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
     
-    const orderDetailDto = localCart.details.map((detail) => ({
-      productId: detail.productId,
-      amount: detail.amount,
-    }));
+    // const orderDetailDto = localCart.details.map((detail) => ({
+    //   productId: detail.productId,
+    //   amount: detail.amount,
+    // }));
 
-    const result = await this.api.post<CartDetail>(
-      `Order/CreateTemporaryOrder`,
-      orderDetailDto
-    );
-    return result;
+    // const result = await this.api.post<CartDetail>(
+    //   `Order/CreateTemporaryOrder`,
+    //   orderDetailDto
+    // );
+    // return result;
   }
 }
