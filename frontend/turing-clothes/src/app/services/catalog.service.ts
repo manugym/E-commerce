@@ -6,14 +6,17 @@ import { PaginationParams } from '../models/pagination-params';
 import { PagedResults } from '../models/paged-results';
 import { ReviewDto } from '../models/review-dto';
 import { CartServiceService } from './cart-service.service';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CatalogService {
   private storageKey = 'catalogSettings';
+  private baseUrl = 'https://localhost:7183/api';
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private http: HttpClient) {}
 
   async getPagedResults(
     paginationParams: PaginationParams
@@ -76,4 +79,13 @@ export class CatalogService {
   async addReview(review: ReviewDto): Promise<Result<ReviewDto>> {
     return await this.api.post<ReviewDto>('Review', review);
   }
+
+  getProductReviews(productId: number): Observable<ReviewDto[]> {
+    const url = `${this.baseUrl}/Review?productId=${productId}`;
+    console.log('Requesting reviews from:', url);
+    return this.http.get<ReviewDto[]>(url);
+  }
 }
+
+
+
