@@ -21,6 +21,7 @@ export class CheckoutComponent {
   sessionId: string = '';
   routeQueryMap$: Subscription;
   stripeEmbedCheckout: StripeEmbeddedCheckout;
+  temporaryOrderId: number;
 
   constructor(
     private service: CheckoutService, 
@@ -33,6 +34,10 @@ export class CheckoutComponent {
     // Por tanto, para poder captar los cambios en la url nos suscribimos al queryParamMap del route.
     // Cada vez que se cambie la url se llamará al método onInit
     this.routeQueryMap$ = this.route.queryParamMap.subscribe(queryMap => this.init(queryMap));
+    this.temporaryOrderId = this.route.snapshot.paramMap.get(
+      'id'
+    ) as unknown as number;
+    const result = this.service.getAllProducts(this.temporaryOrderId);
   }
 
   ngOnDestroy(): void {
@@ -43,6 +48,7 @@ export class CheckoutComponent {
 
   async init(queryMap: ParamMap) {
     this.sessionId = queryMap.get('session_id');
+    console.log(this.sessionId);
 
     if (this.sessionId) {
       const request = await this.service.getStatus(this.sessionId);
@@ -51,8 +57,10 @@ export class CheckoutComponent {
         console.log(request.data);
       }
     } else {
-      const request = await this.service.getAllProducts();
-
+      const temporaryId = this.temporaryOrderId;
+      console.log(this.temporaryOrderId)
+      const request = await this.service.getAllProducts(temporaryId);
+      console.log(this.temporaryOrderId);
       if (request.success) {
         this.product = request.data[0];
       }

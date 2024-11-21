@@ -6,6 +6,7 @@ import { CartDetail } from '../models/cart-detail';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { TemporaryOrder } from '../models/temporary-order';
 
 @Injectable({
   providedIn: 'root',
@@ -79,10 +80,11 @@ export class CartServiceService implements OnInit {
         amount: detail.amount,
       }));
   
-      const result = await this.api.post<CartDetail>(
-        `Order/CreateTemporaryOrder`,
+      const result = await this.api.post<TemporaryOrder>(
+        `TemporaryOrder/CreateTemporaryOrder`,
         orderDetailDto
       );
+      console.log(result);
       this.router.navigate(['/checkout', result.data.id])
       return result;
     }
