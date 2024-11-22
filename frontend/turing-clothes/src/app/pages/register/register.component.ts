@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
-import  Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 import { CartServiceService } from '../../services/cart-service.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class RegisterComponent {
   ) {
     this.myForm = this.createForm();
   }
-  
+
   registerHints: Boolean = false;
 
   private createForm(): FormGroup {
@@ -72,16 +72,15 @@ export class RegisterComponent {
       if (result.success) {
         Swal.fire({
           icon: 'success',
-        text: 'Registro Correcto',
-        showConfirmButton: false,
-        animation: true,
-        toast: true,
-        position: 'top-right',
-        timer: 1100
-          });
+          text: 'Registro Correcto',
+          showConfirmButton: false,
+          animation: true,
+          toast: true,
+          position: 'top-right',
+          timer: 1100
+        });
         await this.cartService.syncCarts()
         this.router.navigate(['/home']);
-        await this.cartService.syncCarts();
       }
     } else {
       // El formulario no es válido
@@ -94,8 +93,8 @@ export class RegisterComponent {
         toast: true,
         position: 'top-right',
         timer: 1100
-        });
-      }
+      });
     }
   }
+}
 
