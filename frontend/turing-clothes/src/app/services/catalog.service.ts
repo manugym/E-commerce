@@ -6,22 +6,19 @@ import { PaginationParams } from '../models/pagination-params';
 import { PagedResults } from '../models/paged-results';
 import { ReviewDto } from '../models/review-dto';
 import { CartServiceService } from './cart-service.service';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class CatalogService {
   private storageKey = 'catalogSettings';
-  private baseUrl = 'https://localhost:7183/api';
 
-  constructor(private api: ApiService, private http: HttpClient) {}
+  constructor(private api: ApiService) { }
 
   async getPagedResults(
     paginationParams: PaginationParams
   ): Promise<Result<PagedResults>> {
-    // Guardar la configuración actual en sessionStorage
     this.saveUserSettings(paginationParams);
 
     const result = await this.api.get<PagedResults>(
@@ -66,7 +63,6 @@ export class CatalogService {
       }
     }
 
-    // Si no hay datos o si ocurre un error, devolvemos los valores predeterminados
     return {
       query: '',
       pageNumber: 1,
@@ -80,10 +76,8 @@ export class CatalogService {
     return await this.api.post<ReviewDto>('Review', review);
   }
 
-  getProductReviews(productId: number): Observable<ReviewDto[]> {
-    const url = `${this.baseUrl}/Review?productId=${productId}`;
-    console.log('Requesting reviews from:', url);
-    return this.http.get<ReviewDto[]>(url);
+  async getProductReviews(productId: number): Promise<Result<ReviewDto[]>> {
+    return await this.api.get<ReviewDto[]>(`/Review?productId=${productId}`)
   }
 }
 

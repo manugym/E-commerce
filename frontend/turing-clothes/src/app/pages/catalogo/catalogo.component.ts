@@ -7,7 +7,6 @@ import { PagedResults } from '../../models/paged-results';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ReviewDto } from '../../models/review-dto';
-import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-catalogo',
@@ -26,23 +25,23 @@ export class CatalogoComponent implements OnInit {
   pagedResults: PagedResults;
   productReviews: { [key: number]: number } = {};
 
-  constructor(private catalogService: CatalogService, private cdr : ChangeDetectorRef) {}
+  constructor(private catalogService: CatalogService) { }
 
   ngOnInit() {
     const savedSettings = this.catalogService.getUserSettings();
 
     this.paginationParams = savedSettings;
     this.oldQuery = this.paginationParams.query;
-    
+
     this.loadProductsAndReviews();
-    
+
     this.getPagedResults();
     this.isAscending = this.paginationParams.direction === 0;
   }
 
   loadProductsAndReviews(): void {
     this.items.forEach((product) => {
-      this.loadProductReviews(product.id); 
+      this.loadProductReviews(product.id);
     });
   }
 
@@ -68,45 +67,43 @@ export class CatalogoComponent implements OnInit {
       }));
       this.items.forEach((product) => this.loadProductReviews(product.id));
     }
-  } catch (error) {
+  } catch(error) {
     console.error('Error al obtener los productos:', error);
   }
 
-  loadProductReviews(productId: number): void {
-    this.catalogService.getProductReviews(productId).subscribe(
-      (reviews: ReviewDto[] | number) => {  
-                if (typeof reviews === 'number') {
-          this.productReviews[productId] = reviews;
-          console.log(`Product ID: ${productId}, Directly Assigned Average Rating: ${reviews}`);
-        } else if (reviews && reviews.length > 0) {
-          const totalRating = reviews.reduce((acc, review) => acc + (review.rating || 0), 0);
-          const averageRating = totalRating / reviews.length;
-          
-          this.productReviews[productId] = averageRating;
-          console.log(`Product ID: ${productId}, Calculated Average Rating: ${averageRating}`);
-        } else {
-          this.productReviews[productId] = 0;
-          console.log(`Product ID: ${productId} has no reviews, setting rating to 0`);
-        }
-      }
-    );
+  async loadProductReviews(productId: number) {
+    const reviews = await this.catalogService.getProductReviews(productId)
+    if (typeof reviews === 'number') {
+      this.productReviews[productId] = reviews;
+      console.log(`Product ID: ${productId}, Directly Assigned Average Rating: ${reviews}`);
+    } else if (reviews && reviews.data.length > 0) {
+      const totalRating = reviews.data.reduce((acc, review) => acc + (review.rating || 0), 0);
+      const averageRating = totalRating / reviews.data.length;
+
+      this.productReviews[productId] = averageRating;
+      console.log(`Product ID: ${productId}, Calculated Average Rating: ${averageRating}`);
+    } else {
+      this.productReviews[productId] = 0;
+      console.log(`Product ID: ${productId} has no reviews, setting rating to 0`);
+    }
   }
+
 
   getStarArray(rating: number): number[] {
     if (isNaN(rating) || rating < 0) {
       rating = 0;
     }
-  
+
     const filledStars = Math.floor(rating);
     const emptyStars = 5 - filledStars;
     const halfStar = rating % 1 > 0.5 ? 1 : 0;
-  
-    const stars = Array(filledStars).fill(1); 
-    if (halfStar) stars.push(0.5); 
+
+    const stars = Array(filledStars).fill(1);
+    if (halfStar) stars.push(0.5);
     while (stars.length < 5) {
-      stars.push(0); 
+      stars.push(0);
     }
-  
+
     return stars;
   }
   /**
@@ -125,7 +122,7 @@ export class CatalogoComponent implements OnInit {
   round(value: number): number {
     return Math.round(value);
   }
-  
+
 
 
   toggleDirection() {
@@ -170,6 +167,6 @@ export class CatalogoComponent implements OnInit {
     this.paginationParams.pageSize = value;
     this.getPagedResults();
   }
- 
+
 }
-  
+
