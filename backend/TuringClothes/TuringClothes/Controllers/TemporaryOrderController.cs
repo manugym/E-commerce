@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TuringClothes.Database;
 using TuringClothes.Model;
@@ -23,6 +24,7 @@ namespace TuringClothes.Controllers
             _orderRepository = orderRepository;
         }
 
+        [Authorize]
         [HttpPost("CreateTemporaryOrder")]
         public async Task<ActionResult<TemporaryOrder>> CreateTemporaryOrder([FromBody] ICollection<OrderDetailDto> orderDetailsDto)
         {
@@ -31,7 +33,14 @@ namespace TuringClothes.Controllers
                 return BadRequest("Order details cannot be null or empty.");
             }
 
-            var temporaryOrder = await _orderRepository.CreateTemporaryOrder(orderDetailsDto);
+            var userId = User.FindFirst("id")?.Value;
+
+            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var userIdLong))
+            {
+                return Unauthorized("Invalid user ID.");
+            }
+
+            var temporaryOrder = await _orderRepository.CreateTemporaryOrder(orderDetailsDto, userIdLong);
 
             return Ok(temporaryOrder);
         }

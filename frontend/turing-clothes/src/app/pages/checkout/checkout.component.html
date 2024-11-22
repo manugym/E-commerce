@@ -1,4 +1,4 @@
-<h1>Pasarela de pago</h1>
+<!-- <h1>Pasarela de pago</h1>
 
 @if (sessionId) {
   <section>
@@ -12,12 +12,8 @@
     <img [src]="product.image">
     <h3>{{product.name}} {{product.price}}€</h3>
     <p>{{product.description}}</p>
-
-    <button (click)="embeddedCheckout()">Comprar embebido</button>
-  </section>
-}
-
-<dialog #checkoutDialog>
+  -->
+<div #checkoutDialog class="w-100 p-4" style="height: 100%;">
   <div id="checkout"></div>
   <button (click)="cancelCheckoutDialog()">x</button>
-</dialog>
+</div>

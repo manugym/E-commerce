@@ -72,10 +72,14 @@ export class RegisterComponent {
       if (result.success) {
         Swal.fire({
           icon: 'success',
-          text: 'Registro Correcto',
-          showConfirmButton: true
+        text: 'Registro Correcto',
+        showConfirmButton: false,
+        animation: true,
+        toast: true,
+        position: 'top-right',
+        timer: 1100
           });
-          await this.cartService.syncCarts()
+        await this.cartService.syncCarts()
         this.router.navigate(['/home']);
         await this.cartService.syncCarts();
       }
@@ -84,8 +88,12 @@ export class RegisterComponent {
       this.registerHints = true;
       Swal.fire({
         icon: 'error',
-        text: 'Registro erroneo',
-        showConfirmButton: true
+        text: 'Registro erroneo.',
+        showConfirmButton: false,
+        animation: true,
+        toast: true,
+        position: 'top-right',
+        timer: 1100
         });
       }
     }

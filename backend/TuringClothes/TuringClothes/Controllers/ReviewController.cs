@@ -77,6 +77,8 @@ namespace TuringClothes.Controllers
             var averageRating = await _reviewService.GetAverageRatingForProduct(productId);
             return Ok(averageRating);
         }
+
+        
     }
 
 }

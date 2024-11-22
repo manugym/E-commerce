@@ -38,7 +38,11 @@ export class LoginComponent implements OnInit {
       Swal.fire({
         icon: 'success',
         text: 'Login Correcto',
-        showConfirmButton: true,
+        showConfirmButton: false,
+        animation: true,
+        toast: true,
+        position: 'top-right',
+        timer: 1100
       });
       await this.cartService.syncCarts();
     }
