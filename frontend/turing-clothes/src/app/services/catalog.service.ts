@@ -73,11 +73,11 @@ export class CatalogService {
   }
 
   async addReview(review: ReviewDto): Promise<Result<ReviewDto>> {
-    return await this.api.post<ReviewDto>('Review', review);
+    return await this.api.post<ReviewDto>('AddReview', review);
   }
 
   async getProductReviews(productId: number): Promise<Result<ReviewDto[]>> {
-    return await this.api.get<ReviewDto[]>(`/Review?productId=${productId}`)
+    return await this.api.get<ReviewDto[]>(`Review?productId=${productId}`)
   }
 }
 

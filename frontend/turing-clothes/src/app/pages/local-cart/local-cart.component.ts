@@ -18,7 +18,7 @@ export class LocalCartComponent implements OnInit {
     userId: null,
     details: [],
   };
-  detailIdCounter: number = 0;
+  detailId: number = 0;
 
   constructor(private catalogService: CatalogService, private cartService: CartServiceService) {}
 
@@ -37,7 +37,7 @@ export class LocalCartComponent implements OnInit {
         return detail;
       } else {
         return {
-          id: this.detailIdCounter++,
+          id: this.detailId++,
           cartId: localCart.id || null,
           product: detail,
           productId: detail.id,
@@ -96,7 +96,7 @@ export class LocalCartComponent implements OnInit {
     if (cartDetail == null) {
       if (amount > 0) {
         const newDetails: CartDetail = {
-          id: this.detailIdCounter++,
+          id: this.detailId++,
           cartId: this.cart.id,
           productId: productId,
           product: product,
