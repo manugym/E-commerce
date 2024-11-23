@@ -3,7 +3,6 @@ import { Cart } from '../../models/cart';
 import { FormsModule } from '@angular/forms';
 import { CartDetail } from '../../models/cart-detail';
 import { CatalogService } from '../../services/catalog.service';
-import { CartServiceService } from '../../services/cart-service.service';
 
 @Component({
   selector: 'app-local-cart',
@@ -13,40 +12,16 @@ import { CartServiceService } from '../../services/cart-service.service';
   styleUrl: './local-cart.component.css',
 })
 export class LocalCartComponent implements OnInit {
-  cart: Cart = {
-    id: null,
-    userId: null,
-    details: [],
-  };
-  detailId: number = 0;
+  cart: Cart;
 
-  constructor(private catalogService: CatalogService, private cartService: CartServiceService) {}
+  constructor(private catalogService: CatalogService) {}
 
   ngOnInit(): void {
     this.cart = this.getLocalCart();
   }
 
   getLocalCart(): Cart {
-    const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
-    if (!localCart) {
-      return { id: null, userId: null, details: [] };
-    }
-
-    localCart.details = (localCart.details || []).map((detail: any) => {
-      if (detail.product) {
-        return detail;
-      } else {
-        return {
-          id: this.detailId++,
-          cartId: localCart.id || null,
-          product: detail,
-          productId: detail.id,
-          amount: 1,
-        };
-      }
-    });
-
-    return localCart;
+    return JSON.parse(localStorage.getItem('localCart'));
   }
 
   saveLocal() {
@@ -75,11 +50,6 @@ export class LocalCartComponent implements OnInit {
     }
   }
 
-  /**
-   *
-   * Este método está roto, hay que arreglarlo
-   */
-
   async updateQuantity(productId: number, amount: number) {
     const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
 
@@ -96,8 +66,8 @@ export class LocalCartComponent implements OnInit {
     if (cartDetail == null) {
       if (amount > 0) {
         const newDetails: CartDetail = {
-          id: this.detailId++,
-          cartId: this.cart.id,
+          id: null,
+          cartId: null,
           productId: productId,
           product: product,
           amount: amount,

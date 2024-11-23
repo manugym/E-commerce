@@ -177,13 +177,14 @@ export class ProductDetailsComponent implements OnInit {
       if (existingDetail) {
         existingDetail.amount += quantity;
       } else {
-        localCart.details.push({
-          id: localCart.details.length + 1,
+        const newDetails = {
+          id: null,
           productId: product.id,
           product,
           amount: quantity,
           cartId: null,
-        });
+        };
+        localCart.details.push(newDetails);
       }
       localStorage.setItem('localCart', JSON.stringify(localCart));
       return Result.success(200, 'Producto agregado al carrito');
