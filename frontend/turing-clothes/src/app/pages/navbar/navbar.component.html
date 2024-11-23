@@ -8,7 +8,6 @@
         >Turing Clothes</a
       >
 
-      <!-- Botón para dispositivos móviles -->
       <button
         class="navbar-toggler"
         type="button"
@@ -21,10 +20,8 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Menú colapsable -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-          <!-- Links comunes -->
           <li class="nav-item">
             <a
               class="nav-link active text-white"
@@ -47,7 +44,6 @@
             >
           </li>
 
-          <!-- Links condicionales según estado de sesión -->
           @if (isLoguedIn()) {
           <li class="nav-item text-white">
             <a class="nav-link" [routerLink]="'test-page'">Testing</a>
@@ -55,10 +51,8 @@
           }
         </ul>
 
-        <!-- Sección de carrito y login/logout -->
         <div class="d-flex align-items-center">
           @if (isLoguedIn()) {
-          <!-- Botón de carrito -->
           <a
             class="btn btn-outline-dark bg-white me-2"
             onmouseover="this.classList.add('text-primary', 'border-primary')"
@@ -71,7 +65,6 @@
             }}</span>
           </a>
           } @else {
-          <!-- Botón de carrito -->
           <a
             class="btn me-2 btn-outline-dark bg-white"
             onmouseover="this.classList.add('text-primary', 'border-primary')"
@@ -85,13 +78,12 @@
           </a>
           }
 
-          <!-- Sección condicional para usuario logueado/no logueado -->
           @if (isLoguedIn()) {
           <div class="pt-2">
             <p class="text-white">Bienvenido, {{ getLogedUsername() }}.</p>
           </div>
           <button
-            class="btn btn-outline-dark bg-white me-2 ms-2"
+            class="btn btn-outline-dark bg-white text-black me-2 ms-2"
             onmouseover="this.classList.add('text-primary', 'border-primary')"
             onmouseout="this.classList.remove('text-primary', 'border-primary')"
             (click)="logout()"
@@ -100,7 +92,7 @@
           </button>
           } @else {
           <a
-            class="btn btn-outline-dark bg-white"
+            class="btn btn-outline-dark text-black bg-white"
             onmouseover="this.classList.add('text-primary', 'border-primary')"
             onmouseout="this.classList.remove('text-primary', 'border-primary')"
             [routerLink]="'login'"

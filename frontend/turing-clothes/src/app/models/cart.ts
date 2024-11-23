@@ -1,7 +1,7 @@
 import { CartDetail } from "./cart-detail";
 
 export interface Cart {
-  id: number,
+  id?: number,
   userId: number,
   details: CartDetail[]
 }
