@@ -5,6 +5,7 @@ import { ProductDto } from '../../models/product-dto';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CheckoutService } from '../../services/checkout.service';
+import { PollingTemporaryOrdersService } from '../../services/polling-temporary-orders.service';
 
 @Component({
   selector: 'app-checkout',
@@ -25,20 +26,19 @@ export class CheckoutComponent implements OnInit{
   payment: string;
 
   constructor(
-    private service: CheckoutService,
+    private checkoutService: CheckoutService,
+    private pollingService: PollingTemporaryOrdersService,
     private route: ActivatedRoute,
     private router: Router,
     private stripe: StripeService) { }
 
   async ngOnInit() {
-    // El evento ngOnInit solo se llama una vez en toda la vida del componente.
-    // Por tanto, para poder captar los cambios en la url nos suscribimos al queryParamMap del route.
-    // Cada vez que se cambie la url se llamará al método onInit
     this.temporaryOrderId = this.route.snapshot.queryParamMap.get(
         'temporaryId') as unknown as number;
     this.payment = this.route.snapshot.queryParamMap.get('payment') as unknown as string;
+    
     await this.embeddedCheckout();
-    // this.routeQueryMap$ = this.route.queryParamMap.subscribe(queryMap => this.init(queryMap));
+    this.startPolling();
     
   }
 
@@ -66,7 +66,7 @@ export class CheckoutComponent implements OnInit{
   // }
 
   async embeddedCheckout() {
-    const request = await this.service.getEmbededCheckout(this.temporaryOrderId);
+    const request = await this.checkoutService.getEmbededCheckout(this.temporaryOrderId);
 
     if (request.success) {
       const options: StripeEmbeddedCheckoutOptions = {
@@ -86,8 +86,13 @@ export class CheckoutComponent implements OnInit{
     this.router.navigate(['checkout']);
   }
 
+  async startPolling() {
+    console.log(this.temporaryOrderId)
+    await this.pollingService.startPolling(this.temporaryOrderId);
+  }
+
   cancelCheckoutDialog() {
     this.stripeEmbedCheckout.destroy();
-    this.checkoutDialogRef.nativeElement.close; // no es una función, por eso le quito los paréntesis
+    this.checkoutDialogRef.nativeElement.close;
   }
 }
