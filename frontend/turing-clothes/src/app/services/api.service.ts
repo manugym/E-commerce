@@ -49,6 +49,23 @@ export class ApiService {
 
     return this.sendRequest<T>(request$);
   }
+  async postPolling<T = void>(
+    path: string,
+    body: any = {},
+    // contentType = null
+    contentType: string | null = 'application/json'
+  ) {
+    const url = `${this.BASE_URL}${path}`;
+    const request$ = this.http
+      .post(url, body, {
+        headers: this.getHeader(contentType),
+        observe: 'response',
+      })
+      .subscribe({
+        next: () => console.log('Temporary order refreshed'),
+        error: (err) => console.error('Error refreshing temporary order', err),
+      });
+  }
 
   async put<T = void>(
     path: string,
