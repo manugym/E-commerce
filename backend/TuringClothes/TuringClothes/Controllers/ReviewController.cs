@@ -47,7 +47,7 @@ namespace TuringClothes.Controllers
 
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("AddReview")]
         public async Task<ActionResult> AddReview([FromBody] ReviewDto reviewDto)
         {
             var userIdClaim = User.FindFirst("id")?.Value;

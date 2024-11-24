@@ -72,13 +72,12 @@ export class CheckoutComponent implements OnInit{
       const options: StripeEmbeddedCheckoutOptions = {
         clientSecret: request.data.clientSecret
       };
-      console.log(request.data.clientSecret);
 
       this.stripe.initEmbeddedCheckout(options)
         .subscribe((checkout) => {
           this.stripeEmbedCheckout = checkout;
           checkout.mount('#checkout');
-          this.checkoutDialogRef.nativeElement.showModal();
+          this.checkoutDialogRef.nativeElement.showModal;
         });
     }
   }
@@ -89,6 +88,6 @@ export class CheckoutComponent implements OnInit{
 
   cancelCheckoutDialog() {
     this.stripeEmbedCheckout.destroy();
-    this.checkoutDialogRef.nativeElement.close();
+    this.checkoutDialogRef.nativeElement.close; // no es una función, por eso le quito los paréntesis
   }
 }

@@ -13,17 +13,18 @@ import { LocalCartComponent } from '../local-cart/local-cart.component';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent implements OnInit{
-
-  jsonDecodedName: string
-  cartQuantity: number
-  constructor(private authService: AuthService, private cartService: CartServiceService) {
-  }
+export class NavbarComponent implements OnInit {
+  jsonDecodedName: string;
+  cartQuantity: number;
+  constructor(
+    private authService: AuthService,
+    private cartService: CartServiceService
+  ) {}
   async ngOnInit(): Promise<void> {
     if (this.isLoguedIn()) {
-      await this.cartService.getCart()
+      await this.cartService.getCart();
     }
-      this.cartService.cartQuantity$.subscribe((quantity) => {
+    this.cartService.cartQuantity$.subscribe((quantity) => {
       this.cartQuantity = quantity;
     });
   }
@@ -32,11 +33,11 @@ export class NavbarComponent implements OnInit{
     return this.authService.isLoggedIn;
   }
 
-  getLogedUsername(){
+  getLogedUsername() {
     return this.authService.decodedToken.unique_name;
   }
 
   logout() {
-    this.authService.logout()
+    this.authService.logout();
   }
 }
