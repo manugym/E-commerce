@@ -4,10 +4,10 @@ namespace TuringClothes.Services
 {
     public class MyBackgroundService : BackgroundService
     {
-        private readonly IServiceScopeFactory _scopeFactory;
-        public MyBackgroundService(IServiceScopeFactory scopeFactory)
+        private readonly IServiceProvider _serviceProvider;
+        public MyBackgroundService(IServiceProvider serviceProvider)
         {
-            _scopeFactory = scopeFactory;
+            _serviceProvider = serviceProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -16,7 +16,8 @@ namespace TuringClothes.Services
             {
                 try
                 {
-                    var myDatabase = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<MyDatabase>();
+                    await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
+                    var myDatabase = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<MyDatabase>();
                     var expiredOrders = myDatabase.TemporaryOrders.Where(o => o.ExpirationTime < DateTime.UtcNow).ToList();
 
                     if (expiredOrders.Any())
@@ -31,7 +32,7 @@ namespace TuringClothes.Services
                 {
                     Console.WriteLine("Error al borrar órdenes temporales expiradas.");
                 }
-                await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
+                
             }
 
 

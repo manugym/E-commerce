@@ -52,15 +52,16 @@ namespace TuringClothes.Controllers
             return Ok(temporaryOrder);
         }
 
+        [Authorize]
         [HttpPost("RefreshTemporaryOrders")]
-        public async Task<ActionResult> RefreshTemporaryOrders([FromBody]long temporaryOrderId)
+        public async Task<ActionResult> RefreshTemporaryOrders(long temporaryOrderId)
         {
             var temporaryOrder = await _orderRepository.GetTemporaryOrder(temporaryOrderId);
             if (temporaryOrder == null)
             {
                 return NotFound("Temporary order no existe.");
             }
-            temporaryOrder.ExpirationTime = DateTime.UtcNow.AddMinutes(1);
+            temporaryOrder.ExpirationTime = DateTime.UtcNow.AddSeconds(15);
             await _myDatabase.SaveChangesAsync();
             return Ok("Temporary order expiration extendida.");
         }
