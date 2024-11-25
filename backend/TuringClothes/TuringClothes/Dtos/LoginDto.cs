@@ -1,4 +1,4 @@
-﻿namespace TuringClothes.Model
+﻿namespace TuringClothes.Dtos
 {
     public class LoginDto
     {

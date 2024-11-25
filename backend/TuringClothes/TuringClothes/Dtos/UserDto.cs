@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 
-namespace TuringClothes.Model
+namespace TuringClothes.Dtos
 {
     [Index(nameof(Email), IsUnique = true)]
     public class UserDto
