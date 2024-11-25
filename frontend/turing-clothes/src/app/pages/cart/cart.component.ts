@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CheckoutService } from '../../services/checkout.service';
+import { ApiService } from '../../services/api.service';
+import { TemporaryOrder } from '../../models/temporary-order';
 
 @Component({
   selector: 'app-cart',
@@ -26,8 +28,9 @@ export class CartComponent implements OnInit {
     private cartService: CartServiceService,
     private router: Router,
     private authService: AuthService,
-    private checkoutService: CheckoutService
-  ) {}
+    private checkoutService: CheckoutService,
+    private api: ApiService
+  ) { }
 
   async ngOnInit(): Promise<void> {
     await this.getCart();
@@ -99,16 +102,36 @@ export class CartComponent implements OnInit {
   }
 
   async goToCheckout() {
-    await this.checkoutService.getEmbededCheckout();
+    if (this.authService.isLoggedIn) {
+      const orderDetailDto = this.cart.details.map((detail) => ({
+        productId: detail.productId,
+        amount: detail.amount,
+      }));
+      
+      const result = await this.api.post<TemporaryOrder>(
+        `TemporaryOrder/CreateTemporaryOrder`,
+        orderDetailDto
+      );
+      // this.cartService.goToCheckout(this.cart);
+      this.router.navigate(['/checkout'], { queryParams: { temporaryId: result.data.id, payment: 'card' } })
+    }
+    const localCart: Cart = JSON.parse(localStorage.getItem('localCart'));
 
-    //await this.cartService.saveToBackLocalCartToCheckout();
-  }
+    const orderDetailDto = localCart.details.map((detail) => ({
+      productId: detail.productId,
+      amount: detail.amount,
+    }));
 
-  goToFail() {
-    console.log("Hola")
+    const result = await this.api.post<CartDetail>(
+      `Order/CreateTemporaryOrder`,
+      orderDetailDto
+    );
+    return result;
   }
 
   async goToBlockchain() {
     await this.router.navigate(['/blockchain']);
   }
+
+
 }

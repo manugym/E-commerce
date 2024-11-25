@@ -1,8 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Stripe;
 using Stripe.Checkout;
+using TuringClothes.Database;
+using TuringClothes.Model;
+using TuringClothes.Repository;
 using TuringClothes.Dtos;
+
 
 namespace TuringClothes.Controllers
 {
@@ -11,93 +17,67 @@ namespace TuringClothes.Controllers
     public class CheckoutController : ControllerBase
     {
         private readonly Settings _settings;
+        private readonly TemporaryOrderRepository _temporaryOrderRepository;
 
-        public CheckoutController(IOptions<Settings> options)
+        public CheckoutController(IOptions<Settings> options, TemporaryOrderRepository temporaryOrderRepository)
         {
             _settings = options.Value;
+            _temporaryOrderRepository = temporaryOrderRepository;
         }
 
-        [HttpGet("products")]
-        public IEnumerable<ProductDto> GetAllProducts()
+        /*[HttpGet("products")]
+        public IEnumerable<ProductDto[]> GetAllProducts()
         {
             return GetProducts();
         }
+        */
 
-        [HttpGet("hosted")]
-        public async Task<ActionResult> HostedCheckout()
+        [HttpGet("GetAllProductsDto")]
+        public async Task<ProductOrderDto[]> GetAllProducts(long temporaryOrderId)
         {
-            ProductDto product = GetProducts()[0];
+            return await GetProducts(temporaryOrderId);
+        }
 
-            SessionCreateOptions options = new SessionCreateOptions
+        [HttpGet("embedded")]
+        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId)
+        {
+            ProductOrderDto[] products = await GetAllProducts(temporaryOrderId);
+            List<SessionLineItemOptions> lineItems = new List<SessionLineItemOptions>();
+            foreach (var product in products)
             {
-                UiMode = "hosted",
-                Mode = "payment",
-                PaymentMethodTypes = ["card"],
-                LineItems = new List<SessionLineItemOptions>
-            {
-                new SessionLineItemOptions()
+                lineItems.Add(new SessionLineItemOptions()
                 {
                     PriceData = new SessionLineItemPriceDataOptions()
                     {
                         Currency = "eur",
-                        UnitAmount = (long)(product.Price * 100),
+                        UnitAmount = (long)(product.Price),
                         ProductData = new SessionLineItemPriceDataProductDataOptions()
                         {
                             Name = product.Name,
                             Description = product.Description,
-                            Images = [product.Image]
+                            Images = new List<string> { product.Image }
                         }
                     },
-                    Quantity = 1,
-                },
-            },
-                CustomerEmail = "correo_cliente@correo.es",
-                SuccessUrl = _settings.ClientBaseUrl + "/checkout?session_id={CHECKOUT_SESSION_ID}",
-                CancelUrl = _settings.ClientBaseUrl + "/checkout"
-            };
-
-            SessionService service = new SessionService();
-            Session session = await service.CreateAsync(options);
-
-            return Ok(new { sessionUrl = session.Url });
-        }
-
-        [HttpGet("embedded")]
-        public async Task<ActionResult> EmbededCheckout()
-        {
-            ProductDto product = GetProducts()[0];
-
+                    Quantity = product.Amount,
+                });
+            }
             SessionCreateOptions options = new SessionCreateOptions
             {
                 UiMode = "embedded",
                 Mode = "payment",
                 PaymentMethodTypes = ["card"],
-                LineItems = new List<SessionLineItemOptions>
-            {
-                new SessionLineItemOptions()
-                {
-                    PriceData = new SessionLineItemPriceDataOptions()
-                    {
-                        Currency = "eur",
-                        UnitAmount = (long)(product.Price * 100),
-                        ProductData = new SessionLineItemPriceDataProductDataOptions()
-                        {
-                            Name = product.Name,
-                            Description = product.Description,
-                            Images = [product.Image]
-                        }
-                    },
-                    Quantity = 1,
-                },
-            },
+                LineItems = lineItems,
                 CustomerEmail = "correo_cliente@correo.es",
-                ReturnUrl = _settings.ClientBaseUrl + "/checkout?session_id={CHECKOUT_SESSION_ID}",
+                RedirectOnCompletion = "never"
             };
 
             SessionService service = new SessionService();
             Session session = await service.CreateAsync(options);
 
-            return Ok(new { clientSecret = session.ClientSecret });
+            return Ok(new
+            {
+                clientSecret = session.ClientSecret
+            });
         }
 
         [HttpGet("status/{sessionId}")]
@@ -109,14 +89,25 @@ namespace TuringClothes.Controllers
             return Ok(new { status = session.Status, customerEmail = session.CustomerEmail });
         }
 
-        private ProductDto[] GetProducts()
+        private async Task<ProductOrderDto[]> GetProducts(long temporaryOrderId)
         {
-            return [
-                new ProductDto
+            TemporaryOrder temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(temporaryOrderId);
+            List<ProductOrderDto> productList = new List<ProductOrderDto>();
+            foreach (var orderDetail in temporaryOrder.Details)
             {
-                
+
+                productList.Add(new ProductOrderDto
+                {
+                    Name = orderDetail.Product.Name,
+                    Description = orderDetail.Product.Description,
+                    Price = orderDetail.Product.Price,
+                    Amount = orderDetail.Amount,
+                    Image = orderDetail.Product.Image
+                });
+
+
             }
-            ];
+            return productList.ToArray();
         }
     }
 }

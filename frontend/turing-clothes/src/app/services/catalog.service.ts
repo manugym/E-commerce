@@ -7,18 +7,18 @@ import { PagedResults } from '../models/paged-results';
 import { ReviewDto } from '../models/review-dto';
 import { CartServiceService } from './cart-service.service';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class CatalogService {
   private storageKey = 'catalogSettings';
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService) { }
 
   async getPagedResults(
     paginationParams: PaginationParams
   ): Promise<Result<PagedResults>> {
-    // Guardar la configuración actual en sessionStorage
     this.saveUserSettings(paginationParams);
 
     const result = await this.api.get<PagedResults>(
@@ -63,7 +63,6 @@ export class CatalogService {
       }
     }
 
-    // Si no hay datos o si ocurre un error, devolvemos los valores predeterminados
     return {
       query: '',
       pageNumber: 1,
@@ -74,6 +73,13 @@ export class CatalogService {
   }
 
   async addReview(review: ReviewDto): Promise<Result<ReviewDto>> {
-    return await this.api.post<ReviewDto>('Review', review);
+    return await this.api.post<ReviewDto>('AddReview', review);
+  }
+
+  async getProductReviews(productId: number): Promise<Result<ReviewDto[]>> {
+    return await this.api.get<ReviewDto[]>(`Review?productId=${productId}`)
   }
 }
+
+
+

@@ -69,6 +69,7 @@ namespace TuringClothes
             builder.Services.AddScoped<SmartSearchService>();
             builder.Services.AddScoped<ReviewService>();
             builder.Services.AddScoped<TemporaryOrderRepository>();
+            builder.Services.AddHostedService<MyBackgroundService>();
 
 
             builder.Services.AddPredictionEnginePool<ModelInput, ModelOutput>()

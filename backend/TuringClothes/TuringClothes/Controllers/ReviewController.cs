@@ -47,7 +47,7 @@ namespace TuringClothes.Controllers
 
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("AddReview")]
         public async Task<ActionResult> AddReview([FromBody] ReviewDto reviewDto)
         {
             var userIdClaim = User.FindFirst("id")?.Value;
@@ -77,6 +77,8 @@ namespace TuringClothes.Controllers
             var averageRating = await _reviewService.GetAverageRatingForProduct(productId);
             return Ok(averageRating);
         }
+
+        
     }
 
 }

@@ -9,5 +9,7 @@ namespace TuringClothes.Database
         public long UserId { get; set; }
 
         public ICollection<TemporaryOrderDetail> Details { get; set; }
+
+        public DateTime ExpirationTime { get; set; }
     }
 }
