@@ -112,8 +112,6 @@ export class CartComponent implements OnInit {
         `TemporaryOrder/CreateTemporaryOrder`,
         orderDetailDto
       );
-      console.log("holaq")
-      console.log(result);
       // this.cartService.goToCheckout(this.cart);
       this.router.navigate(['/checkout'], { queryParams: { temporaryId: result.data.id, payment: 'card' } })
     }
