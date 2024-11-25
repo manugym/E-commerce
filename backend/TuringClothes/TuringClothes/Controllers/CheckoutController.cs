@@ -7,6 +7,8 @@ using Stripe.Checkout;
 using TuringClothes.Database;
 using TuringClothes.Model;
 using TuringClothes.Repository;
+using TuringClothes.Dtos;
+
 
 namespace TuringClothes.Controllers
 {
@@ -93,6 +95,7 @@ namespace TuringClothes.Controllers
             List<ProductOrderDto> productList = new List<ProductOrderDto>();
             foreach (var orderDetail in temporaryOrder.Details)
             {
+
                 productList.Add(new ProductOrderDto
                 {
                     Name = orderDetail.Product.Name,
@@ -101,6 +104,7 @@ namespace TuringClothes.Controllers
                     Amount = orderDetail.Amount,
                     Image = orderDetail.Product.Image
                 });
+
 
             }
             return productList.ToArray();

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Security.Claims;
 using TuringClothes.Database;
-using TuringClothes.Model;
+using TuringClothes.Dtos;
 using TuringClothes.Repository;
 using TuringClothes.Services;
 

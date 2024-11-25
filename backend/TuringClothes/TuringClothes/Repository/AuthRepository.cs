@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TuringClothes.Controllers;
 using TuringClothes.Database;
-using TuringClothes.Model;
+using TuringClothes.Dtos;
 
 namespace TuringClothes.Repository
 {

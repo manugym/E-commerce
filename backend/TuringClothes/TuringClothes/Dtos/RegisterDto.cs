@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace TuringClothes.Model
+namespace TuringClothes.Dtos
 {
     [Index(nameof(Email), IsUnique = true)]
     public class RegisterDto
