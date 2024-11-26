@@ -1,4 +1,5 @@
-﻿using Stripe.Checkout;
+
+using Stripe.Checkout;
 
 namespace TuringClothes.Database
 {
