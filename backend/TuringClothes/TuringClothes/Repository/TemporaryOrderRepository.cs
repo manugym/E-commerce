@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TuringClothes.Database;
-using TuringClothes.Model;
+using TuringClothes.Dtos;
 
 namespace TuringClothes.Repository
 {

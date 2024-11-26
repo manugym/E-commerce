@@ -1,6 +1,6 @@
 ﻿using TuringClothes.Database;
 
-namespace TuringClothes.Model
+namespace TuringClothes.Dtos
 {
     public class ReviewResultDto
     {
