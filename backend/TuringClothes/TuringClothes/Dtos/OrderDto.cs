@@ -1,4 +1,7 @@
-﻿namespace TuringClothes.Dtos
+
+using Stripe.Checkout;
+
+namespace TuringClothes.Dtos
 {
     public class OrderDto
     {

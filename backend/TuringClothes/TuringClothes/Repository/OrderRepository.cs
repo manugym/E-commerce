@@ -1,4 +1,6 @@
-﻿using TuringClothes.Database;
+
+using Stripe.Checkout;
+using TuringClothes.Database;
 
 namespace TuringClothes.Repository
 {
@@ -14,6 +16,7 @@ namespace TuringClothes.Repository
         }
 
         public async Task<Order> CreateOrder(long id, String paymentMethod, String status, int total)
+
         {
             var temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(id);
 
@@ -30,6 +33,9 @@ namespace TuringClothes.Repository
                 TotalPrice = total,
                 OrderDetails = new List<OrderDetail>()
             };
+
+            _myDatabase.Orders.Add(order);
+
             foreach (var temporaryOrderDetail in temporaryOrder.Details)
             {
                 var newOrderDetail = new OrderDetail

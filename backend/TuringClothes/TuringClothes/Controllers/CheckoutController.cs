@@ -18,11 +18,13 @@ namespace TuringClothes.Controllers
     {
         private readonly Settings _settings;
         private readonly TemporaryOrderRepository _temporaryOrderRepository;
-
-        public CheckoutController(IOptions<Settings> options, TemporaryOrderRepository temporaryOrderRepository)
+        private readonly OrderRepository _orderRepository;
+        public CheckoutController(IOptions<Settings> options, TemporaryOrderRepository temporaryOrderRepository, OrderRepository orderRepository)
         {
             _settings = options.Value;
             _temporaryOrderRepository = temporaryOrderRepository;
+            _orderRepository = orderRepository;
+
         }
 
         /*[HttpGet("products")]
@@ -85,6 +87,11 @@ namespace TuringClothes.Controllers
         {
             SessionService sessionService = new SessionService();
             Session session = await sessionService.GetAsync(sessionId);
+            if(session.PaymentStatus.Equals("paid"))
+            {
+                var id = long.Parse(session.Id);
+                var order = await _orderRepository.CreateOrder(id, session.PaymentMethodOptions.ToString(), session.PaymentStatus, session.AmountTotal.Value);
+            }
 
             return Ok(new { status = session.Status, customerEmail = session.CustomerEmail });
         }

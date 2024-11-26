@@ -31,6 +31,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   sessionId: string = '';
   pollingSubscription: Subscription;
   stripeEmbedCheckout: StripeEmbeddedCheckout;
+  routeQueryMap$: Subscription;
   temporaryOrderId: number;
   payment: string;
 
@@ -45,6 +46,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // this.pollingService.stopPolling(this.pollingSubscription);
     this.pollingSubscription.unsubscribe();
+    this.routeQueryMap$.unsubscribe();
   }
 
   async ngOnInit() {
@@ -55,6 +57,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       'payment'
     ) as unknown as string;
 
+    this.pollingSubscription = this.route.queryParamMap.subscribe(queryMap => this.init(queryMap));
+    console.log(this.pollingSubscription)
+
     await this.embeddedCheckout();
     this.startPolling();
   }
@@ -63,22 +68,23 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   // }
 
-  // async init(queryMap: ParamMap) {
-  //   this.sessionId = queryMap.get('session_id');
+  async init(queryMap: ParamMap) {
+    this.sessionId = queryMap.get('session_id');
+    console.log(this.sessionId);
 
-  //   if (this.sessionId) {
-  //     const request = await this.service.getStatus(this.sessionId);
+    if (this.sessionId) {
+      const request = await this.checkoutService.getStatus(this.sessionId);
 
-  //     if (request.success) {
-  //       console.log(request.data);
-  //     }
-  //   } else {
-  //     const request = await this.service.getAllProducts(this.temporaryOrderId);
-  //     if (request.success) {
-  //       this.product = request.data[0];
-  //     }
-  //   }
-  // }
+      if (request.success) {
+        console.log(request.data);
+      }
+    } else {
+      const request = await this.checkoutService.getAllProducts(this.temporaryOrderId);
+      if (request.success) {
+        this.product = request.data[0];
+      }
+    }
+  }
 
   async embeddedCheckout() {
     const request = await this.checkoutService.getEmbededCheckout(
@@ -87,14 +93,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     if (request.success) {
       const options: StripeEmbeddedCheckoutOptions = {
+        onComplete: () => {
+          this.checkoutService.getStatus(this.sessionId);
+          this.router.navigate(['home'])
+        },
         clientSecret: request.data.clientSecret,
       };
 
       this.stripe.initEmbeddedCheckout(options).subscribe((checkout) => {
+        
         this.stripeEmbedCheckout = checkout;
         checkout.mount('#checkout');
         this.checkoutDialogRef.nativeElement.showModal;
       });
+      
     }
   }
 
@@ -103,11 +115,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   async startPolling() {
-    // console.log(this.temporaryOrderId);
-    // await this.pollingService.startPolling(
-    //   this.pollingSubscription,
-    //   this.temporaryOrderId
-    // );
     const pollingInterval = 10000;
     console.log('Refresco...', this.temporaryOrderId);
     this.pollingSubscription = timer(0, pollingInterval).subscribe(() => {
