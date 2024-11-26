@@ -1,4 +1,4 @@
 export interface CheckoutSession {
     clientSecret: string;
-    sessionUrl: string;
+    sessionId: string;
 }

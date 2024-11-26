@@ -78,22 +78,23 @@ namespace TuringClothes.Controllers
 
             return Ok(new
             {
+                sessionId = session.Id,
                 clientSecret = session.ClientSecret
             });
         }
 
         [HttpGet("status/{sessionId}")]
-        public async Task<ActionResult> SessionStatus(string sessionId)
+        public async Task<ActionResult> SessionStatus(string sessionId, long temporaryOrderId)
         {
             SessionService sessionService = new SessionService();
             Session session = await sessionService.GetAsync(sessionId);
-            if(session.PaymentStatus.Equals("paid"))
+            var orderNew = new Order();
+            if(session.PaymentStatus == "paid")
             {
-                var id = long.Parse(session.Id);
-                var order = await _orderRepository.CreateOrder(id, session.PaymentMethodOptions.ToString(), session.PaymentStatus, session.AmountTotal.Value);
+                orderNew = await _orderRepository.CreateOrder(temporaryOrderId, session.PaymentMethodTypes.FirstOrDefault(), session.PaymentStatus, session.AmountTotal.Value);
             }
 
-            return Ok(new { status = session.Status, customerEmail = session.CustomerEmail });
+            return Ok(new { status = session.Status, paymentStatus = session.PaymentStatus, customerEmail = session.CustomerEmail, order = orderNew});
         }
 
         private async Task<ProductOrderDto[]> GetProducts(long temporaryOrderId)
