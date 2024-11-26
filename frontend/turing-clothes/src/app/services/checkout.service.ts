@@ -17,10 +17,10 @@ export class CheckoutService {
   }
 
   getEmbededCheckout(temporaryOrderId: number): Promise<Result<CheckoutSession>> {
-    return this.api.get<CheckoutSession>(`checkout/embedded?temporaryOrderId=${temporaryOrderId}`);
+    return this.api.get<CheckoutSession>(`Checkout/embedded?temporaryOrderId=${temporaryOrderId}`);
   }
 
-  getStatus(sessionId: string): Promise<Result<CheckoutSessionStatus>> {
-    return this.api.get<CheckoutSessionStatus>(`checkout/status/${sessionId}`);
+  getStatus(sessionId: string, temporaryOrderId: number): Promise<Result<CheckoutSessionStatus>> {
+    return this.api.get<CheckoutSessionStatus>(`Checkout/status/${sessionId}?temporaryOrderId=${temporaryOrderId}`);
   }
 }
