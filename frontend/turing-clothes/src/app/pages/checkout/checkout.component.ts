@@ -47,24 +47,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.temporaryOrderId = this.route.snapshot.queryParamMap.get('temporaryId') as unknown as number;
-    this.sessionId = this.route.snapshot.queryParamMap.get(
+    this.temporaryOrderId = this.route.snapshot.queryParamMap.get(
       'temporaryId'
-    )
-    
-    this.payment = this.route.snapshot.queryParamMap.get(
-      'payment'
-    )
+    ) as unknown as number;
+    this.sessionId = this.route.snapshot.queryParamMap.get('temporaryId');
+
+    this.payment = this.route.snapshot.queryParamMap.get('payment');
     this.startPolling();
 
     await this.embeddedCheckout();
-    
   }
 
   async embeddedCheckout() {
     const request = await this.checkoutService.getEmbededCheckout(
-      this.temporaryOrderId
-    ); 
+      this.temporaryOrderId, this.payment
+    );
     this.sessionId = request.data.sessionId;
 
     if (request.success) {
@@ -74,12 +71,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       };
 
       this.stripe.initEmbeddedCheckout(options).subscribe((checkout) => {
-        
         this.stripeEmbedCheckout = checkout;
         checkout.mount('#checkout');
         this.checkoutDialogRef.nativeElement.showModal;
       });
-      
     }
   }
 
@@ -102,12 +97,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   async goToCorfirmPurchase(sessionId: string) {
-    
-    await this.checkoutService.getStatus(sessionId, this.temporaryOrderId);
-    this.checkoutDialogRef.nativeElement.close;
-    this.router.navigate(['home'], {
-      queryParams: { sessionId: sessionId },
-    });
+    const result = await this.checkoutService.getStatus(
+      sessionId,
+      this.temporaryOrderId
+    );
+
+    if (result.success) {
+      this.checkoutDialogRef.nativeElement.close;
+      const resultJson = JSON.stringify(result.data);
+      this.router.navigate(['confirm-checkout'], {
+        queryParams: { result: resultJson },
+      });
+    }
   }
 
   cancelCheckoutDialog() {

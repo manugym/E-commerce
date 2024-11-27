@@ -16,8 +16,8 @@ export class CheckoutService {
     return this.api.get<ProductDto[]>(`Checkout/GetAllProductsDto?temporaryOrderId=${temporaryOrderId}`);
   }
 
-  getEmbededCheckout(temporaryOrderId: number): Promise<Result<CheckoutSession>> {
-    return this.api.get<CheckoutSession>(`Checkout/embedded?temporaryOrderId=${temporaryOrderId}`);
+  getEmbededCheckout(temporaryOrderId: number, paymentMethod: string): Promise<Result<CheckoutSession>> {
+    return this.api.get<CheckoutSession>(`Checkout/embedded?temporaryOrderId=${temporaryOrderId}&paymentMethod=${paymentMethod}`);
   }
 
   getStatus(sessionId: string, temporaryOrderId: number): Promise<Result<CheckoutSessionStatus>> {

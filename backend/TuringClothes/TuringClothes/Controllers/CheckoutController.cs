@@ -18,12 +18,14 @@ namespace TuringClothes.Controllers
     {
         private readonly Settings _settings;
         private readonly TemporaryOrderRepository _temporaryOrderRepository;
+        private readonly UserRepository _userRepository;
         private readonly OrderRepository _orderRepository;
-        public CheckoutController(IOptions<Settings> options, TemporaryOrderRepository temporaryOrderRepository, OrderRepository orderRepository)
+        public CheckoutController(IOptions<Settings> options, TemporaryOrderRepository temporaryOrderRepository, OrderRepository orderRepository, UserRepository userRepository)
         {
             _settings = options.Value;
             _temporaryOrderRepository = temporaryOrderRepository;
             _orderRepository = orderRepository;
+            _userRepository = userRepository;
 
         }
 
@@ -41,8 +43,10 @@ namespace TuringClothes.Controllers
         }
 
         [HttpGet("embedded")]
-        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId)
+        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId, string paymentMethod)
         {
+            TemporaryOrder temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(temporaryOrderId);
+            User user = await _userRepository.GetUserById(temporaryOrder.UserId);
             ProductOrderDto[] products = await GetAllProducts(temporaryOrderId);
             List<SessionLineItemOptions> lineItems = new List<SessionLineItemOptions>();
             foreach (var product in products)
@@ -67,9 +71,9 @@ namespace TuringClothes.Controllers
             {
                 UiMode = "embedded",
                 Mode = "payment",
-                PaymentMethodTypes = ["card"],
+                PaymentMethodTypes = [paymentMethod],
                 LineItems = lineItems,
-                CustomerEmail = "correo_cliente@correo.es",
+                CustomerEmail = user.Email,
                 RedirectOnCompletion = "never"
             };
 
