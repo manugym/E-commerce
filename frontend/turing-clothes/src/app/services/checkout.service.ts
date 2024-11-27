@@ -16,11 +16,11 @@ export class CheckoutService {
     return this.api.get<ProductDto[]>(`Checkout/GetAllProductsDto?temporaryOrderId=${temporaryOrderId}`);
   }
 
-  getEmbededCheckout(temporaryOrderId: number): Promise<Result<CheckoutSession>> {
-    return this.api.get<CheckoutSession>(`checkout/embedded?temporaryOrderId=${temporaryOrderId}`);
+  getEmbededCheckout(temporaryOrderId: number, paymentMethod: string): Promise<Result<CheckoutSession>> {
+    return this.api.get<CheckoutSession>(`Checkout/embedded?temporaryOrderId=${temporaryOrderId}&paymentMethod=${paymentMethod}`);
   }
 
-  getStatus(sessionId: string): Promise<Result<CheckoutSessionStatus>> {
-    return this.api.get<CheckoutSessionStatus>(`checkout/status/${sessionId}`);
+  getStatus(sessionId: string, temporaryOrderId: number): Promise<Result<CheckoutSessionStatus>> {
+    return this.api.get<CheckoutSessionStatus>(`Checkout/status/${sessionId}?temporaryOrderId=${temporaryOrderId}`);
   }
 }

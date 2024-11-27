@@ -18,11 +18,15 @@ namespace TuringClothes.Controllers
     {
         private readonly Settings _settings;
         private readonly TemporaryOrderRepository _temporaryOrderRepository;
-
-        public CheckoutController(IOptions<Settings> options, TemporaryOrderRepository temporaryOrderRepository)
+        private readonly UserRepository _userRepository;
+        private readonly OrderRepository _orderRepository;
+        public CheckoutController(IOptions<Settings> options, TemporaryOrderRepository temporaryOrderRepository, OrderRepository orderRepository, UserRepository userRepository)
         {
             _settings = options.Value;
             _temporaryOrderRepository = temporaryOrderRepository;
+            _orderRepository = orderRepository;
+            _userRepository = userRepository;
+
         }
 
         /*[HttpGet("products")]
@@ -39,8 +43,10 @@ namespace TuringClothes.Controllers
         }
 
         [HttpGet("embedded")]
-        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId)
+        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId, string paymentMethod)
         {
+            TemporaryOrder temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(temporaryOrderId);
+            User user = await _userRepository.GetUserById(temporaryOrder.UserId);
             ProductOrderDto[] products = await GetAllProducts(temporaryOrderId);
             List<SessionLineItemOptions> lineItems = new List<SessionLineItemOptions>();
             foreach (var product in products)
@@ -65,9 +71,9 @@ namespace TuringClothes.Controllers
             {
                 UiMode = "embedded",
                 Mode = "payment",
-                PaymentMethodTypes = ["card"],
+                PaymentMethodTypes = [paymentMethod],
                 LineItems = lineItems,
-                CustomerEmail = "correo_cliente@correo.es",
+                CustomerEmail = user.Email,
                 RedirectOnCompletion = "never"
             };
 
@@ -76,17 +82,23 @@ namespace TuringClothes.Controllers
 
             return Ok(new
             {
+                sessionId = session.Id,
                 clientSecret = session.ClientSecret
             });
         }
 
         [HttpGet("status/{sessionId}")]
-        public async Task<ActionResult> SessionStatus(string sessionId)
+        public async Task<ActionResult> SessionStatus(string sessionId, long temporaryOrderId)
         {
             SessionService sessionService = new SessionService();
             Session session = await sessionService.GetAsync(sessionId);
+            var orderNew = new Order();
+            if(session.PaymentStatus == "paid")
+            {
+                orderNew = await _orderRepository.CreateOrder(temporaryOrderId, session.PaymentMethodTypes.FirstOrDefault(), session.PaymentStatus, session.AmountTotal.Value);
+            }
 
-            return Ok(new { status = session.Status, customerEmail = session.CustomerEmail });
+            return Ok(new { status = session.Status, paymentStatus = session.PaymentStatus, customerEmail = session.CustomerEmail, order = orderNew});
         }
 
         private async Task<ProductOrderDto[]> GetProducts(long temporaryOrderId)

@@ -31,19 +31,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   sessionId: string = '';
   pollingSubscription: Subscription;
   stripeEmbedCheckout: StripeEmbeddedCheckout;
+  routeQueryMap$: Subscription;
   temporaryOrderId: number;
   payment: string;
 
   constructor(
     private checkoutService: CheckoutService,
     private api: ApiService,
-    // private pollingService: PollingTemporaryOrdersService,
     private route: ActivatedRoute,
     private router: Router,
     private stripe: StripeService
   ) {}
   ngOnDestroy(): void {
-    // this.pollingService.stopPolling(this.pollingSubscription);
     this.pollingSubscription.unsubscribe();
   }
 
@@ -51,42 +50,23 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.temporaryOrderId = this.route.snapshot.queryParamMap.get(
       'temporaryId'
     ) as unknown as number;
-    this.payment = this.route.snapshot.queryParamMap.get(
-      'payment'
-    ) as unknown as string;
+    this.sessionId = this.route.snapshot.queryParamMap.get('temporaryId');
+
+    this.payment = this.route.snapshot.queryParamMap.get('payment');
+    this.startPolling();
 
     await this.embeddedCheckout();
-    this.startPolling();
   }
-
-  // ngOnDestroy(): void {
-
-  // }
-
-  // async init(queryMap: ParamMap) {
-  //   this.sessionId = queryMap.get('session_id');
-
-  //   if (this.sessionId) {
-  //     const request = await this.service.getStatus(this.sessionId);
-
-  //     if (request.success) {
-  //       console.log(request.data);
-  //     }
-  //   } else {
-  //     const request = await this.service.getAllProducts(this.temporaryOrderId);
-  //     if (request.success) {
-  //       this.product = request.data[0];
-  //     }
-  //   }
-  // }
 
   async embeddedCheckout() {
     const request = await this.checkoutService.getEmbededCheckout(
-      this.temporaryOrderId
+      this.temporaryOrderId, this.payment
     );
+    this.sessionId = request.data.sessionId;
 
     if (request.success) {
       const options: StripeEmbeddedCheckoutOptions = {
+        onComplete: () => this.goToCorfirmPurchase(this.sessionId),
         clientSecret: request.data.clientSecret,
       };
 
@@ -103,13 +83,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   async startPolling() {
-    // console.log(this.temporaryOrderId);
-    // await this.pollingService.startPolling(
-    //   this.pollingSubscription,
-    //   this.temporaryOrderId
-    // );
     const pollingInterval = 10000;
-    console.log('Refresco...', this.temporaryOrderId);
+    console.log('Refresco...', this.sessionId);
     this.pollingSubscription = timer(0, pollingInterval).subscribe(() => {
       this.pollingRefresh(this.temporaryOrderId);
     });
@@ -119,6 +94,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     await this.api.postPolling(
       `TemporaryOrder/RefreshTemporaryOrders?temporaryOrderId=${temporaryOrderId}`
     );
+  }
+
+  async goToCorfirmPurchase(sessionId: string) {
+    const result = await this.checkoutService.getStatus(
+      sessionId,
+      this.temporaryOrderId
+    );
+
+    if (result.success) {
+      this.checkoutDialogRef.nativeElement.close;
+      const resultJson = JSON.stringify(result.data);
+      this.router.navigate(['confirm-checkout'], {
+        queryParams: { result: resultJson },
+      });
+    }
   }
 
   cancelCheckoutDialog() {
