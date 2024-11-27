@@ -4,6 +4,7 @@ import { CheckoutSession } from '../models/checkout-session';
 import { Result } from '../models/result';
 import { CheckoutSessionStatus } from '../models/checkout-session-status';
 import { ProductDto } from '../models/product-dto';
+import { Order } from '../models/order';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +23,9 @@ export class CheckoutService {
 
   getStatus(sessionId: string, temporaryOrderId: number): Promise<Result<CheckoutSessionStatus>> {
     return this.api.get<CheckoutSessionStatus>(`Checkout/status/${sessionId}?temporaryOrderId=${temporaryOrderId}`);
+  }
+
+  getOrderById(orderId: number) {
+    return this.api.get<Order>(`Order/GetOrderById?orderId=${orderId}`)
   }
 }

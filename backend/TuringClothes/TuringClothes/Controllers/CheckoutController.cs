@@ -43,7 +43,7 @@ namespace TuringClothes.Controllers
         }
 
         [HttpGet("embedded")]
-        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId, string paymentMethod)
+        public async Task<ActionResult> EmbededCheckout(long temporaryOrderId)
         {
             TemporaryOrder temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(temporaryOrderId);
             User user = await _userRepository.GetUserById(temporaryOrder.UserId);
@@ -71,7 +71,7 @@ namespace TuringClothes.Controllers
             {
                 UiMode = "embedded",
                 Mode = "payment",
-                PaymentMethodTypes = [paymentMethod],
+                PaymentMethodTypes = ["card"],
                 LineItems = lineItems,
                 CustomerEmail = user.Email,
                 RedirectOnCompletion = "never"
@@ -95,10 +95,13 @@ namespace TuringClothes.Controllers
             var orderNew = new Order();
             if(session.PaymentStatus == "paid")
             {
-                orderNew = await _orderRepository.CreateOrder(temporaryOrderId, session.PaymentMethodTypes.FirstOrDefault(), session.PaymentStatus, session.AmountTotal.Value);
+                Console.WriteLine(session.CustomerEmail);
+                orderNew = await _orderRepository.CreateOrder(temporaryOrderId, session.PaymentMethodTypes.FirstOrDefault(), session.PaymentStatus, session.AmountTotal.Value, session.CustomerEmail);
+                
+                return Ok(new { order = orderNew.Id});
             }
 
-            return Ok(new { status = session.Status, paymentStatus = session.PaymentStatus, customerEmail = session.CustomerEmail, order = orderNew});
+            return BadRequest("No está pagado");
         }
 
         private async Task<ProductOrderDto[]> GetProducts(long temporaryOrderId)
