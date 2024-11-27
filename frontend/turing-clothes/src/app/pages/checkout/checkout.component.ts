@@ -38,13 +38,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   constructor(
     private checkoutService: CheckoutService,
     private api: ApiService,
-    // private pollingService: PollingTemporaryOrdersService,
     private route: ActivatedRoute,
     private router: Router,
     private stripe: StripeService
   ) {}
   ngOnDestroy(): void {
-    // this.pollingService.stopPolling(this.pollingSubscription);
     this.pollingSubscription.unsubscribe();
   }
 
@@ -59,33 +57,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     )
     this.startPolling();
 
-    // this.pollingSubscription = this.route.queryParamMap.subscribe(queryMap => this.init(queryMap));
-
     await this.embeddedCheckout();
     
   }
-
-  // ngOnDestroy(): void {
-
-  // }
-
-  // async init(queryMap: ParamMap) {
-  //   this.sessionId = queryMap.get('temporaryId');
-  //   console.log(this.sessionId);
-
-  //   if (this.sessionId) {
-  //     const request = await this.checkoutService.getStatus(this.sessionId);
-
-  //     if (request.success) {
-  //       console.log(request.data.status);
-  //     }
-  //   } else {
-  //     const request = await this.checkoutService.getAllProducts(this.temporaryOrderId);
-  //     if (request.success) {
-  //       this.product = request.data[0];
-  //     }
-  //   }
-  // }
 
   async embeddedCheckout() {
     const request = await this.checkoutService.getEmbededCheckout(
