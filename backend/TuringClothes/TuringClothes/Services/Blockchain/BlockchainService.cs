@@ -51,6 +51,7 @@ namespace TuringClothes.Services.Blockchain
             return new PurchaseInfoDto
             {
                 TemporaryOrder = order,
+                TotalPrice = price,
                 PriceInWei = (price/ethEurPrice).ToString()
             };
 

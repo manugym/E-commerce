@@ -15,6 +15,8 @@ import { Subscription, timer } from 'rxjs';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CheckoutService } from '../../services/checkout.service';
 import { ApiService } from '../../services/api.service';
+import { BlockchainService } from '../../services/blockchain.service';
+import { PurchaseInfoDto } from '../../models/purchase-info-dto';
 
 @Component({
   selector: 'app-checkout',
@@ -34,13 +36,23 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   routeQueryMap$: Subscription;
   temporaryOrderId: number;
   payment: string;
+  purchaseInfo: PurchaseInfoDto = {
+    temporaryOrder: {
+      id: 0,
+      userId: 0,
+      details: [],
+    },
+    priceInWei: '',
+    totalPrice: 0,
+  };
 
   constructor(
     private checkoutService: CheckoutService,
     private api: ApiService,
     private route: ActivatedRoute,
     private router: Router,
-    private stripe: StripeService
+    private stripe: StripeService,
+    private blockchainService: BlockchainService
   ) {}
   ngOnDestroy(): void {
     this.pollingSubscription.unsubscribe();
@@ -56,7 +68,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.payment = this.route.snapshot.queryParamMap.get('payment');
     this.startPolling();
 
-    await this.embeddedCheckout();
+    if (this.payment === 'card') {
+      await this.embeddedCheckout();
+    }
+    await this.getPurchaseInfoDto();
   }
 
   async embeddedCheckout() {
@@ -113,5 +128,26 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   cancelCheckoutDialog() {
     this.stripeEmbedCheckout.destroy();
     this.checkoutDialogRef.nativeElement.close;
+  }
+
+  /**
+   *  BLOCKCHAIN
+   *
+   * */
+
+  async getPurchaseInfoDto() {
+    const result = await this.blockchainService.getEthereumPrice(
+      this.temporaryOrderId
+    );
+    if (result.success) {
+      result.data.temporaryOrder.details.map((detail) => {
+        detail.product.image = `https://localhost:7183/${detail.product.image}`;
+      });
+      this.purchaseInfo = result.data;
+    }
+  }
+
+  proceedToPayment() {
+    throw new Error('Method not implemented.');
   }
 }
