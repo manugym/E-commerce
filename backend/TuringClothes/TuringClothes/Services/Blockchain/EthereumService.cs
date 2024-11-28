@@ -10,10 +10,10 @@ namespace TuringClothes.Services.Blockchain
         private const int POLLY_INTERVAL_MS = 1000;
         private const int GAS = 30_000;
         private const int TRANSACTION_SUCCESS_STATUS = 1;
-
+        private const string networkUrl = "https://otter.bordel.wtf/erigon";
         private readonly Web3 _web3;
 
-        public EthereumService(string networkUrl)
+        public EthereumService()
         {
             _web3 = new Web3(networkUrl);
             _web3.TransactionReceiptPolling.SetPollingRetryIntervalInMilliseconds(POLLY_INTERVAL_MS);
