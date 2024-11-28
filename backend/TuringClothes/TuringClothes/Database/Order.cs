@@ -9,6 +9,7 @@ namespace TuringClothes.Database
         public long UserId { get; set; }
         public string PaymentMethod { get; set; }
         public string TransactionStatus { get; set; }
+        public string Email { get; set; }
         public long? TotalPrice { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
     }

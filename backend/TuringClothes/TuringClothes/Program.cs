@@ -7,10 +7,12 @@ using Microsoft.OpenApi.Models;
 using Stripe;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using TuringClothes.Controllers;
 using TuringClothes.Database;
 using TuringClothes.Pagination;
 using TuringClothes.Repository;
 using TuringClothes.Services;
+using TuringClothes.Services.Blockchain;
 using ReviewService = TuringClothes.Services.ReviewService;
 
 namespace TuringClothes
@@ -71,6 +73,7 @@ namespace TuringClothes
             builder.Services.AddScoped<TemporaryOrderRepository>();
             builder.Services.AddScoped<OrderRepository>();
             builder.Services.AddScoped<UserRepository>();
+            builder.Services.AddScoped<BlockchainService>();
             builder.Services.AddHostedService<MyBackgroundService>();
 
 
@@ -124,19 +127,29 @@ namespace TuringClothes
 
             }
 
-            static void SeedDatabase(IServiceProvider serviceProvider)
-            {
-                using IServiceScope scope = serviceProvider.CreateScope();
-                using MyDatabase dataBaseContext = scope.ServiceProvider.GetService<MyDatabase>();
 
-                if (dataBaseContext.Database.EnsureCreated())
-                {
-                    DataSeed seeder = new DataSeed(dataBaseContext);
-                    seeder.Seed();
-                }
-            }
+            InitBackgroundService(app.Services);
+
+
 
             app.Run();
+        }
+
+        static void SeedDatabase(IServiceProvider serviceProvider)
+        {
+            using IServiceScope scope = serviceProvider.CreateScope();
+            using MyDatabase dataBaseContext = scope.ServiceProvider.GetService<MyDatabase>();
+
+            if (dataBaseContext.Database.EnsureCreated())
+            {
+                DataSeed seeder = new DataSeed(dataBaseContext);
+                seeder.Seed();
+            }
+        }
+
+        static void InitBackgroundService(IServiceProvider serviceProvider)
+        {
+            serviceProvider.GetService<MyBackgroundService>();
         }
     }
 }

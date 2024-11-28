@@ -1,4 +1,5 @@
 
+using Microsoft.EntityFrameworkCore;
 using Stripe.Checkout;
 using TuringClothes.Database;
 
@@ -15,7 +16,7 @@ namespace TuringClothes.Repository
             _temporaryOrderRepository = temporaryOrderRepository;
         }
 
-        public async Task<Order> CreateOrder(long id, string paymentMethod, string status, long total)
+        public async Task<Order> CreateOrder(long id, string paymentMethod, string status, long total, string email)
 
         {
             var temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(id);
@@ -31,6 +32,7 @@ namespace TuringClothes.Repository
                 PaymentMethod = paymentMethod,
                 TransactionStatus = status,
                 TotalPrice = total,
+                Email = email,
                 OrderDetails = new List<OrderDetail>()
             };
 
@@ -50,6 +52,13 @@ namespace TuringClothes.Repository
             }
             await _myDatabase.SaveChangesAsync();
             return order;
+        }
+
+        public async Task<Order> GetOrderById(long orderId)
+        {
+            await _myDatabase.SaveChangesAsync();
+            return await _myDatabase.Orders.Include(p => p.OrderDetails).ThenInclude(p => p.Product).FirstOrDefaultAsync(o => o.Id == orderId);
+            
         }
     }
 }
