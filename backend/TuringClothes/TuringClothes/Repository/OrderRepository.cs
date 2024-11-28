@@ -32,7 +32,7 @@ namespace TuringClothes.Repository
                 PaymentMethod = paymentMethod,
                 TransactionStatus = status,
                 TotalPrice = total,
-                Email = "",
+                Email = email,
                 OrderDetails = new List<OrderDetail>()
             };
 
@@ -56,7 +56,9 @@ namespace TuringClothes.Repository
 
         public async Task<Order> GetOrderById(long orderId)
         {
-            return await _myDatabase.Orders.Include(p => p.OrderDetails).FirstOrDefaultAsync(o => o.Id == orderId);
+            await _myDatabase.SaveChangesAsync();
+            return await _myDatabase.Orders.Include(p => p.OrderDetails).ThenInclude(p => p.Product).FirstOrDefaultAsync(o => o.Id == orderId);
+            
         }
     }
 }

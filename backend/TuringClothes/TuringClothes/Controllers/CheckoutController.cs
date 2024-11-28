@@ -97,6 +97,7 @@ namespace TuringClothes.Controllers
             {
                 Console.WriteLine(session.CustomerEmail);
                 orderNew = await _orderRepository.CreateOrder(temporaryOrderId, session.PaymentMethodTypes.FirstOrDefault(), session.PaymentStatus, session.AmountTotal.Value, session.CustomerEmail);
+                Console.WriteLine(orderNew.Id);
                 
                 return Ok(new { order = orderNew.Id});
             }

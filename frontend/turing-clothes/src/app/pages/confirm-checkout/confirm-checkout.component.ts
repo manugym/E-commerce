@@ -5,16 +5,18 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CheckoutService } from '../../services/checkout.service';
 import { Order } from '../../models/order';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-confirm-checkout',
   standalone: true,
   imports: [RouterLink],
   templateUrl: './confirm-checkout.component.html',
-  styleUrl: './confirm-checkout.component.css'
+  styleUrl: './confirm-checkout.component.css',
 })
 export class ConfirmCheckoutComponent implements OnInit {
-  order: Order
+  routeParamMap$: Subscription;
+  order: Order;
   // orderItems = [
   //   {
   //     name: 'Camiseta',
@@ -28,18 +30,22 @@ export class ConfirmCheckoutComponent implements OnInit {
   //   },
   // ];
 
-  constructor(private route: ActivatedRoute, private checkoutService: CheckoutService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private checkoutService: CheckoutService
+  ) {}
 
   async ngOnInit(): Promise<void> {
-    const orderId = +this.route.snapshot.queryParamMap.get('id');
-    const result = await this.checkoutService.getOrderById(orderId);
-    this.order = result.data;
-    console.log(this.order)
-    if (this.order) {
-      this.order.orderDetails.map(img => {
-        img.product.image = `https://localhost:7183/${img.product.image}`;
-      })
-    }
+    this.routeParamMap$ = this.route.paramMap.subscribe(async (paramMap) => {
+      const id = paramMap.get('id') as unknown as number;
+      console.log(id);
+      const result = await this.checkoutService.getOrderById(id);
+      console.log(result.data);
+      this.order = result.data;
+    });
+    console.log(this.order);
+    this.order.orderDetails.map((img) => {
+      img.product.image = `https://localhost:7183/${img.product.image}`;
+    });
   }
-
 }
