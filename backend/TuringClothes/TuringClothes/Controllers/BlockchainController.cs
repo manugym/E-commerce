@@ -17,11 +17,11 @@ namespace TuringClothes.Controllers
             _blockchainService = blockchainService;
         }
 
-        [HttpGet]
-        public Task<Erc20ContractDto> GetContractInfoAsync([FromQuery] ContractInfoRequest data)
-        {
-            return _blockchainService.GetContractInfoAsync(data.NetworkUrl, data.ContractAddress);
-        }
+        //[HttpGet]
+        //public Task<Erc20ContractDto> GetContractInfoAsync([FromQuery] ContractInfoRequest data)
+        //{
+        //    return _blockchainService.GetContractInfoAsync(data.NetworkUrl, data.ContractAddress);
+        //}
 
 
         [HttpGet("GetEthPrice")]
@@ -35,7 +35,7 @@ namespace TuringClothes.Controllers
         public Task<EthereumTransaction> CreateTransaction([FromBody] CreateTransactionRequest data)
         {
             
-            return _blockchainService.GetEthereumInfoAsync(data);
+            return _blockchainService.CreateEthTransaction(data);
         }
 
         [HttpPost("check")]

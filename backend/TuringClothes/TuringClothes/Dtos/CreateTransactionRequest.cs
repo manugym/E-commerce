@@ -2,6 +2,6 @@
 {
     public class CreateTransactionRequest
     {
-        public decimal Euros { get; set; }
+        public long TemporaryOrderId { get; set; }
     }
 }

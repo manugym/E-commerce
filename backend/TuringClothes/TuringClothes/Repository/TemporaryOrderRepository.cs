@@ -23,6 +23,7 @@ namespace TuringClothes.Repository
                 var temporaryOrder = new TemporaryOrder
                 {
                     UserId = userId,
+                    HexEthereumPrice = "",
                     Details = new List<TemporaryOrderDetail>()
                 };
 
@@ -47,7 +48,8 @@ namespace TuringClothes.Repository
                             TemporaryOrderID = temporaryOrder.Id,
                             Product = product
                         };
-
+                        temporaryOrder.TotalPriceEur += (newOrderDetail.Product.Price * newOrderDetail.Amount);
+                        
                         temporaryOrder.Details.Add(newOrderDetail);
 
                         product.Stock -= orderDetail.Amount;
@@ -65,7 +67,7 @@ namespace TuringClothes.Repository
                 {
                     _myDatabase.Remove(temporaryOrder);
                     await _myDatabase.SaveChangesAsync();
-
+                  
                     var productNames = string.Join(", ", noStockProducts.Select(x => x.ProductId));
                     throw new Exception($"Los siguientes productos no tienen stock: {productNames}");
 

@@ -9,14 +9,14 @@ using TuringClothes.Repository;
 
 namespace TuringClothes.Services.Blockchain
 {
-    public class BlockchainService      
+    public class BlockchainService
     {
         private readonly TemporaryOrderRepository _temporaryOrderRepository;
 
         public BlockchainService(TemporaryOrderRepository temporaryOrderRepository)
         {
             _temporaryOrderRepository = temporaryOrderRepository;
-        }    
+        }
 
         public async Task<Erc20ContractDto> GetContractInfoAsync(string nodeUrl, string contractAddress)
         {
@@ -48,25 +48,32 @@ namespace TuringClothes.Services.Blockchain
             price = price / 100;
             CoinGeckoApi coinGeckoApi = new CoinGeckoApi();
             decimal ethEurPrice = await coinGeckoApi.GetEthereumPriceAsync();
+            order.EthereumPrice = (double)ethEurPrice;
+            await _temporaryOrderRepository.UpdateAsync(order);
             return new PurchaseInfoDto
             {
                 TemporaryOrder = order,
                 TotalPrice = price,
-                PriceInWei = (price/ethEurPrice).ToString()
+                EthereumPrice = ethEurPrice.ToString(),
+                PriceInWei = (price / ethEurPrice).ToString()
             };
 
         }
 
-        public async Task<EthereumTransaction> GetEthereumInfoAsync(CreateTransactionRequest data)
+        public async Task<EthereumTransaction> CreateEthTransaction(CreateTransactionRequest data)
         {
-            CoinGeckoApi coinGeckoApi = new CoinGeckoApi();
-            EthereumService ethereumService = new EthereumService();
+            var temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(data.TemporaryOrderId);
+            EthereumService ethereumService = new EthereumService(_temporaryOrderRepository);
 
-            decimal ethEurPrice = await coinGeckoApi.GetEthereumPriceAsync();
-            BigInteger value = ethereumService.ToWei(data.Euros / ethEurPrice);
+            BigInteger value = ethereumService.ToWei((double)((temporaryOrder.TotalPriceEur / 100) / temporaryOrder.EthereumPrice));
             HexBigInteger gas = ethereumService.GetGas();
             HexBigInteger gasPrice = await ethereumService.GetGasPriceAsync();
 
+            //temporaryOrder.EthereumPrice = value.ToString();
+            //await _temporaryOrderRepository.UpdateAsync(temporaryOrder);
+
+            temporaryOrder.HexEthereumPrice = new HexBigInteger(value).HexValue;
+            await _temporaryOrderRepository.UpdateAsync(temporaryOrder);
             return new EthereumTransaction
             {
                 Value = new HexBigInteger(value).HexValue,
@@ -77,9 +84,9 @@ namespace TuringClothes.Services.Blockchain
 
         public Task<bool> CheckTransactionAsync(CheckTransactionRequest data)
         {
-            EthereumService ethereumService = new EthereumService();
+            EthereumService ethereumService = new EthereumService(_temporaryOrderRepository);
 
-            return ethereumService.CheckTransactionAsync(data.Hash, data.From, data.To, data.Value);
+            return ethereumService.CheckTransactionAsync(data.Hash, data.TemporaryOrderId);
         }
 
 
