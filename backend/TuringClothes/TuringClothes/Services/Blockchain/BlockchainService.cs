@@ -43,9 +43,9 @@ namespace TuringClothes.Services.Blockchain
 
             foreach (var item in order.Details)
             {
-                price += item.Product.Price;
+                price += item.Product.Price * item.Amount;
             }
-
+            price = price / 100;
             CoinGeckoApi coinGeckoApi = new CoinGeckoApi();
             decimal ethEurPrice = await coinGeckoApi.GetEthereumPriceAsync();
             return new PurchaseInfoDto
