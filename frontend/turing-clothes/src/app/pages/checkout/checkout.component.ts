@@ -44,6 +44,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ) {}
   ngOnDestroy(): void {
     this.pollingSubscription.unsubscribe();
+    this.stripeEmbedCheckout.destroy();
   }
 
   async ngOnInit() {
@@ -60,7 +61,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   async embeddedCheckout() {
     const request = await this.checkoutService.getEmbededCheckout(
-      this.temporaryOrderId, this.payment
+      this.temporaryOrderId,
+      this.payment
     );
     this.sessionId = request.data.sessionId;
 
@@ -104,10 +106,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     if (result.success) {
       this.checkoutDialogRef.nativeElement.close;
-      const resultJson = JSON.stringify(result.data);
-      this.router.navigate(['confirm-checkout'], {
-        queryParams: { result: resultJson },
-      });
+      this.router.navigateByUrl(`/confirm-checkout/${result.data.order}`);
     }
   }
 

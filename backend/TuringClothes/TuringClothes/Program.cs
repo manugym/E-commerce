@@ -124,19 +124,29 @@ namespace TuringClothes
 
             }
 
-            static void SeedDatabase(IServiceProvider serviceProvider)
-            {
-                using IServiceScope scope = serviceProvider.CreateScope();
-                using MyDatabase dataBaseContext = scope.ServiceProvider.GetService<MyDatabase>();
 
-                if (dataBaseContext.Database.EnsureCreated())
-                {
-                    DataSeed seeder = new DataSeed(dataBaseContext);
-                    seeder.Seed();
-                }
-            }
+            InitBackgroundService(app.Services);
+
+
 
             app.Run();
+        }
+
+        static void SeedDatabase(IServiceProvider serviceProvider)
+        {
+            using IServiceScope scope = serviceProvider.CreateScope();
+            using MyDatabase dataBaseContext = scope.ServiceProvider.GetService<MyDatabase>();
+
+            if (dataBaseContext.Database.EnsureCreated())
+            {
+                DataSeed seeder = new DataSeed(dataBaseContext);
+                seeder.Seed();
+            }
+        }
+
+        static void InitBackgroundService(IServiceProvider serviceProvider)
+        {
+            serviceProvider.GetService<MyBackgroundService>();
         }
     }
 }
