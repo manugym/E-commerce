@@ -11,6 +11,11 @@ namespace TuringClothes.Repository
         {
             _myDatabase = myDatabase;
         }
+
+        public async Task<User> GetUserById(long userId)
+        {
+            return _myDatabase.Users.FirstOrDefault(u => u.Id == userId);
+        }
         
         
     }

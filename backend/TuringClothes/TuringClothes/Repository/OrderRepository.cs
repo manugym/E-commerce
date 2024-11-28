@@ -15,7 +15,7 @@ namespace TuringClothes.Repository
             _temporaryOrderRepository = temporaryOrderRepository;
         }
 
-        public async Task<Order> CreateOrder(long id, String paymentMethod, String status, int total)
+        public async Task<Order> CreateOrder(long id, string paymentMethod, string status, long total)
 
         {
             var temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(id);
