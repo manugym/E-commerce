@@ -130,7 +130,15 @@ export class CartComponent implements OnInit {
   }
 
   async goToBlockchain() {
-    await this.router.navigate(['/blockchain']);
+    const orderDetailDto = this.cart.details.map((detail) => ({
+      productId: detail.productId,
+      amount: detail.amount,
+    }));
+    const result = await this.api.post<TemporaryOrder>(
+      `TemporaryOrder/CreateTemporaryOrder`,
+      orderDetailDto
+    );
+    this.router.navigate(['/checkout'], { queryParams: { temporaryId: result.data.id, payment: 'blockchain' } });
   }
 
 

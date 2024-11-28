@@ -23,11 +23,18 @@ namespace TuringClothes.Controllers
             return _blockchainService.GetContractInfoAsync(data.NetworkUrl, data.ContractAddress);
         }
 
+
+        [HttpGet("GetEthPrice")]
+        public Task<PurchaseInfoDto> GetEthPrice(long id)
+        {
+            return _blockchainService.GetEthereumPrice(id);
+        }
+
+
         [HttpPost("transaction")]
         public Task<EthereumTransaction> CreateTransaction([FromBody] CreateTransactionRequest data)
         {
-            data.NetworkUrl = HttpUtility.UrlDecode(data.NetworkUrl);
-
+            
             return _blockchainService.GetEthereumInfoAsync(data);
         }
 
