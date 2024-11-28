@@ -4,7 +4,7 @@ export interface Order {
   id: number,
   userId: number,
   paymentMethod: string,
-  email: string,
+  email?: string,
   transactionStatus: string,
   totalPrice: number,
   orderDetails: CartDetail[]

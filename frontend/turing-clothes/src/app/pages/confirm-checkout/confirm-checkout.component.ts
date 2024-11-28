@@ -16,19 +16,15 @@ import { Subscription } from 'rxjs';
 })
 export class ConfirmCheckoutComponent implements OnInit {
   routeParamMap$: Subscription;
-  order: Order;
-  // orderItems = [
-  //   {
-  //     name: 'Camiseta',
-  //     quantity: 2,
-  //     image: 'https://localhost:7183/images/Camiseta-cuello-redondo-black.png',
-  //   },
-  //   {
-  //     name: 'Pantalón',
-  //     quantity: 1,
-  //     image: 'https://localhost:7183/images/pantalon-vaquero-hombre.png',
-  //   },
-  // ];
+  order: Order = {
+    id: 0,
+    userId: 0,
+    paymentMethod: '',
+    email: '',
+    transactionStatus: '',
+    totalPrice: 0,
+    orderDetails: [],
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -38,14 +34,11 @@ export class ConfirmCheckoutComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.routeParamMap$ = this.route.paramMap.subscribe(async (paramMap) => {
       const id = paramMap.get('id') as unknown as number;
-      console.log(id);
       const result = await this.checkoutService.getOrderById(id);
-      console.log(result.data);
       this.order = result.data;
-    });
-    console.log(this.order);
-    this.order.orderDetails.map((img) => {
-      img.product.image = `https://localhost:7183/${img.product.image}`;
+      this.order.orderDetails.map((img) => {
+        img.product.image = `https://localhost:7183/${img.product.image}`;
+      });
     });
   }
 }
