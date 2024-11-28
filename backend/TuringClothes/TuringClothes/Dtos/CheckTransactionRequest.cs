@@ -2,7 +2,6 @@
 {
     public class CheckTransactionRequest
     {
-        public string NetworkUrl { get; set; }
         public string Hash { get; set; }
         public string From { get; set; }
         public string To { get; set; }
