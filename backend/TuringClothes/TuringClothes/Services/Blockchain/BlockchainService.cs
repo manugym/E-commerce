@@ -69,17 +69,11 @@ namespace TuringClothes.Services.Blockchain
         {
             var temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(data.TemporaryOrderId);
             EthereumService ethereumService = new EthereumService(_temporaryOrderRepository);
-            Console.WriteLine(temporaryOrder.EthereumPrice);
-            Console.WriteLine(temporaryOrder.TotalPriceEur);
        
             BigInteger etherValue = ethereumService.ToWei((double)((temporaryOrder.TotalPriceEur / 100) / temporaryOrder.EthereumPrice));
-            Console.WriteLine(etherValue);
 
             HexBigInteger gas = ethereumService.GetGas();
             HexBigInteger gasPrice = await ethereumService.GetGasPriceAsync();
-
-            //temporaryOrder.EthereumPrice = value.ToString();
-            //await _temporaryOrderRepository.UpdateAsync(temporaryOrder);
             
             temporaryOrder.HexEthereumPrice = new HexBigInteger(etherValue).HexValue;
             Console.WriteLine(temporaryOrder.HexEthereumPrice);
@@ -94,8 +88,6 @@ namespace TuringClothes.Services.Blockchain
 
         public async Task<bool> CheckTransactionAsync(CheckTransactionRequest data)
         {
-            Console.WriteLine("HOLA HE ENTRADO EN CHECK TRANSACTION");
-            //PurchaseInfoDto purchaseInfoDto = await GetEthereumPrice(data.TemporaryOrderId);
             TemporaryOrder temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(data.TemporaryOrderId);
             temporaryOrder.Wallet = data.Wallet;
             await _temporaryOrderRepository.UpdateAsync(temporaryOrder);
@@ -109,7 +101,6 @@ namespace TuringClothes.Services.Blockchain
                 Console.WriteLine("Transacción válida");
                 return true;
             }
-            //return ethereumService.CheckTransactionAsync(data.Hash, data.TemporaryOrderId);
             return false;
         }
 

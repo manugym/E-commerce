@@ -53,7 +53,6 @@ namespace TuringClothes.Services.Blockchain
             {
                 Transaction transaction = await _web3.Eth.Transactions.GetTransactionByHash.SendRequestAsync(txHash);
                 TransactionReceipt txReceipt = await _web3.TransactionReceiptPolling.PollForReceiptAsync(txHash);
-                //var value = new BigInteger(temporaryOrder.EthereumPrice).Hexvalue;
                 Console.WriteLine($"Transaction From: {transaction.From}");
                 Console.WriteLine($"Transaction To: {transaction.To}");
                 Console.WriteLine($"Transaction Value: {transaction.Value.HexValue}");
