@@ -17,6 +17,8 @@ import { CheckoutService } from '../../services/checkout.service';
 import { ApiService } from '../../services/api.service';
 import { BlockchainService } from '../../services/blockchain.service';
 import { PurchaseInfoDto } from '../../models/purchase-info-dto';
+import { CreateEthTransactionRequest } from '../../models/create-eth-transaction-request';
+import { CheckTransactionRequest } from '../../models/check-transaction-request';
 
 @Component({
   selector: 'app-checkout',
@@ -29,6 +31,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   @ViewChild('checkoutDialog')
   checkoutDialogRef: ElementRef<HTMLDialogElement>;
 
+  networkUrl: string = 'https://otter.bordel.wtf/erigon';
   product: ProductDto = null;
   sessionId: string = '';
   pollingSubscription: Subscription;
@@ -36,6 +39,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   routeQueryMap$: Subscription;
   temporaryOrderId: number;
   payment: string;
+  addressToSend: string = "0x5FEB7276Af5FA6b8acA27B03441D9Fe2C5FA6426";
   purchaseInfo: PurchaseInfoDto = {
     temporaryOrder: {
       id: 0,
@@ -43,6 +47,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       details: [],
     },
     priceInWei: '',
+    ethereumPrice: '',
     totalPrice: 0,
   };
 
@@ -74,6 +79,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     await this.getPurchaseInfoDto();
   }
 
+  
+
   async embeddedCheckout() {
     const request = await this.checkoutService.getEmbededCheckout(
       this.temporaryOrderId,
@@ -100,7 +107,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   async startPolling() {
-    const pollingInterval = 10000;
+    const pollingInterval = 1500;
     console.log('Refresco...', this.sessionId);
     this.pollingSubscription = timer(0, pollingInterval).subscribe(() => {
       this.pollingRefresh(this.temporaryOrderId);
@@ -147,7 +154,78 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
-  proceedToPayment() {
-    throw new Error('Method not implemented.');
+  async createTransaction() {
+    // Si no está instalado Metamask se lanza un error y se corta la ejecución
+    if (!window.ethereum) {
+      throw new Error('Metamask not found');
+    }
+
+    // Obtener la cuenta de metamask del usuario
+    const accounts = await window.ethereum.request({
+      method: 'eth_requestAccounts',
+    });
+    const account = accounts[0];
+
+    // Pedimos permiso al usuario para usar su cuenta de metamask
+    await window.ethereum.request({
+      method: 'wallet_requestPermissions',
+      params: [
+        {
+          eth_accounts: { account },
+        },
+      ],
+    });
+
+    // Obtenemos los datos que necesitamos para la transacción:
+    // gas, precio del gas y el valor en Ethereum
+    const transactionRequest: CreateEthTransactionRequest = {
+      temporaryOrderId: this.temporaryOrderId
+    };
+    const ethereumInfoResult = await this.blockchainService.createEthTransaction(
+      transactionRequest
+    );
+    const ethereumInfo = ethereumInfoResult.data;
+
+    // Creamos la transacción y pedimos al usuario que la firme
+    const transactionHash = await window.ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [
+        {
+          from: account,
+          to: this.addressToSend,
+          value: ethereumInfo.value,
+          gas: ethereumInfo.gas,
+          gasPrice: ethereumInfo.gasPrice,
+        },
+      ],
+    });
+
+    // Pedimos al servidor que verifique la transacción.
+    // CUIDADO: si el cliente le manda todos los datos,
+    // podría engañar al servidor.
+    const checkTransactionRequest: CheckTransactionRequest = {
+      hash: transactionHash,
+      temporaryOrderId: this.temporaryOrderId,
+      wallet: account,
+      paymentMethod: this.payment,
+    };
+    console.log(checkTransactionRequest);
+
+    const checkTransactionResult = await this.blockchainService.checkTransaction(
+      checkTransactionRequest
+    );
+
+    // Notificamos al usuario si la transacción ha sido exitosa o si ha fallado.
+    if (checkTransactionResult.success && checkTransactionResult.data) {
+      alert('Transacción realizada con éxito');
+    } else {
+      alert('Transacción fallida');
+    }
+  }
+}
+
+declare global {
+  interface Window {
+    ethereum: any;
   }
 }
