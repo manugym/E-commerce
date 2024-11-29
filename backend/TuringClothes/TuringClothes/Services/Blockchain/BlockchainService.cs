@@ -69,14 +69,12 @@ namespace TuringClothes.Services.Blockchain
         {
             var temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(data.TemporaryOrderId);
             EthereumService ethereumService = new EthereumService(_temporaryOrderRepository);
-       
+
             BigInteger etherValue = ethereumService.ToWei((double)((temporaryOrder.TotalPriceEur / 100) / temporaryOrder.EthereumPrice));
 
             HexBigInteger gas = ethereumService.GetGas();
             HexBigInteger gasPrice = await ethereumService.GetGasPriceAsync();
-            
             temporaryOrder.HexEthereumPrice = new HexBigInteger(etherValue).HexValue;
-            Console.WriteLine(temporaryOrder.HexEthereumPrice);
             await _temporaryOrderRepository.UpdateAsync(temporaryOrder);
             return new EthereumTransaction
             {
@@ -94,10 +92,10 @@ namespace TuringClothes.Services.Blockchain
             User user = await _userRepository.GetUserById(temporaryOrder.UserId);
             EthereumService ethereumService = new EthereumService(_temporaryOrderRepository);
             bool isTransactionValid = await ethereumService.CheckTransactionAsync(data.Hash, data.TemporaryOrderId);
-                
+
             if (isTransactionValid)
             {
-                await _orderRepository.CreateOrder(data.TemporaryOrderId, data.PaymentMethod, "",  temporaryOrder.TotalPriceEur, user.Email);
+                var newOrder = await _orderRepository.CreateOrder(data.TemporaryOrderId, data.PaymentMethod, "", temporaryOrder.TotalPriceEur, user.Email);
                 Console.WriteLine("Transacción válida");
                 return true;
             }
