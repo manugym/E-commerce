@@ -2,6 +2,7 @@
 using Nethereum.Hex.HexTypes;
 using Nethereum.Web3;
 using Stripe;
+using Stripe.Checkout;
 using System.Numerics;
 using TuringClothes.Database;
 using TuringClothes.Dtos;
@@ -12,10 +13,14 @@ namespace TuringClothes.Services.Blockchain
     public class BlockchainService
     {
         private readonly TemporaryOrderRepository _temporaryOrderRepository;
+        private readonly OrderRepository _orderRepository;
+        private readonly UserRepository _userRepository;
 
-        public BlockchainService(TemporaryOrderRepository temporaryOrderRepository)
+        public BlockchainService(TemporaryOrderRepository temporaryOrderRepository, OrderRepository orderRepository, UserRepository userRepository)
         {
             _temporaryOrderRepository = temporaryOrderRepository;
+            _orderRepository = orderRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<Erc20ContractDto> GetContractInfoAsync(string nodeUrl, string contractAddress)
@@ -64,29 +69,48 @@ namespace TuringClothes.Services.Blockchain
         {
             var temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(data.TemporaryOrderId);
             EthereumService ethereumService = new EthereumService(_temporaryOrderRepository);
+            Console.WriteLine(temporaryOrder.EthereumPrice);
+            Console.WriteLine(temporaryOrder.TotalPriceEur);
+       
+            BigInteger etherValue = ethereumService.ToWei((double)((temporaryOrder.TotalPriceEur / 100) / temporaryOrder.EthereumPrice));
+            Console.WriteLine(etherValue);
 
-            BigInteger value = ethereumService.ToWei((double)((temporaryOrder.TotalPriceEur / 100) / temporaryOrder.EthereumPrice));
             HexBigInteger gas = ethereumService.GetGas();
             HexBigInteger gasPrice = await ethereumService.GetGasPriceAsync();
 
             //temporaryOrder.EthereumPrice = value.ToString();
             //await _temporaryOrderRepository.UpdateAsync(temporaryOrder);
-
-            temporaryOrder.HexEthereumPrice = new HexBigInteger(value).HexValue;
+            
+            temporaryOrder.HexEthereumPrice = new HexBigInteger(etherValue).HexValue;
+            Console.WriteLine(temporaryOrder.HexEthereumPrice);
             await _temporaryOrderRepository.UpdateAsync(temporaryOrder);
             return new EthereumTransaction
             {
-                Value = new HexBigInteger(value).HexValue,
+                Value = new HexBigInteger(etherValue).HexValue,
                 Gas = gas.HexValue,
                 GasPrice = gasPrice.HexValue,
             };
         }
 
-        public Task<bool> CheckTransactionAsync(CheckTransactionRequest data)
+        public async Task<bool> CheckTransactionAsync(CheckTransactionRequest data)
         {
+            Console.WriteLine("HOLA HE ENTRADO EN CHECK TRANSACTION");
+            //PurchaseInfoDto purchaseInfoDto = await GetEthereumPrice(data.TemporaryOrderId);
+            TemporaryOrder temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(data.TemporaryOrderId);
+            temporaryOrder.Wallet = data.Wallet;
+            await _temporaryOrderRepository.UpdateAsync(temporaryOrder);
+            User user = await _userRepository.GetUserById(temporaryOrder.UserId);
             EthereumService ethereumService = new EthereumService(_temporaryOrderRepository);
-
-            return ethereumService.CheckTransactionAsync(data.Hash, data.TemporaryOrderId);
+            bool isTransactionValid = await ethereumService.CheckTransactionAsync(data.Hash, data.TemporaryOrderId);
+                
+            if (isTransactionValid)
+            {
+                await _orderRepository.CreateOrder(data.TemporaryOrderId, data.PaymentMethod, "",  temporaryOrder.TotalPriceEur, user.Email);
+                Console.WriteLine("Transacción válida");
+                return true;
+            }
+            //return ethereumService.CheckTransactionAsync(data.Hash, data.TemporaryOrderId);
+            return false;
         }
 
 

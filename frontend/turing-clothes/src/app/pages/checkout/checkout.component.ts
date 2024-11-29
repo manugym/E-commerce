@@ -31,6 +31,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   @ViewChild('checkoutDialog')
   checkoutDialogRef: ElementRef<HTMLDialogElement>;
 
+  networkUrl: string = 'https://otter.bordel.wtf/erigon';
   product: ProductDto = null;
   sessionId: string = '';
   pollingSubscription: Subscription;
@@ -106,7 +107,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   async startPolling() {
-    const pollingInterval = 10000;
+    const pollingInterval = 1500;
     console.log('Refresco...', this.sessionId);
     this.pollingSubscription = timer(0, pollingInterval).subscribe(() => {
       this.pollingRefresh(this.temporaryOrderId);
@@ -204,8 +205,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     // podría engañar al servidor.
     const checkTransactionRequest: CheckTransactionRequest = {
       hash: transactionHash,
-      temporaryOrderId: this.temporaryOrderId
+      temporaryOrderId: this.temporaryOrderId,
+      wallet: account,
+      paymentMethod: this.payment,
     };
+    console.log(checkTransactionRequest);
 
     const checkTransactionResult = await this.blockchainService.checkTransaction(
       checkTransactionRequest

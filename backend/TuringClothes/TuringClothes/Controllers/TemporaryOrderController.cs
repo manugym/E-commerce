@@ -61,7 +61,7 @@ namespace TuringClothes.Controllers
             {
                 return NotFound("Temporary order no existe.");
             }
-            temporaryOrder.ExpirationTime = DateTime.UtcNow.AddSeconds(15);
+            temporaryOrder.ExpirationTime = DateTime.UtcNow.AddMinutes(1);
             await _myDatabase.SaveChangesAsync();
             return Ok("Temporary order expiration extendida.");
         }
