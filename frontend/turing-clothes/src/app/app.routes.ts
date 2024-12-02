@@ -12,6 +12,7 @@ import { LocalCartComponent } from './pages/local-cart/local-cart.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { BlockchainComponent } from './pages/blockchain/blockchain.component';
 import { ConfirmCheckoutComponent } from './pages/confirm-checkout/confirm-checkout.component';
+import { UserComponent } from './pages/user/user.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -27,5 +28,6 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'footer', component: FooterComponent},
   {path: 'test-page', component: TestPageComponent},
-  {path: 'aboutus', component: AboutusComponent}
+  {path: 'aboutus', component: AboutusComponent},
+  {path: 'user', component: UserComponent}
 ];

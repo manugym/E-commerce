@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.EntityFrameworkCore;
 
 namespace TuringClothes.Database
 {
@@ -15,10 +16,6 @@ namespace TuringClothes.Database
         public DbSet<Order> Orders { get; set; }
 
 
-        //#if DEBUG
-        //#else
-        //#endif
-
         //Configura EF para crear un archivo de la base de datos Sqlite
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,8 +24,9 @@ namespace TuringClothes.Database
 #if DEBUG
 
             optionsBuilder.UseSqlite($"Datasource={basedir}{DATABASE_PATH}");
-#else
-            optionsBuilder.UseMySql($"Datasource={basedir}{DATABASE_PATH}");
+#else   
+            string connection = "Server=db10820.databaseasp.net; Database=db10820; Uid=db10820; Pwd=J%z45K+y_6bE;";
+            optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection));
 #endif
         }
     }
