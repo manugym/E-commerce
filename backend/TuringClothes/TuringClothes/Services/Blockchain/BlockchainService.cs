@@ -2,6 +2,7 @@
 using Nethereum.Hex.HexTypes;
 using Nethereum.Web3;
 using Stripe;
+using Stripe.Checkout;
 using System.Numerics;
 using TuringClothes.Database;
 using TuringClothes.Dtos;
@@ -9,14 +10,18 @@ using TuringClothes.Repository;
 
 namespace TuringClothes.Services.Blockchain
 {
-    public class BlockchainService      
+    public class BlockchainService
     {
         private readonly TemporaryOrderRepository _temporaryOrderRepository;
+        private readonly OrderRepository _orderRepository;
+        private readonly UserRepository _userRepository;
 
-        public BlockchainService(TemporaryOrderRepository temporaryOrderRepository)
+        public BlockchainService(TemporaryOrderRepository temporaryOrderRepository, OrderRepository orderRepository, UserRepository userRepository)
         {
             _temporaryOrderRepository = temporaryOrderRepository;
-        }    
+            _orderRepository = orderRepository;
+            _userRepository = userRepository;
+        }
 
         public async Task<Erc20ContractDto> GetContractInfoAsync(string nodeUrl, string contractAddress)
         {
@@ -48,38 +53,53 @@ namespace TuringClothes.Services.Blockchain
             price = price / 100;
             CoinGeckoApi coinGeckoApi = new CoinGeckoApi();
             decimal ethEurPrice = await coinGeckoApi.GetEthereumPriceAsync();
+            order.EthereumPrice = (double)ethEurPrice;
+            await _temporaryOrderRepository.UpdateAsync(order);
             return new PurchaseInfoDto
             {
                 TemporaryOrder = order,
                 TotalPrice = price,
-                PriceInWei = (price/ethEurPrice).ToString()
+                EthereumPrice = ethEurPrice.ToString(),
+                PriceInWei = (price / ethEurPrice).ToString()
             };
 
         }
 
-        public async Task<EthereumTransaction> GetEthereumInfoAsync(CreateTransactionRequest data)
+        public async Task<EthereumTransaction> CreateEthTransaction(CreateTransactionRequest data)
         {
-            CoinGeckoApi coinGeckoApi = new CoinGeckoApi();
-            EthereumService ethereumService = new EthereumService();
+            var temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(data.TemporaryOrderId);
+            EthereumService ethereumService = new EthereumService(_temporaryOrderRepository);
 
-            decimal ethEurPrice = await coinGeckoApi.GetEthereumPriceAsync();
-            BigInteger value = ethereumService.ToWei(data.Euros / ethEurPrice);
+            BigInteger etherValue = ethereumService.ToWei((double)((temporaryOrder.TotalPriceEur / 100) / temporaryOrder.EthereumPrice));
+
             HexBigInteger gas = ethereumService.GetGas();
             HexBigInteger gasPrice = await ethereumService.GetGasPriceAsync();
-
+            temporaryOrder.HexEthereumPrice = new HexBigInteger(etherValue).HexValue;
+            await _temporaryOrderRepository.UpdateAsync(temporaryOrder);
             return new EthereumTransaction
             {
-                Value = new HexBigInteger(value).HexValue,
+                Value = new HexBigInteger(etherValue).HexValue,
                 Gas = gas.HexValue,
                 GasPrice = gasPrice.HexValue,
             };
         }
 
-        public Task<bool> CheckTransactionAsync(CheckTransactionRequest data)
+        public async Task<bool> CheckTransactionAsync(CheckTransactionRequest data)
         {
-            EthereumService ethereumService = new EthereumService();
+            TemporaryOrder temporaryOrder = await _temporaryOrderRepository.GetTemporaryOrder(data.TemporaryOrderId);
+            temporaryOrder.Wallet = data.Wallet;
+            await _temporaryOrderRepository.UpdateAsync(temporaryOrder);
+            User user = await _userRepository.GetUserById(temporaryOrder.UserId);
+            EthereumService ethereumService = new EthereumService(_temporaryOrderRepository);
+            bool isTransactionValid = await ethereumService.CheckTransactionAsync(data.Hash, data.TemporaryOrderId);
 
-            return ethereumService.CheckTransactionAsync(data.Hash, data.From, data.To, data.Value);
+            if (isTransactionValid)
+            {
+                var newOrder = await _orderRepository.CreateOrder(data.TemporaryOrderId, data.PaymentMethod, "", temporaryOrder.TotalPriceEur, user.Email);
+                Console.WriteLine("Transacción válida");
+                return true;
+            }
+            return false;
         }
 
 

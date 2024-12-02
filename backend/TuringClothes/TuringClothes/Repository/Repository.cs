@@ -50,7 +50,13 @@ namespace TuringClothes.Repository
             throw new NotImplementedException();
         }
 
-        public Task<TEntity> UpdateAsync(TEntity entity)
+        public async Task UpdateAsync(TEntity entity)
+        {
+            _myDatabase.Set<TEntity>().Update(entity);
+            await _myDatabase.SaveChangesAsync();
+        }
+
+        Task<TEntity> IRepository<TEntity, TId>.UpdateAsync(TEntity entity)
         {
             throw new NotImplementedException();
         }

@@ -8,5 +8,6 @@ namespace TuringClothes.Dtos
         public decimal TotalPrice { get; set; }
 
         public string PriceInWei { get; set; }
+        public string EthereumPrice { get; set; }
     }
 }
