@@ -18,7 +18,7 @@ namespace TuringClothes.Services
             {
                 try
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
+                    await Task.Delay(TimeSpan.FromMinutes(2), stoppingToken);
                     var myDatabase = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<MyDatabase>();
                     var productRepository = _serviceProvider.CreateScope().ServiceProvider.GetService<ProductRepository>();
                     var temporaryOrderRepository = _serviceProvider.CreateScope().ServiceProvider.GetService<TemporaryOrderRepository>();

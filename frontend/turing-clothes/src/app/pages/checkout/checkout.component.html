@@ -43,9 +43,10 @@
     }
     </div>
     <div class="mt-4">
-      <h4 class="fw-bold">Total a pagar: € {{ purchaseInfo.totalPrice }}</h4>
-      <h4 class="fw-bold">Total a pagar: Eth {{purchaseInfo.priceInWei}}</h4>
-      <button class="btn btn-dark mt-3 px-4 py-2 mb-5" (click)="proceedToPayment()">
+      <h4 class="fw-bold">Total a pagar: {{ purchaseInfo.totalPrice }} €</h4>
+      <h4 class="fw-bold">Valor actual de Ethereum en Euros: {{ purchaseInfo.ethereumPrice }} €</h4>
+      <h4 class="fw-bold">Total a pagar: {{purchaseInfo.priceInWei}} Eth</h4>
+      <button class="btn btn-dark mt-3 px-4 py-2 mb-5" (click)="createTransaction()">
         Proceder al pago
       </button>
     </div>
