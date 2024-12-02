@@ -20,11 +20,16 @@ namespace TuringClothes.Database
         //#endif
 
         //Configura EF para crear un archivo de la base de datos Sqlite
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string basedir = AppDomain.CurrentDomain.BaseDirectory;
+#if DEBUG
+
             optionsBuilder.UseSqlite($"Datasource={basedir}{DATABASE_PATH}");
-            /*optionsBuilder.LogTo(Console.WriteLine);*/
+#else
+            optionsBuilder.UseMySql($"Datasource={basedir}{DATABASE_PATH}");
+#endif
         }
     }
 }
