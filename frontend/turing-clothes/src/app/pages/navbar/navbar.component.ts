@@ -29,10 +29,6 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  isAdmin(): boolean {
-    return this.authService.decodedToken.role === 'admin';
-  }
-
   isLoguedIn(): boolean {
     return this.authService.isLoggedIn;
   }
