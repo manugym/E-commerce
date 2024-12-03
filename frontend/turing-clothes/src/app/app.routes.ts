@@ -12,6 +12,10 @@ import { LocalCartComponent } from './pages/local-cart/local-cart.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { BlockchainComponent } from './pages/blockchain/blockchain.component';
 import { ConfirmCheckoutComponent } from './pages/confirm-checkout/confirm-checkout.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { UsersComponent } from './pages/admin/users/users.component';
+import { ProductsComponent } from './pages/admin/products/products.component';
+import { ChangePasswordComponent } from './pages/admin/change-password/change-password.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -28,4 +32,9 @@ export const routes: Routes = [
   { path: 'footer', component: FooterComponent},
   {path: 'test-page', component: TestPageComponent},
   {path: 'aboutus', component: AboutusComponent}
+
+  ,{path: 'admin', component: AdminComponent},
+  {path: 'admin/users', component: UsersComponent},
+  {path: 'admin/products', component: ProductsComponent},
+  {path: 'admin/change-password', component: ChangePasswordComponent}
 ];
