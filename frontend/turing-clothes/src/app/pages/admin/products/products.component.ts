@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { SidebarComponent } from '../../../../shared/sidebar/sidebar.component';
-import { ProductDto } from '../../../../models/product-dto';
+import { SidebarComponent } from "../../../shared/sidebar/sidebar.component";
+import { ProductDto } from '../../../models/product-dto';
 
 @Component({
   selector: 'app-products',
   standalone: true,
   imports: [SidebarComponent],
   templateUrl: './products.component.html',
-  styleUrl: './products.component.css',
+  styleUrl: './products.component.css'
 })
 export class ProductsComponent {
   products: ProductDto[] = [

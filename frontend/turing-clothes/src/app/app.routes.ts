@@ -13,9 +13,9 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { BlockchainComponent } from './pages/blockchain/blockchain.component';
 import { ConfirmCheckoutComponent } from './pages/confirm-checkout/confirm-checkout.component';
 import { AdminComponent } from './pages/admin/admin.component';
-import { UsersComponent } from './pages/admin/pages/users/users.component';
-import { ChangePasswordComponent } from './pages/admin/pages/change-password/change-password.component';
-import { ProductsComponent } from './pages/admin/pages/products/products.component';
+import { UsersComponent } from './pages/admin/users/users.component';
+import { ProductsComponent } from './pages/admin/products/products.component';
+import { ChangePasswordComponent } from './pages/admin/change-password/change-password.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
