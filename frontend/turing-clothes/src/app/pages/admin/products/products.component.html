@@ -1,0 +1,39 @@
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="col-12 col-md-3 col-lg-2">
+            <app-sidebar />
+        </div>
+
+        <div class="col-12 col-md-9 col-lg-10">
+            <h2 class="mb-4">Gestión de Productos</h2>
+            <p>
+                Aquí puedes ver y gestionar los productos disponibles en el sistema.
+            </p>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (product of products; track product.id) {
+                            <tr>
+                                <td>{{ product.id }}</td>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.price }}</td>
+                                <td>{{ product.stock }}</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
