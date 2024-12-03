@@ -90,11 +90,6 @@
           >
             Cerrar sesión
           </button>
-          @if (isAdmin()) {
-            <a class="bi bi-person-gear text-white" [routerLink]="'admin'"></a>
-          } @else {
-            <a class="bi bi-person text-white" [routerLink]="'user'"></a>
-          }
           } @else {
           <a
             class="btn btn-outline-dark text-black bg-white"
