@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.EntityFrameworkCore;
 
 namespace TuringClothes.Database
 {
@@ -19,7 +20,11 @@ namespace TuringClothes.Database
         {
             string basedir = AppDomain.CurrentDomain.BaseDirectory;
             optionsBuilder.UseSqlite($"Datasource={basedir}{DATABASE_PATH}");
-            /*optionsBuilder.LogTo(Console.WriteLine);*/
+
+#else   
+            string connection = "Server=db10820.databaseasp.net; Database=db10820; Uid=db10820; Pwd=J%z45K+y_6bE;";
+            optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection));
+#endif
         }
     }
 }

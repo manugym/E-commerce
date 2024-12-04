@@ -17,6 +17,7 @@ import { UsersComponent } from './pages/admin/users/users.component';
 import { ProductsComponent } from './pages/admin/products/products.component';
 import { ChangePasswordComponent } from './pages/admin/change-password/change-password.component';
 import { AddNewProductComponent } from './pages/admin/products/add-new-product/add-new-product.component';
+import { UserComponent } from './pages/user/user.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -32,11 +33,11 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'footer', component: FooterComponent},
   {path: 'test-page', component: TestPageComponent},
-  {path: 'aboutus', component: AboutusComponent}
-
-  ,{path: 'admin', component: AdminComponent},
+  {path: 'admin', component: AdminComponent},
   {path: 'admin/users', component: UsersComponent},
   {path: 'admin/products', component: ProductsComponent},
   {path: 'admin/change-password', component: ChangePasswordComponent},
   {path: 'admin/products/add-new-product', component: AddNewProductComponent}
+  {path: 'aboutus', component: AboutusComponent},
+  {path: 'user', component: UserComponent}
 ];
