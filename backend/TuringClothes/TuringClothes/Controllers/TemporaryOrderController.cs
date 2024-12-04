@@ -36,7 +36,7 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            var temporaryOrder = await _unitOfWork._temporaryOrderRepository.CreateTemporaryOrder(orderDetailsDto, userIdLong);
+            var temporaryOrder = await _unitOfWork.TemporaryOrderRepository.CreateTemporaryOrder(orderDetailsDto, userIdLong);
 
             return Ok(temporaryOrder);
         }
@@ -44,7 +44,7 @@ namespace TuringClothes.Controllers
         [HttpGet("TemporaryOrder")]
         public async Task<ActionResult<TemporaryOrder>> GetTemporaryOrder(long id)
         {
-            var temporaryOrder = _unitOfWork._temporaryOrderRepository.GetTemporaryOrder(id);
+            var temporaryOrder = _unitOfWork.TemporaryOrderRepository.GetTemporaryOrder(id);
             return Ok(temporaryOrder);
         }
 
@@ -52,7 +52,7 @@ namespace TuringClothes.Controllers
         [HttpPost("RefreshTemporaryOrders")]
         public async Task<ActionResult> RefreshTemporaryOrders(long temporaryOrderId)
         {
-            var temporaryOrder = await _unitOfWork._temporaryOrderRepository.GetTemporaryOrder(temporaryOrderId);
+            var temporaryOrder = await _unitOfWork.TemporaryOrderRepository.GetTemporaryOrder(temporaryOrderId);
             if (temporaryOrder == null)
             {
                 return NotFound("Temporary order no existe.");

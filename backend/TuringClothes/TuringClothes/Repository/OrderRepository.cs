@@ -1,8 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
-using Stripe.Checkout;
 using TuringClothes.Database;
-using TuringClothes.Model;
 
 namespace TuringClothes.Repository
 {

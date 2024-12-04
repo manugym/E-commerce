@@ -5,10 +5,10 @@ using TuringClothes.Database;
 
 namespace TuringClothes.Repository
 {
-    public class UserRepository
+    public class UserRepository : Repository<User, long>
     {
         private readonly MyDatabase _myDatabase;
-        public UserRepository(MyDatabase myDatabase)
+        public UserRepository(MyDatabase myDatabase) : base(myDatabase)
         {
             _myDatabase = myDatabase;
         }
@@ -23,6 +23,12 @@ namespace TuringClothes.Repository
             await _myDatabase.AddAsync(user);
         }
 
+        public async Task<List<Order>> GetordersByUser(long userId)
+        {
+            var user = await GetByIdAsync(userId);
+            var orders = user.Orders.ToList();
+            return orders;
+        }
 
     }
 }
