@@ -106,7 +106,6 @@ namespace TuringClothes
                 app.UseSwaggerUI();
                 //permite CORS
                 app.UseCors();
-                //rellena la base de datos con DataSeed
             }
             SeedDatabase(app.Services);
             app.UseHttpsRedirection();
