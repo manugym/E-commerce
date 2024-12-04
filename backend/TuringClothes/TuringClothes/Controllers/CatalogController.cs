@@ -35,7 +35,7 @@ namespace TuringClothes.Controllers
         {
             try
             {
-                var result = await _unitOfWork._productRepository.GetProductById(id);
+                var result = await _unitOfWork.ProductRepository.GetProductById(id);
 
                 if (result == null) return NotFound();
 

@@ -30,7 +30,7 @@ namespace TuringClothes.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<string>> Login([FromBody] LoginDto loginData)
         {
-            var user = await _unitOfWork._authRepository.GetByEmail(loginData.Email);
+            var user = await _unitOfWork.AuthRepository.GetByEmail(loginData.Email);
 
             if (user == null)
             {
@@ -49,7 +49,7 @@ namespace TuringClothes.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody] RegisterDto registerData)
         {
-            var existingUser = await _unitOfWork._authRepository.GetByEmail(registerData.Email);
+            var existingUser = await _unitOfWork.AuthRepository.GetByEmail(registerData.Email);
             if (existingUser != null)
             {
                 return Conflict("El correo electrónico ya está registrado.");
@@ -65,7 +65,7 @@ namespace TuringClothes.Controllers
                 Address = registerData.Address,
                 Role = "user"
             };
-            await _unitOfWork._userRepository.AddAsync(newUser);
+            await _unitOfWork.UserRepository.AddAsync(newUser);
             await _unitOfWork.SaveChangesAsync();
             string stringToken = GenerateToken(newUser);
 
@@ -90,7 +90,7 @@ namespace TuringClothes.Controllers
         [HttpGet("user by email")]
         public async Task<User?> GetUserByEmail(string mail)
         {
-            var user = await _unitOfWork._authRepository.GetByEmail(mail);
+            var user = await _unitOfWork.AuthRepository.GetByEmail(mail);
             return user;
         }
 

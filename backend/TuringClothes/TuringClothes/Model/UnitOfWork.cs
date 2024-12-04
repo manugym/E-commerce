@@ -1,4 +1,5 @@
-﻿using TuringClothes.Database;
+﻿using Microsoft.IdentityModel.Tokens;
+using TuringClothes.Database;
 using TuringClothes.Repository;
 
 namespace TuringClothes.Model
@@ -6,33 +7,27 @@ namespace TuringClothes.Model
     public class UnitOfWork
     {
         private readonly MyDatabase _database; // NO TENGO CLARO SI DEBERÍA DEJARLA PRIVADA O PÚBLICA PARA USARLA EN OTROS FICHEROS.
+        private UserRepository _userRepository;
+        private ProductRepository _productRepository;
+        private CartRepository _cartRepository;
+        private AuthRepository _authRepository;
+        private OrderRepository _orderRepository;
+        private TemporaryOrderRepository _temporaryOrderRepository;
+        private readonly TokenValidationParameters _tokenParameters;
 
-        public UserRepository _userRepository { get; init; }
-        public ProductRepository _productRepository { get; init; }
-        public CartRepository _cartRepository { get; init; }
-        public AuthRepository _authRepository { get; init; }
-        public OrderRepository _orderRepository { get; init; }
-        public TemporaryOrderRepository _temporaryOrderRepository { get; init; }
-        public ImageRepository _imageRepository;
+        public UserRepository UserRepository => _userRepository ??= new UserRepository(_database);
+        public ProductRepository ProductRepository => _productRepository ??= new ProductRepository(_database);
+        public CartRepository CartRepository => _cartRepository ??= new CartRepository(_database);
+              
+        public AuthRepository AuthRepository=> _authRepository ??= new AuthRepository(_database, _tokenParameters);
+       
+        public OrderRepository OrderRepository=> _orderRepository ??= new OrderRepository(_database);
+        public TemporaryOrderRepository TemporaryOrderRepository => _temporaryOrderRepository ??= new TemporaryOrderRepository(_database);
 
 
-        public UnitOfWork(MyDatabase database,
-            UserRepository userRepository,
-            ProductRepository productRepository,
-            CartRepository cartRepository,
-            AuthRepository authRepository,
-            OrderRepository orderRepository,
-            TemporaryOrderRepository temporaryOrderRepository,
-            ImageRepository imageRepository)
+        public UnitOfWork(MyDatabase database)
         {
             _database = database;
-            _userRepository = userRepository;
-            _productRepository = productRepository;
-            _cartRepository = cartRepository;
-            _authRepository = authRepository;
-            _orderRepository = orderRepository;
-            _temporaryOrderRepository = temporaryOrderRepository;
-            _imageRepository = imageRepository;
         }
 
         public async Task<bool> SaveChangesAsync()
