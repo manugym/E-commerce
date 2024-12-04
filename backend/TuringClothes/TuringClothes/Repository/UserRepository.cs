@@ -15,7 +15,7 @@ namespace TuringClothes.Repository
 
         public async Task<User> GetUserById(long userId)
         {
-            return _myDatabase.Users.FirstOrDefault(u => u.Id == userId);
+            return await _myDatabase.Users.FirstOrDefaultAsync(u => u.Id == userId);
         }
 
         public async Task AddAsync(User user)
