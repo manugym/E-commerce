@@ -28,6 +28,11 @@ export class AdminService {
       return result;
   }
 
+  async updateProduct(product: ProductDto): Promise<Result<void>> {
+    const result = await this.api.put<void>('Admin/updateProduct', product);
+      return result;
+  }
+
   async removeProduct(productId: number): Promise<Result<void>> {
     const result = await this.api.delete<void>(`Admin/deleteProduct/${productId}`);
       return result;
