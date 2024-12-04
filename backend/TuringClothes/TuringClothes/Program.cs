@@ -109,9 +109,8 @@ namespace TuringClothes
                 //permite CORS
                 app.UseCors();
                 //rellena la base de datos con DataSeed
-                SeedDatabase(app.Services);
             }
-
+            SeedDatabase(app.Services);
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
