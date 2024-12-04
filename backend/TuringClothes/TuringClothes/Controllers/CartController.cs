@@ -30,7 +30,7 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            var cart = await _unitOfWork._cartRepository.GetCart(userIdLong);
+            var cart = await _unitOfWork.CartRepository.GetCart(userIdLong);
             if (cart == null)
             {
                 return NotFound("Cart not found");
@@ -49,7 +49,7 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            await _unitOfWork._cartRepository.AddItemToCart(id, userIdLong, quantity);
+            await _unitOfWork.CartRepository.AddItemToCart(id, userIdLong, quantity);
 
             return Ok("Product added");
         }
@@ -65,7 +65,7 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            await _unitOfWork._cartRepository.RemoveItemFromCart(id, userIdLong);
+            await _unitOfWork.CartRepository.RemoveItemFromCart(id, userIdLong);
 
             return Ok(new { message = "Product Removed" });
         }
@@ -81,7 +81,7 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            var result = await _unitOfWork._cartRepository.UpdateItemInCart(id, amount, userIdLong);
+            var result = await _unitOfWork.CartRepository.UpdateItemInCart(id, amount, userIdLong);
 
             if (!result)
             {

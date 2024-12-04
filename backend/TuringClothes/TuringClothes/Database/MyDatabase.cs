@@ -18,6 +18,7 @@ namespace TuringClothes.Database
         //Configura EF para crear un archivo de la base de datos Sqlite
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+#if DEBUG
             string basedir = AppDomain.CurrentDomain.BaseDirectory;
             optionsBuilder.UseSqlite($"Datasource={basedir}{DATABASE_PATH}");
 
