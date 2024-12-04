@@ -21,14 +21,14 @@ namespace TuringClothes.Controllers
         [HttpPost("CreateOrder")]
         public async Task<Order> CreateOrder(OrderDto orderDto)
         {
-            var order = await _unitOfWork._orderRepository.CreateOrder(orderDto.OrderId, orderDto.PaymentMethod, orderDto.Status, orderDto.Total, orderDto.Email);
+            var order = await _unitOfWork.OrderRepository.CreateOrder(orderDto.OrderId, orderDto.PaymentMethod, orderDto.Status, orderDto.Total, orderDto.Email);
             return order;
         }
 
         [HttpGet("GetOrderById")]
         public async Task<Order> GetOrderById(long orderId)
         {
-            return await _unitOfWork._orderRepository.GetOrderById(orderId);
+            return await _unitOfWork.OrderRepository.GetOrderById(orderId);
         }
 
     }

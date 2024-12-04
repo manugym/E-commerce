@@ -41,8 +41,8 @@ namespace TuringClothes.Controllers
         [HttpGet("embedded")]
         public async Task<ActionResult> EmbededCheckout(long temporaryOrderId)
         {
-            TemporaryOrder temporaryOrder = await _unitOfWork._temporaryOrderRepository.GetTemporaryOrder(temporaryOrderId);
-            User user = await _unitOfWork._userRepository.GetUserById(temporaryOrder.UserId);
+            TemporaryOrder temporaryOrder = await _unitOfWork.TemporaryOrderRepository.GetTemporaryOrder(temporaryOrderId);
+            User user = await _unitOfWork.UserRepository.GetUserById(temporaryOrder.UserId);
             ProductOrderDto[] products = await GetAllProducts(temporaryOrderId);
             List<SessionLineItemOptions> lineItems = new List<SessionLineItemOptions>();
             foreach (var product in products)
@@ -93,7 +93,7 @@ namespace TuringClothes.Controllers
             Console.WriteLine(temporaryOrderId);
             if(session.PaymentStatus == "paid")
             {
-                orderNew = await _unitOfWork._orderRepository.CreateOrder(temporaryOrderId, session.PaymentMethodTypes.FirstOrDefault(), session.PaymentStatus, session.AmountTotal.Value, session.CustomerEmail);
+                orderNew = await _unitOfWork.OrderRepository.CreateOrder(temporaryOrderId, session.PaymentMethodTypes.FirstOrDefault(), session.PaymentStatus, session.AmountTotal.Value, session.CustomerEmail);
                 
                 return Ok(new { order = orderNew.Id});
             }
@@ -103,7 +103,7 @@ namespace TuringClothes.Controllers
 
         private async Task<ProductOrderDto[]> GetProducts(long temporaryOrderId)
         {
-            TemporaryOrder temporaryOrder = await _unitOfWork._temporaryOrderRepository.GetTemporaryOrder(temporaryOrderId);
+            TemporaryOrder temporaryOrder = await _unitOfWork.TemporaryOrderRepository.GetTemporaryOrder(temporaryOrderId);
             List<ProductOrderDto> productList = new List<ProductOrderDto>();
             foreach (var orderDetail in temporaryOrder.Details)
             {
