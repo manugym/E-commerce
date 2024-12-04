@@ -16,6 +16,7 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { UsersComponent } from './pages/admin/users/users.component';
 import { ProductsComponent } from './pages/admin/products/products.component';
 import { ChangePasswordComponent } from './pages/admin/change-password/change-password.component';
+import { AddNewProductComponent } from './pages/admin/products/add-new-product/add-new-product.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -36,5 +37,6 @@ export const routes: Routes = [
   ,{path: 'admin', component: AdminComponent},
   {path: 'admin/users', component: UsersComponent},
   {path: 'admin/products', component: ProductsComponent},
-  {path: 'admin/change-password', component: ChangePasswordComponent}
+  {path: 'admin/change-password', component: ChangePasswordComponent},
+  {path: 'admin/products/add-new-product', component: AddNewProductComponent}
 ];

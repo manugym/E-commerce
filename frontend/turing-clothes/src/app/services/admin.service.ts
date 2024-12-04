@@ -22,4 +22,14 @@ export class AdminService {
     const users = await this.api.get<User[]>('Admin/getAllUsers');
       return users;
   }
+
+  async addProduct(product: ProductDto): Promise<Result<void>> {
+    const result = await this.api.post<void>('Admin/addProduct', product);
+      return result;
+  }
+
+  async removeProduct(productId: number): Promise<Result<void>> {
+    const result = await this.api.delete<void>(`Admin/deleteProduct/${productId}`);
+      return result;
+  }
 }
