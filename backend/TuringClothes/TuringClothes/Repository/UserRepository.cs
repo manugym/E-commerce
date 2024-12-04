@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TuringClothes.Database;
 
 namespace TuringClothes.Repository
@@ -16,7 +17,12 @@ namespace TuringClothes.Repository
         {
             return _myDatabase.Users.FirstOrDefault(u => u.Id == userId);
         }
-        
-        
+
+        public async Task AddAsync(User user)
+        {
+            await _myDatabase.AddAsync(user);
+        }
+
+
     }
 }
