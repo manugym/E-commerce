@@ -16,6 +16,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Imagen</th>
                                 <th>Nombre</th>
                                 <th>Precio</th>
                                 <th>Stock</th>
@@ -25,8 +26,9 @@
                             @for (product of products; track product.id) {
                             <tr>
                                 <td>{{ product.id }}</td>
+                                <td><img [src]="product.image" width="50"></td>
                                 <td>{{ product.name }}</td>
-                                <td>{{ product.price }}</td>
+                                <td>{{ product.price / 100 }}</td>
                                 <td>{{ product.stock }}</td>
                             </tr>
                             }

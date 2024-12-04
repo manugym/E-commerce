@@ -8,7 +8,24 @@
             <p>Aquí puedes ver y gestionar los usuarios registrados.</p>
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <p>Contenido específico del componente de gestión de usuarios.</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Rol</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (user of users; track user.id) {
+                            <tr>
+                                <td>{{ user.name + " " + user.surname}}</td>
+                                <td>{{ user.email}}</td>
+                                <td>{{ user.role }}</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
