@@ -13,6 +13,7 @@ namespace TuringClothes.Model
         public AuthRepository _authRepository { get; init; }
         public OrderRepository _orderRepository { get; init; }
         public TemporaryOrderRepository _temporaryOrderRepository { get; init; }
+        public ImageRepository _imageRepository;
 
 
         public UnitOfWork(MyDatabase database,
@@ -21,7 +22,8 @@ namespace TuringClothes.Model
             CartRepository cartRepository,
             AuthRepository authRepository,
             OrderRepository orderRepository,
-            TemporaryOrderRepository temporaryOrderRepository)
+            TemporaryOrderRepository temporaryOrderRepository,
+            ImageRepository imageRepository)
         {
             _database = database;
             _userRepository = userRepository;
@@ -30,6 +32,7 @@ namespace TuringClothes.Model
             _authRepository = authRepository;
             _orderRepository = orderRepository;
             _temporaryOrderRepository = temporaryOrderRepository;
+            _imageRepository = imageRepository;
         }
 
         public async Task<bool> SaveChangesAsync()
