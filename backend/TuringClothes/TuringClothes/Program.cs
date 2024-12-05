@@ -75,8 +75,25 @@ namespace TuringClothes
             builder.Services.AddScoped<OrderRepository>();
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<BlockchainService>();
+
+            // scopeds de las imágenes
+            builder.Services.AddScoped<ImageService>();
+            builder.Services.AddScoped<ImageRepository>();
+            builder.Services.AddScoped<Mapper>();
+
+
+
+
+
             builder.Services.AddHostedService<MyBackgroundService>();
             builder.Services.AddScoped<UnitOfWork>();
+
+            // scopeds de las imágenes
+            builder.Services.AddScoped<ImageService>();
+            builder.Services.AddScoped<ImageRepository>();
+            builder.Services.AddScoped<Mapper>();
+
+
 
 
             builder.Services.AddPredictionEnginePool<ModelInput, ModelOutput>()

@@ -11,6 +11,7 @@ namespace TuringClothes.Model
         private ProductRepository _productRepository;
         private CartRepository _cartRepository;
         private AuthRepository _authRepository;
+        private ImageRepository _imageRepository;
         private OrderRepository _orderRepository;
         private TemporaryOrderRepository _temporaryOrderRepository;
         private readonly TokenValidationParameters _tokenParameters;
@@ -18,6 +19,8 @@ namespace TuringClothes.Model
         public UserRepository UserRepository => _userRepository ??= new UserRepository(_database);
         public ProductRepository ProductRepository => _productRepository ??= new ProductRepository(_database);
         public CartRepository CartRepository => _cartRepository ??= new CartRepository(_database);
+
+        public ImageRepository ImageRepository => _imageRepository ??= new ImageRepository(_database);
               
         public AuthRepository AuthRepository=> _authRepository ??= new AuthRepository(_database, _tokenParameters);
        
