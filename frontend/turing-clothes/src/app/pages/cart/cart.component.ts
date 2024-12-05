@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { CheckoutService } from '../../services/checkout.service';
 import { ApiService } from '../../services/api.service';
 import { TemporaryOrder } from '../../models/temporary-order';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cart',
@@ -39,7 +40,7 @@ export class CartComponent implements OnInit {
   async getCart() {
     const result = await this.cartService.getCart();
     result.data.details.forEach((element) => {
-      element.product.image = `https://localhost:7183/${element.product.image}`;
+      element.product.image = `${environment.imageUrl}${element.product.image}`;
     });
     this.cart = result.data;
   }
