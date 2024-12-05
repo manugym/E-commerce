@@ -1,6 +1,4 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom, Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Result } from '../models/result';
 import { User } from '../models/user';
