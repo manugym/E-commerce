@@ -54,6 +54,16 @@ namespace TuringClothes.Controllers
             return Ok(new { message = "Rol modificado correctamente." });
         }
 
+        //[Authorize(Roles = "admin")]
+        [HttpDelete("deleteUser")]
+        public async Task<IActionResult> deleteUser(string email)
+        {
+            var user = await _unitOfWork.AuthRepository.GetByEmail(email);
+            _mydatabase.Users.Remove(user);
+            await _unitOfWork.SaveChangesAsync();
+            return Ok(new { message = "Usuario eliminado correctamente." });
+        }
+
         [Authorize(Roles = "admin")]
         [HttpGet("getAllProducts")]
         public IActionResult GetProducts()

@@ -34,6 +34,11 @@ export class AdminService {
     return result;
   }
 
+  async deleteUser(email: string): Promise<Result> {
+    const result = await this.api.delete<void>(`Admin/deleteUser?email=${email}`);
+    return result;
+  }
+
   getAllImages(): Promise<Result<Image[]>> {
     return this.api.get<Image[]>('images');
   }
