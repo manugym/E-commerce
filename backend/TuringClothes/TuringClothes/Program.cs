@@ -102,19 +102,17 @@ namespace TuringClothes
             StripeConfiguration.ApiKey = "sk_test_51QJzkGRqNFmfQiA9GJ41Y9yoGmgUsXLzdV8mbk06Rtfj5Q7d5Z0F0foXulLkkIKeRGpyGy5L4zM6UwtbprVlNbp300qCldYM25";
 
 
-            if (builder.Environment.IsDevelopment())
-            {
                 //Permite CORS
                 builder.Services.AddCors(options =>
                 {
                     options.AddDefaultPolicy(builder =>
                     {
-                        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                        builder.AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                     });
                 });
-            }
+            
             var app = builder.Build();
 
             app.UseStaticFiles();
@@ -123,9 +121,9 @@ namespace TuringClothes
             if (app.Environment.IsDevelopment()) { 
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                //permite CORS
-                app.UseCors();
+                //permite CORS   
             }
+            app.UseCors();
             SeedDatabase(app.Services);
             app.UseHttpsRedirection();
 
