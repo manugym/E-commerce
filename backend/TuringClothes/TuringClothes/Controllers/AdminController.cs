@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using TuringClothes.Database;
 using TuringClothes.Dtos;
+using TuringClothes.Model;
+using TuringClothes.Services;
 
 namespace TuringClothes.Controllers
 {
@@ -11,9 +14,13 @@ namespace TuringClothes.Controllers
     public class AdminController : ControllerBase
     {
         private MyDatabase _mydatabase;
-        public AdminController(MyDatabase myDatabase) 
+        private readonly ImageService _imageService;
+        private readonly Mapper _mapper;
+        public AdminController(MyDatabase myDatabase, ImageService imageService, Mapper mapper) 
         {
             _mydatabase = myDatabase;
+            _imageService = imageService;
+            _mapper = mapper;
         }
 
         [Authorize(Roles = "admin")]
@@ -53,6 +60,15 @@ namespace TuringClothes.Controllers
         }
 
         [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<ActionResult<Image>> InsertAsync(CreateUpdateImageRequest createImage)
+        {
+            Image newImage = await _imageService.InsertAsync(createImage);
+
+            return Created($"images/{newImage.Id}", _mapper.ToDto(newImage));
+        }
+
+        [Authorize(Roles = "admin")]
         [HttpPost("addProduct")]
         public async Task<IActionResult> AddProduct([FromBody] ProductDto productDto)
         {
@@ -61,7 +77,7 @@ namespace TuringClothes.Controllers
                 return BadRequest(new { message = "Datos del producto no válidos." });
             }
 
-            var newProduct = new Product
+            var newProduct = new Database.Product
             {
                 Name = productDto.Name,
                 Description = productDto.Description,
