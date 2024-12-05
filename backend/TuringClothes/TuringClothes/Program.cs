@@ -9,6 +9,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using TuringClothes.Controllers;
 using TuringClothes.Database;
+using TuringClothes.Model;
 using TuringClothes.Pagination;
 using TuringClothes.Repository;
 using TuringClothes.Services;
@@ -74,7 +75,25 @@ namespace TuringClothes
             builder.Services.AddScoped<OrderRepository>();
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<BlockchainService>();
+
+            // scopeds de las imágenes
+            builder.Services.AddScoped<ImageService>();
+            builder.Services.AddScoped<ImageRepository>();
+            builder.Services.AddScoped<Mapper>();
+
+
+
+
+
             builder.Services.AddHostedService<MyBackgroundService>();
+            builder.Services.AddScoped<UnitOfWork>();
+
+            // scopeds de las imágenes
+            builder.Services.AddScoped<ImageService>();
+            builder.Services.AddScoped<ImageRepository>();
+            builder.Services.AddScoped<Mapper>();
+
+
 
 
             builder.Services.AddPredictionEnginePool<ModelInput, ModelOutput>()
@@ -106,10 +125,8 @@ namespace TuringClothes
                 app.UseSwaggerUI();
                 //permite CORS
                 app.UseCors();
-                //rellena la base de datos con DataSeed
-                SeedDatabase(app.Services);
             }
-
+            SeedDatabase(app.Services);
             app.UseHttpsRedirection();
 
             app.UseAuthentication();

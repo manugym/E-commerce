@@ -14,6 +14,6 @@
 
         public string Image { get; set; }
 
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review>? Reviews { get; set; }
     }
 }
