@@ -19,7 +19,6 @@ import { BlockchainService } from '../../services/blockchain.service';
 import { PurchaseInfoDto } from '../../models/purchase-info-dto';
 import { CreateEthTransactionRequest } from '../../models/create-eth-transaction-request';
 import { CheckTransactionRequest } from '../../models/check-transaction-request';
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-checkout',
@@ -151,7 +150,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     );
     if (result.success) {
       result.data.temporaryOrder.details.map((detail) => {
-        detail.product.image = `${environment.imageUrl}${detail.product.image}`;
+        detail.product.image = `https://localhost:7183/${detail.product.image}`;
       });
       this.purchaseInfo = result.data;
     }

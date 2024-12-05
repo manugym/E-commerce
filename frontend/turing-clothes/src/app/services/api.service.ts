@@ -24,7 +24,6 @@ export class ApiService {
     params: any = {},
     responseType = null
   ): Promise<Result<T>> {
-    console.log(this.BASE_URL);
     const url = `${this.BASE_URL}${path}`;
     const request$ = this.http.get(url, {
       params: new HttpParams({ fromObject: params }),
