@@ -22,6 +22,18 @@ export class AdminService {
     return users;
   }
 
+  async getUserByEmail(email: string): Promise<Result<User>> {
+    const user = await this.api.get<User>(`Auth/user by email?mail=${email}`);
+    return user;
+  }
+
+  async updateUserRole(email: string, role: string): Promise<Result> {
+    const result = await this.api.put<void>(`Admin/editUserRol?email=${email}&role=${role}`, {
+      role,
+    });
+    return result;
+  }
+
   getAllImages(): Promise<Result<Image[]>> {
     return this.api.get<Image[]>('images');
   }

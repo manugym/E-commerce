@@ -10,10 +10,12 @@ namespace TuringClothes.Services
     {
         private const string IMAGES_FOLDER = "images";
         private readonly UnitOfWork _unitOfWork;
+        private readonly ImageRepository _imageRepository;
 
         public ImageService(UnitOfWork unitOfWork, ImageRepository imageRepository)
         {
             _unitOfWork = unitOfWork;
+            _imageRepository = imageRepository;
         }
 
         public async Task<Image> InsertAsync(CreateUpdateImageRequest image)

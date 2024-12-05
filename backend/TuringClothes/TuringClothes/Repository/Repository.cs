@@ -55,6 +55,14 @@ namespace TuringClothes.Repository
             await _myDatabase.SaveChangesAsync();
         }
 
+        Task<TEntity> IRepository<TEntity, TId>.UpdateAsync(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
 
+        Task<TEntity> IRepository<TEntity, TId>.DeleteAsync(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
