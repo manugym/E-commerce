@@ -3,6 +3,8 @@ import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
 import { ProductDto } from '../../../models/product-dto';
 import { AdminService } from '../../../services/admin.service';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../../../environments/environment';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-products',
@@ -14,7 +16,7 @@ import { RouterLink } from '@angular/router';
 export class ProductsComponent implements OnInit {
   products: ProductDto[] = [];
 
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService, private api: ApiService) {}
 
   ngOnInit(): void {
     this.getProducts();
@@ -25,8 +27,9 @@ export class ProductsComponent implements OnInit {
       this.products = result.data;
       this.products = result.data.map((product) => ({
         ...product,
-        image: `https://localhost:7183/${product.image}`,
+        image: `${environment.imageUrl}${product.image}`,
       }));
+      console.log(this.products)
     }
   }
 
