@@ -107,6 +107,48 @@ namespace TuringClothes.Controllers
         }
 
         [Authorize(Roles = "admin")]
+        [HttpGet("getProduct/{id}")]
+        public async Task<IActionResult> GetProductById(long id)
+        {
+            var product = await _mydatabase.Products.FindAsync(id);
+
+            if (product == null)
+            {
+                return NotFound(new { message = "Producto no encontrado." });
+            }
+
+            return Ok(product);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPut("updateProduct/{id}")]
+        public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductDto productDto)
+        {
+            if (productDto == null)
+            {
+                return BadRequest(new { message = "Datos del producto no válidos." });
+            }
+
+            var existingProduct = await _mydatabase.Products.FindAsync(id);
+
+            if (existingProduct == null)
+            {
+                return NotFound(new { message = "Producto no encontrado." });
+            }
+
+            existingProduct.Name = productDto.Name;
+            existingProduct.Description = productDto.Description;
+            existingProduct.Price = (int)productDto.Price;
+            existingProduct.Stock = productDto.Stock;
+            //existingProduct.Image = productDto.Image;
+
+            _mydatabase.Products.Update(existingProduct);
+            await _mydatabase.SaveChangesAsync();
+
+            return Ok(new { message = "Producto actualizado correctamente.", product = existingProduct });
+        }
+
+        [Authorize(Roles = "admin")]
         [HttpDelete("deleteProduct/{id}")]
         public async Task<IActionResult> DeleteProduct(long id)
         {

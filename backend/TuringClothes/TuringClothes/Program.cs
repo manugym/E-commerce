@@ -88,6 +88,13 @@ namespace TuringClothes
             builder.Services.AddHostedService<MyBackgroundService>();
             builder.Services.AddScoped<UnitOfWork>();
 
+            // scopeds de las imágenes
+            builder.Services.AddScoped<ImageService>();
+            builder.Services.AddScoped<ImageRepository>();
+            builder.Services.AddScoped<Mapper>();
+
+
+
 
             builder.Services.AddPredictionEnginePool<ModelInput, ModelOutput>()
                 .FromFile("TuringModel1.mlnet");
