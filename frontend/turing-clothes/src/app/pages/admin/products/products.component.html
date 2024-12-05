@@ -37,11 +37,7 @@
                 <td>{{ product.name }}</td>
                 <td>{{ product.price / 100 }}</td>
                 <td>{{ product.stock }}</td>
-                <button
-                  class="bi bi-trash border border-danger"
-                  style="color: red"
-                  (click)="removeProduct(product.id)"
-                ></button>
+                <button class="bi bi-pencil-square" (click)="updateProduct(product)"></button>
               </tr>
               }
             </tbody>
