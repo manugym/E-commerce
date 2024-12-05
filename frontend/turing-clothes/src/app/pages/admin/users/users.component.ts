@@ -25,12 +25,11 @@ export class UsersComponent implements OnInit {
     }
   }
 
-
-
-
-
-
-  updateRol() {
-  throw new Error('Method not implemented.');
+  async deleteUser(email: string): Promise<void> {
+    const result = await this.adminService.deleteUser(email);
+    if (result.success) {
+      this.getUsers();
+    }
   }
+
 }
