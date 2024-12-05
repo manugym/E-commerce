@@ -18,8 +18,8 @@ user: UserDto;
 
 constructor(private userService:UserService){}
 
-ngOnInit(): void {
-  this.getOrders();
+async ngOnInit(): Promise<void> {
+  await this.getOrders();
 }
 
   async getOrders():Promise<void> {
@@ -27,5 +27,5 @@ ngOnInit(): void {
     this.user = result.data;
   }
 
-  
+
 }
