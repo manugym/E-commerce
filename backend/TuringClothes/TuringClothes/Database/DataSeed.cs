@@ -26,6 +26,7 @@
                 Email = "juanmita@gmail.com",
                 Password = hashedPassword,
                 Address = "Calle La Fuente 3",
+                Orders = new List<Order>(),
                 Role = "admin"
             },
             new User

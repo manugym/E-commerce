@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TuringClothes.Database;
+using TuringClothes.Dtos;
 using TuringClothes.Model;
 
 namespace TuringClothes.Controllers
@@ -19,8 +20,8 @@ namespace TuringClothes.Controllers
         }
 
         [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<List<Order>>> GetUserOrders()
+        [HttpGet("UserOrder")]
+        public async Task<ActionResult<UserDto>> GetUserOrders()
         {
             var userId = User.FindFirst("id")?.Value;
 
@@ -29,8 +30,8 @@ namespace TuringClothes.Controllers
                 return Unauthorized("Invalid user ID.");
             }
 
-            var orders = await _unitOfWork.UserRepository.GetordersByUser(userIdLong);
-            return Ok(orders);
+            var userDto = await _unitOfWork.UserRepository.GetordersByUser(userIdLong);
+            return Ok(userDto);
         }
     }
 }
