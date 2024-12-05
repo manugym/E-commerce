@@ -26,7 +26,7 @@ namespace TuringClothes.Services
                 Path = relativePath
             };
 
-            await _unitOfWork._imageRepository.InsertAsync(newImage);
+            await _unitOfWork.ImageRepository.InsertAsync(newImage);
 
             if (await _unitOfWork.SaveChangesAsync())
             {
