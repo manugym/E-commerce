@@ -3,6 +3,7 @@ import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
 import { ProductDto } from '../../../models/product-dto';
 import { AdminService } from '../../../services/admin.service';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-products',
@@ -25,7 +26,7 @@ export class ProductsComponent implements OnInit {
       this.products = result.data;
       this.products = result.data.map((product) => ({
         ...product,
-        image: `https://localhost:7183/${product.image}`,
+        image: `${environment.imageUrl}${product.image}`,
       }));
     }
   }
