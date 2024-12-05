@@ -1,6 +1,4 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom, Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Result } from '../models/result';
 import { User } from '../models/user';
@@ -22,6 +20,18 @@ export class AdminService {
   async getUsers(): Promise<Result<User[]>> {
     const users = await this.api.get<User[]>('Admin/getAllUsers');
     return users;
+  }
+
+  async getUserByEmail(email: string): Promise<Result<User>> {
+    const user = await this.api.get<User>(`Auth/user by email?mail=${email}`);
+    return user;
+  }
+
+  async updateUserRole(email: string, role: string): Promise<Result> {
+    const result = await this.api.put<void>(`Admin/editUserRol?email=${email}&role=${role}`, {
+      role,
+    });
+    return result;
   }
 
   getAllImages(): Promise<Result<Image[]>> {
@@ -53,6 +63,11 @@ export class AdminService {
   async addProduct(product: ProductDto): Promise<Result<void>> {
     const result = await this.api.post<void>('Admin/addProduct', product);
     return result;
+  }
+
+  async updateProduct(product: ProductDto): Promise<Result<void>> {
+    const result = await this.api.put<void>('Admin/updateProduct', product);
+      return result;
   }
 
   async removeProduct(productId: number): Promise<Result<void>> {

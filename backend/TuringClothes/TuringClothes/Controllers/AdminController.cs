@@ -16,11 +16,13 @@ namespace TuringClothes.Controllers
         private MyDatabase _mydatabase;
         private readonly ImageService _imageService;
         private readonly Mapper _mapper;
-        public AdminController(MyDatabase myDatabase, ImageService imageService, Mapper mapper) 
+        private readonly UnitOfWork _unitOfWork;
+        public AdminController(MyDatabase myDatabase, ImageService imageService, Mapper mapper, UnitOfWork unitOfWork)
         {
             _mydatabase = myDatabase;
             _imageService = imageService;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         [Authorize(Roles = "admin")]
@@ -39,6 +41,17 @@ namespace TuringClothes.Controllers
                 .ToList();
 
             return Ok(users);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPut("editUserRol")]
+        public async Task<IActionResult> EditUserRole(string email, string role)
+        {
+            var user = await _unitOfWork.AuthRepository.GetByEmail(email);
+            user.Role = role;
+            _mydatabase.Users.Update(user);
+            await _unitOfWork.SaveChangesAsync();
+            return Ok(new { message = "Rol modificado correctamente." });
         }
 
         [Authorize(Roles = "admin")]

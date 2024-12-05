@@ -4,11 +4,11 @@ using TuringClothes.Database;
 
 namespace TuringClothes.Repository
 {
-    public class OrderRepository
+    public class OrderRepository : Repository<Order, int>
     {
         private readonly MyDatabase _myDatabase;
 
-        public OrderRepository(MyDatabase myDatabase)
+        public OrderRepository(MyDatabase myDatabase) : base(myDatabase)
         {
             _myDatabase = myDatabase;
         }
@@ -17,7 +17,6 @@ namespace TuringClothes.Repository
 
         {
             var temporaryOrder = await _myDatabase.TemporaryOrders.Include(d => d.Details).ThenInclude(p => p.Product).FirstOrDefaultAsync(t => t.Id == id);
-            Console.WriteLine(temporaryOrder.Id);
 
             if (temporaryOrder == null)
             {

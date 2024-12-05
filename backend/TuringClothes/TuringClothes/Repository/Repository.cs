@@ -17,10 +17,6 @@ namespace TuringClothes.Repository
         {
             return await _myDatabase.Set<TEntity>().ToArrayAsync();
         }
-        public Task<TEntity> DeleteAsync(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<bool> ExistAsync(TId id)
         {
@@ -53,7 +49,18 @@ namespace TuringClothes.Repository
             await _myDatabase.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(TEntity entity)
+        {
+            _myDatabase.Set<TEntity>().Remove(entity);
+            await _myDatabase.SaveChangesAsync();
+        }
+
         Task<TEntity> IRepository<TEntity, TId>.UpdateAsync(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TEntity> IRepository<TEntity, TId>.DeleteAsync(TEntity entity)
         {
             throw new NotImplementedException();
         }
