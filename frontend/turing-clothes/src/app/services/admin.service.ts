@@ -70,9 +70,13 @@ export class AdminService {
     return result;
   }
 
-  async updateProduct(product: ProductDto): Promise<Result<void>> {
-    const result = await this.api.put<void>('Admin/updateProduct', product);
+  async updateProduct(productId: number, product: ProductDto): Promise<Result<void>> {
+    const result = await this.api.put<void>(`Admin/updateProduct/${productId}`, product);
       return result;
+  }
+
+  async getProductById(productId: number): Promise<any> {
+    return this.api.get(`/api/admin/getProduct/${productId}`);
   }
 
   async removeProduct(productId: number): Promise<Result<void>> {

@@ -30,10 +30,11 @@ export class ProductsComponent implements OnInit {
     }
   }
 
-  async updateProduct(product: ProductDto) {
-    const result = await this.adminService.updateProduct(product);
+  async updateProduct(productId: number, product: ProductDto) {
+    const result = await this.adminService.updateProduct(productId, product);
     if (result.success) {
       await this.getProducts();
+      console.log('Producto actualizado correctamente.');
     }
   }
   

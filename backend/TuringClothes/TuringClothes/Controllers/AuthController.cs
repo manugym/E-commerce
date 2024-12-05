@@ -63,6 +63,7 @@ namespace TuringClothes.Controllers
                 Email = registerData.Email,
                 Password = hashedPassword,
                 Address = registerData.Address,
+                Orders = new List<Order>(),
                 Role = "user"
             };
             await _unitOfWork.UserRepository.AddAsync(newUser);
