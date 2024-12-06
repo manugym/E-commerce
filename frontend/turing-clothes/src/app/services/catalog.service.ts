@@ -6,6 +6,7 @@ import { PaginationParams } from '../models/pagination-params';
 import { PagedResults } from '../models/paged-results';
 import { ReviewDto } from '../models/review-dto';
 import { CartServiceService } from './cart-service.service';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -42,7 +43,7 @@ export class CatalogService {
       `Catalog/GetProduct?id=${id}`
     );
 
-    result.data.image = `https://localhost:7183/${result.data.image}`;
+    result.data.image = `${environment.imageUrl}${result.data.image}`;
 
     return result;
   }
