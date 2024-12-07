@@ -9,11 +9,12 @@ import {
 import { AdminService } from '../../../../services/admin.service';
 import { CreateOrUpdateImageRequest } from '../../../../models/create-or-update-image-request';
 import { Image } from '../../../../models/image';
+import { SidebarComponent } from "../../../../shared/sidebar/sidebar.component";
 
 @Component({
   selector: 'app-add-new-product',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SidebarComponent],
   templateUrl: './add-new-product.component.html',
   styleUrl: './add-new-product.component.css',
 })

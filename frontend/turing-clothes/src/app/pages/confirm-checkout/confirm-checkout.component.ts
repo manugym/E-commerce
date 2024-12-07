@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CheckoutService } from '../../services/checkout.service';
 import { Order } from '../../models/order';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-confirm-checkout',
@@ -38,7 +39,7 @@ export class ConfirmCheckoutComponent implements OnInit {
       console.log(result);
       this.order = result.data;
       this.order.orderDetails.map((img) => {
-        img.product.image = `https://localhost:7183/${img.product.image}`;
+        img.product.image = `${environment.imageUrl}${img.product.image}`;
       });
     });
   }
