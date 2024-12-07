@@ -7,6 +7,7 @@ import { PagedResults } from '../../models/paged-results';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ReviewDto } from '../../models/review-dto';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-catalogo',
@@ -63,7 +64,7 @@ export class CatalogoComponent implements OnInit {
       this.items = this.pagedResults.results;
       this.items = result.data.results.map((product) => ({
         ...product,
-        image: `https://localhost:7183/${product.image}`,
+        image: `${environment.imageUrl}${product.image}`,
       }));
       this.items.forEach((product) => this.loadProductReviews(product.id));
     }
