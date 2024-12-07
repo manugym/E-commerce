@@ -3,7 +3,7 @@ import { User } from '../../models/user';
 import { Order } from '../../models/order';
 import { UserService } from '../../services/user.service';
 import { UserDto } from '../../models/user-dto';
-
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-user',
@@ -15,6 +15,7 @@ import { UserDto } from '../../models/user-dto';
 export class UserComponent implements OnInit {
 
 user: UserDto;
+apiUrl = environment.apiUrl;
 
 constructor(private userService:UserService){}
 
