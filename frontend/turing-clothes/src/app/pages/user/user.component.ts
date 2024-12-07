@@ -15,7 +15,7 @@ import { environment } from '../../../environments/environment';
 export class UserComponent implements OnInit {
 
 user: UserDto;
-apiUrl = environment.apiUrl;
+apiUrl = environment.imageUrl;
 
 constructor(private userService:UserService){}
 
