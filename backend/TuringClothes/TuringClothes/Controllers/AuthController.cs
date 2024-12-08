@@ -2,14 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TuringClothes.Database;
 using TuringClothes.Dtos;
 using TuringClothes.Model;
-using TuringClothes.Repository;
 
 namespace TuringClothes.Controllers
 {
@@ -20,7 +18,7 @@ namespace TuringClothes.Controllers
 
         private readonly TokenValidationParameters _tokenParameters;
         private readonly UnitOfWork _unitOfWork;
-   
+
         public AuthController(UnitOfWork unitOfWork, IOptionsMonitor<JwtBearerOptions> jwtOptions)
         {
             _unitOfWork = unitOfWork;
@@ -38,7 +36,7 @@ namespace TuringClothes.Controllers
             }
             if (loginData.Email == user.Email && BCrypt.Net.BCrypt.Verify(loginData.Password, user.Password))
             {
-               string stringToken = GenerateToken(user);
+                string stringToken = GenerateToken(user);
 
                 return Ok(new AuthResultDto { AccessToken = stringToken });
             }
@@ -73,21 +71,6 @@ namespace TuringClothes.Controllers
             return Ok(new AuthResultDto { AccessToken = stringToken });
         }
 
-
-        [Authorize(Roles = "admin")]
-        [HttpGet]
-        public IActionResult GetSecret()
-        {
-            return Ok(new { message = "Esto es un secreto que nadie puede saber..." });
-        }
-
-        [HttpGet("users")]
-        public IActionResult Users()
-        {
-            return Ok(new { message = "Esto es un secreto que nadie puede saber..." });
-        }
-
-
         [HttpGet("user by email")]
         public async Task<User?> GetUserByEmail(string mail)
         {
@@ -118,6 +101,35 @@ namespace TuringClothes.Controllers
             return stringToken;
         }
 
+        [Authorize]
+        [HttpPut("UpdatePass")]
+        public async Task<ActionResult> UpdatePassword([FromBody]PassDto passDto)
+        {
+
+            var userId = User.FindFirst("id").Value;
+
+            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var userIdLong))
+            {
+                return Unauthorized("El usuario no está autenticado.");
+            }
+
+            var user = await _unitOfWork.AuthRepository.GetByIdAsync(userIdLong);
+
+
+            if (!BCrypt.Net.BCrypt.Verify(passDto.OldPassword, user.Password))
+            {
+                return BadRequest("La contraseña introducida es incorrecta.");
+
+            }
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(passDto.Password);
+            user.Password = hashedPassword;
+
+            await _unitOfWork.AuthRepository.UpdateAsync(user);
+            string stringToken = GenerateToken(user);
+
+            return Ok(new AuthResultDto { AccessToken = stringToken });
+        }
     }
 
 
