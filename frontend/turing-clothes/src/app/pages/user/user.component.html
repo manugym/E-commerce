@@ -16,7 +16,10 @@
                 @if (user.role === "admin") {
                 <p><strong>Rol: </strong>{{user.role}}</p>
                 }
-                <a href="#" class="btn btn-dark mt-3" [routerLink]="'/user/password'">Cambiar contraseña</a>
+                <div class="d-flex justify-content-center gap-3 mt-3">
+                    <a href="#" class="btn btn-outline-dark" [routerLink]="'/user/edit'">Modificar datos</a>
+                    <a href="#" class="btn btn-outline-dark" [routerLink]="'/user/password'">Cambiar contraseña</a>
+                </div>
             </div>
         </div>
     </section>

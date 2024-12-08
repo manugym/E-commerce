@@ -24,39 +24,12 @@ export class UserService {
 
   async updatePass(passDto: PassDto): Promise<Result<AuthResponse>> {
     const result = await this.api.put<AuthResponse>('Auth/UpdatePass', passDto);
-
+    
     if (result.success) {
-      this.clearSession();
-      this.setSession(result.data.accessToken, true);
-    } else {
-      this.handleError('Ha habido un problema al registrar el usuario.');
-    }
+      
+      this.authService.handleSession(result.data.accessToken, false)
+    } 
     return result;
   }
 
-  private setSession(token: string, remember: boolean): void {
-    this.api.jwt = token;
-    this.decodedToken = this.authService.decodedToken(token);
-
-    if (remember) {
-      localStorage.setItem(this.TOKEN_KEY, token);
-    } else {
-      sessionStorage.setItem(this.TOKEN_KEY, token);
-    }
-  }
-
-  private handleError(message: string): void {
-    Swal.fire({
-      icon: 'error',
-      text: 'Login Incorrecto',
-      showConfirmButton: true,
-    });
-  }
-
-  private clearSession(): void {
-    this.api.jwt = null;
-    this.decodedToken = null;
-    localStorage.removeItem(this.TOKEN_KEY);
-    sessionStorage.removeItem(this.TOKEN_KEY);
-  }
 }
