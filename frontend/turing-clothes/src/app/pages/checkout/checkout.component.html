@@ -19,6 +19,10 @@
     <div id="checkout"></div>
   </div>
 } @else {
+  <div #checkoutDialog class="w-100 p-4" style="height: 100%;">
+    <button (click)="cancelCheckoutDialog()">Cancelar</button>
+    <div id="checkout"></div>
+  </div>
   <div class="container mt-5">
     <h3 class="mb-4">Resumen de tu compra</h3>
     <div class="row">
