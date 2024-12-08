@@ -1,4 +1,3 @@
-<app-sidebar/>
 <div class="container vh-100 d-flex justify-content-center align-items-center">
   <div class="card shadow-lg p-4" style="width: 100%; max-width: 500px">
     <h2 class="mb-4 text-center">Editar rol del usuario: {{user.email}}</h2>
@@ -18,6 +17,9 @@
         <button type="submit" class="btn btn-dark" (click)="editUserRole()">
           Cambiar rol
         </button>
+        <a class="" [routerLink] = "'/admin/users'" class="btn btn-outline-secondary mt-2">
+          Cancelar
+        </a>
       </div>
     </form>
   </div>

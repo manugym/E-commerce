@@ -75,8 +75,8 @@ export class AdminService {
       return result;
   }
 
-  async getProductById(productId: number): Promise<any> {
-    return this.api.get(`/api/admin/getProduct/${productId}`);
+  async getProductById(productId: number): Promise<Result<ProductDto>> {
+    return this.api.get<ProductDto>(`Admin/getProduct/${productId}`);
   }
 
   async removeProduct(productId: number): Promise<Result<void>> {
