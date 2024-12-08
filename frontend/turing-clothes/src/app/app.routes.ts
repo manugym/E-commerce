@@ -18,7 +18,6 @@ import { ProductsComponent } from './pages/admin/products/products.component';
 import { ChangePasswordComponent } from './pages/admin/change-password/change-password.component';
 import { AddNewProductComponent } from './pages/admin/products/add-new-product/add-new-product.component';
 import { UserComponent } from './pages/user/user.component';
-import { EditUserComponent } from './pages/admin/users/edit-user/edit-user.component';
 import { UpdateProductComponent } from './pages/admin/products/update-product/update-product.component';
 import { PasswordComponent } from './pages/user/password/password.component';
 
@@ -41,7 +40,6 @@ export const routes: Routes = [
   {path: 'admin/products', component: ProductsComponent},
   {path: 'admin/change-password', component: ChangePasswordComponent},
   {path: 'admin/products/add-new-product', component: AddNewProductComponent},
-  {path: 'admin/users/edit-user', component: EditUserComponent},
   {path: 'admin/products/update-product', component: UpdateProductComponent},
   {path: 'aboutus', component: AboutusComponent},
   {path: 'user', component: UserComponent},
