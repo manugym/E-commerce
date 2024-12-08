@@ -135,9 +135,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
-  cancelCheckoutDialog() {
-    this.stripeEmbedCheckout.destroy();
-    this.checkoutDialogRef.nativeElement.close;
+  async cancelCheckoutDialog() {
+    if (this.payment === 'card') {
+      await this.router.navigate(['/cart']);
+      this.stripeEmbedCheckout.destroy();
+      this.checkoutDialogRef.nativeElement.close;
+    } else {
+      this.router.navigate(['/cart']);
+    }
   }
 
   /**
