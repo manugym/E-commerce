@@ -29,6 +29,7 @@ export class UpdateProductComponent implements OnInit {
     const result = await this.adminService.getProductById(this.productId);
     if (result.success) {
       this.product = result.data;
+      this.product.price = this.product.price / 100;
     } else {
       alert('Error al cargar el producto');
       this.router.navigate(['/admin/products']);
@@ -36,7 +37,8 @@ export class UpdateProductComponent implements OnInit {
   }
 
   async updateProduct(): Promise<void> {
-    const result = await this.adminService.updateProduct(this.product.id, this.product);
+    const updatedProduct = { ...this.product, price: Math.round(this.product.price * 100)};
+    const result = await this.adminService.updateProduct(this.product.id, updatedProduct);
     if (result.success) {
       alert('Producto actualizado correctamente');
       this.router.navigate(['/admin/products']);
