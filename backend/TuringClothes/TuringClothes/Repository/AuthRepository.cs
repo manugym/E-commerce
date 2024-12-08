@@ -4,7 +4,7 @@ using TuringClothes.Database;
 
 namespace TuringClothes.Repository
 {
-    public class AuthRepository : Repository<User, int>
+    public class AuthRepository : Repository<User, long>
     {
         private readonly TokenValidationParameters _tokenParameters;
         public AuthRepository(MyDatabase myDatabase, TokenValidationParameters tokenParameters) : base(myDatabase) 
