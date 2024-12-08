@@ -24,7 +24,7 @@
     <div id="checkout"></div>
   </div>
   <div class="container mt-5">
-    <h3 class="mb-4">Resumen de tu compra</h3>
+    <h3 class="mb-4 text-center">Resumen de tu compra</h3>
     <div class="row">
         @for (item of purchaseInfo.temporaryOrder.details; track item.id) {
       <div
@@ -46,7 +46,7 @@
       </div>
     }
     </div>
-    <div class="mt-4">
+    <div class="mt-4 text-center">
       <h4 class="fw-bold">Total a pagar: {{ purchaseInfo.totalPrice }} €</h4>
       <h4 class="fw-bold">Valor actual de Ethereum en Euros: {{ purchaseInfo.ethereumPrice }} €</h4>
       <h4 class="fw-bold">Total a pagar: {{purchaseInfo.priceInWei}} Eth</h4>
