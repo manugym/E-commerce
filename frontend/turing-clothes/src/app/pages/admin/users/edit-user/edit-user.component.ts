@@ -3,12 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../../../models/user';
 import { AdminService } from '../../../../services/admin.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { SidebarComponent } from "../../../../shared/sidebar/sidebar.component";
 
 @Component({
   selector: 'app-edit-user',
   standalone: true,
-  imports: [FormsModule, SidebarComponent, RouterLink],
+  imports: [FormsModule, RouterLink],
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.css',
 })

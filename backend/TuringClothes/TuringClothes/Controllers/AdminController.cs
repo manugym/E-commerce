@@ -54,7 +54,7 @@ namespace TuringClothes.Controllers
             return Ok(new { message = "Rol modificado correctamente." });
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("deleteUser")]
         public async Task<IActionResult> deleteUser(string email)
         {
