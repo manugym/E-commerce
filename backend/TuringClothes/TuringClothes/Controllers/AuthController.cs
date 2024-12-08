@@ -126,6 +126,7 @@ namespace TuringClothes.Controllers
             user.Password = hashedPassword;
 
             await _unitOfWork.AuthRepository.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
             string stringToken = GenerateToken(user);
 
             return Ok(new AuthResultDto { AccessToken = stringToken });
