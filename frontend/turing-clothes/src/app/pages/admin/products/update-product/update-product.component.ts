@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductDto } from '../../../../models/product-dto';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AdminService } from '../../../../services/admin.service';
 import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from "../../../../shared/sidebar/sidebar.component";
@@ -8,7 +8,7 @@ import { SidebarComponent } from "../../../../shared/sidebar/sidebar.component";
 @Component({
   selector: 'app-update-product',
   standalone: true,
-  imports: [FormsModule, SidebarComponent],
+  imports: [FormsModule, SidebarComponent, RouterLink],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.css'
 })
