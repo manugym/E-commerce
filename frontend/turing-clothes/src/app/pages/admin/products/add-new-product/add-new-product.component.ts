@@ -10,11 +10,12 @@ import { AdminService } from '../../../../services/admin.service';
 import { CreateOrUpdateImageRequest } from '../../../../models/create-or-update-image-request';
 import { Image } from '../../../../models/image';
 import { SidebarComponent } from "../../../../shared/sidebar/sidebar.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-add-new-product',
   standalone: true,
-  imports: [FormsModule, SidebarComponent],
+  imports: [FormsModule, SidebarComponent, RouterLink],
   templateUrl: './add-new-product.component.html',
   styleUrl: './add-new-product.component.css',
 })

@@ -14,4 +14,6 @@ export interface ProductDto {
   image: string;
   
   reviews: ReviewDto[];
+
+  averageRating?: number;
 }

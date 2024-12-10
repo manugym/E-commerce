@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductDto } from '../../models/product-dto';
 import { CatalogService } from '../../services/catalog.service';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { PaginationParams } from '../../models/pagination-params';
 import { PagedResults } from '../../models/paged-results';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ReviewDto } from '../../models/review-dto';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -26,26 +25,17 @@ export class CatalogoComponent implements OnInit {
   pagedResults: PagedResults;
   productReviews: { [key: number]: number } = {};
 
-  constructor(private catalogService: CatalogService) { }
+  constructor(private catalogService: CatalogService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const savedSettings = this.catalogService.getUserSettings();
 
     this.paginationParams = savedSettings;
     this.oldQuery = this.paginationParams.query;
 
-    this.loadProductsAndReviews();
-
-    this.getPagedResults();
+    await this.getPagedResults();
     this.isAscending = this.paginationParams.direction === 0;
   }
-
-  loadProductsAndReviews(): void {
-    this.items.forEach((product) => {
-      this.loadProductReviews(product.id);
-    });
-  }
-
 
   async getPagedResults() {
     if (this.oldQuery !== this.paginationParams.query) {
@@ -66,47 +56,20 @@ export class CatalogoComponent implements OnInit {
         ...product,
         image: `${environment.imageUrl}${product.image}`,
       }));
-      this.items.forEach((product) => this.loadProductReviews(product.id));
+      for (const item of this.items) {
+        item.averageRating = await this.getAverageRating(item.id);
+      }
     }
-  } catch(error) {
+  }
+  catch(error) {
     console.error('Error al obtener los productos:', error);
   }
 
-  async loadProductReviews(productId: number) {
-    const reviews = await this.catalogService.getProductReviews(productId)
-    if (typeof reviews === 'number') {
-      this.productReviews[productId] = reviews;
-      console.log(`Product ID: ${productId}, Directly Assigned Average Rating: ${reviews}`);
-    } else if (reviews && reviews.data.length > 0) {
-      const totalRating = reviews.data.reduce((acc, review) => acc + (review.rating || 0), 0);
-      const averageRating = totalRating / reviews.data.length;
-
-      this.productReviews[productId] = averageRating;
-      console.log(`Product ID: ${productId}, Calculated Average Rating: ${averageRating}`);
-    } else {
-      this.productReviews[productId] = 0;
-      console.log(`Product ID: ${productId} has no reviews, setting rating to 0`);
-    }
+  async getAverageRating(productId: number): Promise<number> {
+    const averageRating = await this.catalogService.getAverageRating(productId);
+    return averageRating;
   }
 
-
-  getStarArray(rating: number): number[] {
-    if (isNaN(rating) || rating < 0) {
-      rating = 0;
-    }
-
-    const filledStars = Math.floor(rating);
-    const emptyStars = 5 - filledStars;
-    const halfStar = rating % 1 > 0.5 ? 1 : 0;
-
-    const stars = Array(filledStars).fill(1);
-    if (halfStar) stars.push(0.5);
-    while (stars.length < 5) {
-      stars.push(0);
-    }
-
-    return stars;
-  }
   /**
    * Ordenar por precio: 0.
    * Ordenar por nombre: 1.
@@ -114,39 +77,37 @@ export class CatalogoComponent implements OnInit {
    * Ordenar por descendente: 1.
    */
 
-  setOrderBy(choice: number) {
+  async setOrderBy(choice: number) {
     this.paginationParams.orderBy = choice;
     this.paginationParams.pageNumber = 1;
-    this.getPagedResults();
+    await this.getPagedResults();
   }
 
   round(value: number): number {
     return Math.round(value);
   }
 
-
-
-  toggleDirection() {
+  async toggleDirection() {
     this.paginationParams.direction =
       this.paginationParams.direction === 0 ? 1 : 0;
     this.isAscending = this.paginationParams.direction === 0;
     this.paginationParams.pageNumber = 1;
-    this.getPagedResults();
+    await this.getPagedResults();
   }
 
-  nextPage() {
+  async nextPage() {
     if (
       this.paginationParams.pageNumber < this.pagedResults.totalNumberOfPages
     ) {
       this.paginationParams.pageNumber++;
-      this.getPagedResults();
+      await this.getPagedResults();
     }
   }
 
-  previousPage() {
+  async previousPage() {
     if (this.paginationParams.pageNumber > 1) {
       this.paginationParams.pageNumber--;
-      this.getPagedResults();
+      await this.getPagedResults();
     }
   }
 
@@ -157,17 +118,15 @@ export class CatalogoComponent implements OnInit {
     );
   }
 
-  goToPage(page: number) {
+  async goToPage(page: number) {
     if (page !== this.paginationParams.pageNumber) {
       this.paginationParams.pageNumber = page;
-      this.getPagedResults();
+      await this.getPagedResults();
     }
   }
 
-  onProductsPerPageChange(value: number) {
+  async onProductsPerPageChange(value: number) {
     this.paginationParams.pageSize = value;
-    this.getPagedResults();
+    await this.getPagedResults();
   }
-
 }
-
