@@ -21,6 +21,7 @@ import { UserComponent } from './pages/user/user.component';
 import { EditUserComponent } from './pages/admin/users/edit-user/edit-user.component';
 import { UpdateProductComponent } from './pages/admin/products/update-product/update-product.component';
 import { PasswordComponent } from './pages/user/password/password.component';
+import { EditComponent } from './pages/user/edit/edit.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -45,5 +46,6 @@ export const routes: Routes = [
   {path: 'admin/products/update-product', component: UpdateProductComponent},
   {path: 'aboutus', component: AboutusComponent},
   {path: 'user', component: UserComponent},
-  {path: 'user/password', component: PasswordComponent}
+  {path: 'user/password', component: PasswordComponent},
+  {path: 'user/edit', component: EditComponent}
 ];

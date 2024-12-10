@@ -16,12 +16,12 @@ import { Router } from '@angular/router';
 export class PasswordComponent {
 
   passForm: FormGroup;
-  
+
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder,
     private router: Router
-  ){
+  ) {
     this.passForm = this.createPass();
   }
 
@@ -33,7 +33,7 @@ export class PasswordComponent {
         password: ['', [Validators.required, Validators.minLength(6)]],
         newpassword: ['', [Validators.required, Validators.minLength(6)]],
         checkpass: ['', Validators.required],
-        
+
       },
       { validators: this.passwordMatchValidator }
     );
@@ -54,7 +54,6 @@ export class PasswordComponent {
     const passDto: PassDto = {
       oldPassword: this.passForm.get('password').value,
       password: this.passForm.get('newpassword').value,
-      user: 0
     };
     if (this.passForm.valid) {
       const result = await this.userService.updatePass(passDto);

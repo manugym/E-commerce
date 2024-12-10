@@ -6,6 +6,7 @@ import { PassDto } from '../models/pass-dto';
 import { AuthService } from './auth.service';
 import { AuthResponse } from '../models/auth-response';
 import Swal from 'sweetalert2';
+import { EditDto } from '../models/edit-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +18,12 @@ export class UserService {
 
   constructor(private api: ApiService, private authService: AuthService) { }
 
-  async getUserOrder(): Promise<Result<UserDto>> {
+  public async getUserOrder(): Promise<Result<UserDto>> {
     const userOrder = await this.api.get<UserDto>('User/UserOrder');
     return userOrder;
   }
 
-  async updatePass(passDto: PassDto): Promise<Result<AuthResponse>> {
+  public async updatePass(passDto: PassDto): Promise<Result<AuthResponse>> {
     const result = await this.api.put<AuthResponse>('Auth/UpdatePass', passDto);
     
     if (result.success) {
@@ -30,6 +31,11 @@ export class UserService {
       this.authService.handleSession(result.data.accessToken, false)
     } 
     return result;
+  }
+
+  public async getEditUser(): Promise<Result<EditDto>>{
+    const editUser = await this.api.get<EditDto>('Auth/GetEditUser');
+    return editUser;
   }
 
 }
