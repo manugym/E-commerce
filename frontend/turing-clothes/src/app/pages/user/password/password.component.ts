@@ -50,7 +50,6 @@ export class PasswordComponent {
   }
 
   async submit() {
-    const userId = this
     const passDto: PassDto = {
       oldPassword: this.passForm.get('password').value,
       password: this.passForm.get('newpassword').value,

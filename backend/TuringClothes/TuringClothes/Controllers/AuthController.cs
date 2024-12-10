@@ -168,7 +168,16 @@ namespace TuringClothes.Controllers
             }
 
             var user = await _unitOfWork.AuthRepository.GetByIdAsync(userIdLong);
-            return Ok(editDto);
+
+            user.Name = editDto.Name;
+            user.Surname = editDto.Surname;
+            user.Address = editDto.Address;
+            user.Email = editDto.Email;
+
+            await _unitOfWork.AuthRepository.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok("Usuario actualizado");
             
         }
     }

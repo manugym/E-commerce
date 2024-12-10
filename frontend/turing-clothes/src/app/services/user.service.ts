@@ -38,4 +38,8 @@ export class UserService {
     return editUser;
   }
 
+  public async editUser(editDto: EditDto): Promise<Result<string>>{
+    const result = await this.api.put<string>('Auth/UserUpdate', editDto);
+    return result;
+  }
 }
