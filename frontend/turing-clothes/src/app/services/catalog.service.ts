@@ -5,8 +5,8 @@ import { Result } from '../models/result';
 import { PaginationParams } from '../models/pagination-params';
 import { PagedResults } from '../models/paged-results';
 import { ReviewDto } from '../models/review-dto';
-import { CartServiceService } from './cart-service.service';
 import { environment } from '../../environments/environment';
+import { AddReview } from '../models/add-review';
 
 @Injectable({
   providedIn: 'root',
@@ -72,11 +72,19 @@ export class CatalogService {
     };
   }
 
-  async addReview(review: ReviewDto): Promise<Result<ReviewDto>> {
-    return await this.api.post<ReviewDto>('AddReview', review);
+  async addReview(review: AddReview): Promise<Result<ReviewDto>> {
+    return await this.api.post<ReviewDto>('Review/AddReview', review);
   }
 
   async getProductReviews(productId: number): Promise<Result<ReviewDto[]>> {
     return await this.api.get<ReviewDto[]>(`Review?productId=${productId}`);
+  }
+
+  async getAverageRating(productId: number): Promise<number> {
+    const result = await this.api.get<number>(
+      `Review/getAverageRating?productId=${productId}`
+    );
+
+    return result.data;
   }
 }
