@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Stripe;
 using TuringClothes.Database;
 using TuringClothes.Dtos;
@@ -48,6 +49,18 @@ namespace TuringClothes.Controllers
         public async Task<IActionResult> EditUserRole(string email, string role)
         {
             var user = await _unitOfWork.AuthRepository.GetByEmail(email);
+
+            bool isCurrentAdmin = user.Role == "admin";
+
+            var adminCount = await _mydatabase.Users.CountAsync(u => u.Role == "admin");
+
+            if (isCurrentAdmin && role != "admin")
+            {
+                if (adminCount <= 1)
+                {
+                    return BadRequest(new { message = "Debe haber al menos un administrador en el sistema." });
+                }
+            }
             user.Role = role;
             _mydatabase.Users.Update(user);
             await _unitOfWork.SaveChangesAsync();

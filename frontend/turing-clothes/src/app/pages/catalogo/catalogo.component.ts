@@ -27,13 +27,13 @@ export class CatalogoComponent implements OnInit {
 
   constructor(private catalogService: CatalogService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const savedSettings = this.catalogService.getUserSettings();
 
     this.paginationParams = savedSettings;
     this.oldQuery = this.paginationParams.query;
 
-    this.getPagedResults();
+    await this.getPagedResults();
     this.isAscending = this.paginationParams.direction === 0;
   }
 
@@ -77,37 +77,37 @@ export class CatalogoComponent implements OnInit {
    * Ordenar por descendente: 1.
    */
 
-  setOrderBy(choice: number) {
+  async setOrderBy(choice: number) {
     this.paginationParams.orderBy = choice;
     this.paginationParams.pageNumber = 1;
-    this.getPagedResults();
+    await this.getPagedResults();
   }
 
   round(value: number): number {
     return Math.round(value);
   }
 
-  toggleDirection() {
+  async toggleDirection() {
     this.paginationParams.direction =
       this.paginationParams.direction === 0 ? 1 : 0;
     this.isAscending = this.paginationParams.direction === 0;
     this.paginationParams.pageNumber = 1;
-    this.getPagedResults();
+    await this.getPagedResults();
   }
 
-  nextPage() {
+  async nextPage() {
     if (
       this.paginationParams.pageNumber < this.pagedResults.totalNumberOfPages
     ) {
       this.paginationParams.pageNumber++;
-      this.getPagedResults();
+      await this.getPagedResults();
     }
   }
 
-  previousPage() {
+  async previousPage() {
     if (this.paginationParams.pageNumber > 1) {
       this.paginationParams.pageNumber--;
-      this.getPagedResults();
+      await this.getPagedResults();
     }
   }
 
@@ -118,15 +118,15 @@ export class CatalogoComponent implements OnInit {
     );
   }
 
-  goToPage(page: number) {
+  async goToPage(page: number) {
     if (page !== this.paginationParams.pageNumber) {
       this.paginationParams.pageNumber = page;
-      this.getPagedResults();
+      await this.getPagedResults();
     }
   }
 
-  onProductsPerPageChange(value: number) {
+  async onProductsPerPageChange(value: number) {
     this.paginationParams.pageSize = value;
-    this.getPagedResults();
+    await this.getPagedResults();
   }
 }

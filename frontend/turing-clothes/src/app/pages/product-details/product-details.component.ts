@@ -78,7 +78,8 @@ export class ProductDetailsComponent implements OnInit {
         await this.router.navigate(['/cart']);
         await this.cartService.getCart();
       } else {
-        await this.router.navigate(['/local-cart']);
+        await this.router.navigate(['/login']);
+        alert('Inicia sesión para continuar con tu compra');
       }
     }
   }
@@ -112,11 +113,29 @@ export class ProductDetailsComponent implements OnInit {
         localCart.details.push(newDetails);
       }
       localStorage.setItem('localCart', JSON.stringify(localCart));
+      Swal.fire({
+        icon: 'success',
+        text: 'Producto agregado al carrito',
+        showConfirmButton: false,
+        animation: true,
+        toast: true,
+        position: 'top-right',
+        timer: 1100,
+      });
       return Result.success(200, 'Producto agregado al carrito');
     }
     const result = await this.cartService.addProductToCart(productId, quantity);
     console.log(result);
     if (result.success) {
+      Swal.fire({
+        icon: 'success',
+        text: 'Producto agregado al carrito',
+        showConfirmButton: false,
+        animation: true,
+        toast: true,
+        position: 'top-right',
+        timer: 1100,
+      });
       await this.cartService.getCart();
       return result;
     }

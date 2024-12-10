@@ -35,6 +35,9 @@ export class UsersComponent implements OnInit {
     const newUserRole = await this.adminService.updateUserRole(userEmail, newRole);
     if (newUserRole.success) {
       this.getUsers();
+    } else {
+      alert('Como mínimo debe de haber un administrador en el sistema');
+      this.getUsers();
     }
   }
 }
