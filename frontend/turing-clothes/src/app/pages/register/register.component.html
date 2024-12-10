@@ -1,21 +1,11 @@
-<div
-  class="container-fluid login-container d-flex justify-content-center align-items-center my-5"
-  style="min-height: 100vh"
->
-  <div
-    class="login-form shadow p-4 bg-white rounded w-100"
-    style="max-width: 500px"
-  >
+<div class="container-fluid login-container d-flex justify-content-center align-items-center my-5"
+  style="min-height: 100vh">
+  <div class="login-form shadow p-4 bg-white rounded w-100" style="max-width: 500px">
     <h3 class="text-center mb-4">Registro de Usuario</h3>
     <form [formGroup]="myForm" (ngSubmit)="submit()">
       <div class="mb-3">
         <label for="exampleFormControlInput1" class="form-label">Nombre</label>
-        <input
-          type="user"
-          formControlName="name"
-          class="form-control"
-          id="nombre"
-        />
+        <input type="user" formControlName="name" class="form-control" id="nombre" />
       </div>
 
       <div *ngIf="myForm.get('name').invalid && registerHints" class="error">
@@ -25,15 +15,8 @@
       </div>
 
       <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label"
-          >Apellido</label
-        >
-        <input
-          type="userLastName"
-          formControlName="surname"
-          class="form-control"
-          id="apellido"
-        />
+        <label for="exampleFormControlInput1" class="form-label">Apellido</label>
+        <input type="userLastName" formControlName="surname" class="form-control" id="apellido" />
       </div>
 
       <div *ngIf="myForm.get('surname').invalid && registerHints" class="error">
@@ -43,15 +26,8 @@
       </div>
 
       <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label"
-          >Correo Electrónico</label
-        >
-        <input
-          type="email"
-          formControlName="email"
-          class="form-control"
-          id="correoId"
-        />
+        <label for="exampleFormControlInput1" class="form-label">Correo Electrónico</label>
+        <input type="email" formControlName="email" class="form-control" id="correoId" />
       </div>
 
       <div *ngIf="myForm.get('email').invalid && registerHints" class="error">
@@ -65,19 +41,11 @@
 
       <div class="mb-3">
         <label for="inputPassword" class="form-label">Contraseña</label>
-        <input
-          type="password"
-          formControlName="password"
-          id="inputPassword5"
-          class="form-control"
-          aria-describedby="passwordHelpBlock"
-        />
+        <input type="password" formControlName="password" id="inputPassword5" class="form-control"
+          aria-describedby="passwordHelpBlock" />
       </div>
 
-      <div
-        *ngIf="myForm.get('password').invalid && registerHints"
-        class="error"
-      >
+      <div *ngIf="myForm.get('password').invalid && registerHints" class="error">
         <div *ngIf="myForm.get('password').hasError('required')">
           La contraseña es obligatoria.
         </div>
@@ -87,16 +55,9 @@
       </div>
 
       <div class="mb-3">
-        <label for="inputPassword" class="form-label"
-          >Confirmar contraseña</label
-        >
-        <input
-          type="password"
-          formControlName="confirmPassword"
-          id="inputPasswordConfirm"
-          class="form-control"
-          aria-describedby="passwordHelpBlock"
-        />
+        <label for="inputPassword" class="form-label">Confirmar contraseña</label>
+        <input type="password" formControlName="confirmPassword" id="inputPasswordConfirm" class="form-control"
+          aria-describedby="passwordHelpBlock" />
       </div>
 
       <div *ngIf="myForm.get('confirmPassword').invalid" class="error">
@@ -106,9 +67,7 @@
       </div>
 
       <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label"
-          >Dirección</label
-        >
+        <label for="exampleFormControlInput1" class="form-label">Dirección</label>
         <input class="form-control" formControlName="address" type="address" />
       </div>
 
@@ -118,11 +77,7 @@
         </div>
       </div>
 
-      <input
-        type="submit"
-        class="btn bg-dark btn-light w-100 text-white"
-        value="Registrarse"
-      />
+      <input type="submit" class="btn bg-dark btn-light w-100 text-white" value="Registrarse" />
       <!-- ESTO ESTÁ POR VER LA ANIMACIÓN NO SE VE-->
     </form>
   </div>

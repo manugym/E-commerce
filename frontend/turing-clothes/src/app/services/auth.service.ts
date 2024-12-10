@@ -99,4 +99,16 @@ export class AuthService {
   async getSecretMessage(): Promise<Result<string>> {
     return await this.api.get<string>('Auth');
   }
+
+  public handleSession(token: string, remember: boolean): void {
+    this.clearSession();
+    this.setSession(token, remember);
+  }
+
+  private clearSession(): void {
+    this.api.jwt = null;
+    this.decodedToken = null;
+    localStorage.removeItem(this.TOKEN_KEY);
+    sessionStorage.removeItem(this.TOKEN_KEY);
+  }
 }

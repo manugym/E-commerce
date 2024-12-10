@@ -103,7 +103,7 @@ namespace TuringClothes.Controllers
 
         [Authorize]
         [HttpPut("UpdatePass")]
-        public async Task<ActionResult> UpdatePassword([FromBody]PassDto passDto)
+        public async Task<ActionResult> UpdatePassword([FromBody] PassDto passDto)
         {
 
             var userId = User.FindFirst("id").Value;
@@ -126,9 +126,59 @@ namespace TuringClothes.Controllers
             user.Password = hashedPassword;
 
             await _unitOfWork.AuthRepository.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
             string stringToken = GenerateToken(user);
 
             return Ok(new AuthResultDto { AccessToken = stringToken });
+        }
+
+        [Authorize]
+        [HttpGet("GetEditUser")]
+        public async Task<ActionResult> GetEditUser()
+        {
+            var userId = User.FindFirst("id").Value;
+
+            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var userIdLong))
+            {
+                return Unauthorized("El usuario no está autenticado.");
+            }
+
+            var user = await _unitOfWork.AuthRepository.GetByIdAsync(userIdLong);
+
+            var editDto = new EditDto
+            {
+                Name = user.Name,
+                Surname = user.Surname,
+                Address = user.Address,
+                Email = user.Email,
+            };
+            return Ok(editDto);
+        }
+
+
+        [Authorize]
+        [HttpPut("UserUpdate")]
+        public async Task<ActionResult> EditUser([FromBody] EditDto editDto)
+        {
+            var userId = User.FindFirst("id").Value;
+
+            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var userIdLong))
+            {
+                return Unauthorized("El usuario no está autenticado.");
+            }
+
+            var user = await _unitOfWork.AuthRepository.GetByIdAsync(userIdLong);
+
+            user.Name = editDto.Name;
+            user.Surname = editDto.Surname;
+            user.Address = editDto.Address;
+            user.Email = editDto.Email;
+
+            await _unitOfWork.AuthRepository.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok("Usuario actualizado");
+            
         }
     }
 
