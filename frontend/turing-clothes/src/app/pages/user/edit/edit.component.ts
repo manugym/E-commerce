@@ -25,7 +25,8 @@ export class EditComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
 
   }
@@ -51,7 +52,8 @@ export class EditComponent implements OnInit {
         position: 'top-right',
         timer: 1100
       });
-      this.router.navigate(['/home']);
+      this.authService.logout();
+      this.router.navigate(['/login']);
     }
     else {
       Swal.fire({
