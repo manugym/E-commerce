@@ -59,7 +59,7 @@ export class PasswordComponent {
       if (result.success) {
         Swal.fire({
           icon: 'success',
-          text: 'Registro Correcto',
+          text: 'Contraseña modificada.',
           showConfirmButton: false,
           animation: true,
           toast: true,
@@ -73,7 +73,7 @@ export class PasswordComponent {
       this.registerHints = true;
       Swal.fire({
         icon: 'error',
-        text: 'Registro erroneo.',
+        text: 'Las contraseñas no son válidas.',
         showConfirmButton: false,
         animation: true,
         toast: true,
