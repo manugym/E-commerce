@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CheckoutSession } from '../../models/checkout-session';
-import { CheckoutSessionStatus } from '../../models/checkout-session-status';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CheckoutService } from '../../services/checkout.service';
 import { Order } from '../../models/order';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -29,29 +25,22 @@ export class ConfirmCheckoutComponent implements OnInit {
   //   orderDetails: [],
   // };
 
-  orderDto: UserDto
-  lastOrder: Order
+  orderDto: UserDto;
+  lastOrder: Order;
 
   constructor(
     private route: ActivatedRoute,
-    private checkoutService: CheckoutService,
     private userService: UserService
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.routeParamMap$ = this.route.paramMap.subscribe(async (paramMap) => {
-      const id = paramMap.get('id') as unknown as number;
-      // const result = await this.checkoutService.getOrderById(id);
+      // const id = paramMap.get('id') as unknown as number;
       const result = await this.userService.getUserOrder();
       this.orderDto = result.data;
       this.lastOrder = this.orderDto.orders[this.orderDto.orders.length - 1];
-      console.log(this.orderDto.orders);
-      // this.order = result.data;
-      // this.order.orderDetails.map((img) => {
-      //   img.product.image = `${environment.imageUrl}${img.product.image}`;
-      // });
-      this.lastOrder.orderDetails.map(img => {
-        img.product.image = `${environment.imageUrl}${img.product.image}`
+      this.lastOrder.orderDetails.map((img) => {
+        img.product.image = `${environment.imageUrl}${img.product.image}`;
       });
     });
   }
