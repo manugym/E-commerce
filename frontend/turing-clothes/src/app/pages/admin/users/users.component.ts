@@ -28,6 +28,9 @@ export class UsersComponent implements OnInit {
     const result = await this.adminService.deleteUser(email);
     if (result.success) {
       this.getUsers();
+    } else {
+      alert('Como mínimo debe de haber un administrador en el sistema');
+      this.getUsers();
     }
   }
 
