@@ -7,6 +7,8 @@ import { CheckoutService } from '../../services/checkout.service';
 import { Order } from '../../models/order';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { UserService } from '../../services/user.service';
+import { UserDto } from '../../models/user-dto';
 
 @Component({
   selector: 'app-confirm-checkout',
@@ -17,29 +19,39 @@ import { environment } from '../../../environments/environment';
 })
 export class ConfirmCheckoutComponent implements OnInit {
   routeParamMap$: Subscription;
-  order: Order = {
-    id: 0,
-    userId: 0,
-    paymentMethod: '',
-    email: '',
-    transactionStatus: '',
-    totalPrice: 0,
-    orderDetails: [],
-  };
+  // order: Order = {
+  //   id: 0,
+  //   userId: 0,
+  //   paymentMethod: '',
+  //   email: '',
+  //   transactionStatus: '',
+  //   totalPrice: 0,
+  //   orderDetails: [],
+  // };
+
+  orderDto: UserDto
+  lastOrder: Order
 
   constructor(
     private route: ActivatedRoute,
-    private checkoutService: CheckoutService
+    private checkoutService: CheckoutService,
+    private userService: UserService
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.routeParamMap$ = this.route.paramMap.subscribe(async (paramMap) => {
       const id = paramMap.get('id') as unknown as number;
-      const result = await this.checkoutService.getOrderById(id);
-      console.log(result);
-      this.order = result.data;
-      this.order.orderDetails.map((img) => {
-        img.product.image = `${environment.imageUrl}${img.product.image}`;
+      // const result = await this.checkoutService.getOrderById(id);
+      const result = await this.userService.getUserOrder();
+      this.orderDto = result.data;
+      this.lastOrder = this.orderDto.orders[this.orderDto.orders.length - 1];
+      console.log(this.orderDto.orders);
+      // this.order = result.data;
+      // this.order.orderDetails.map((img) => {
+      //   img.product.image = `${environment.imageUrl}${img.product.image}`;
+      // });
+      this.lastOrder.orderDetails.map(img => {
+        img.product.image = `${environment.imageUrl}${img.product.image}`
       });
     });
   }
