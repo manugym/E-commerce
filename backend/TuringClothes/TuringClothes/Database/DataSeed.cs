@@ -10,12 +10,12 @@
 
         public void Seed()
         {
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword("1234");
-            var hashedPassword2 = BCrypt.Net.BCrypt.HashPassword("12345");
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword("123456");
+            var hashedPassword2 = BCrypt.Net.BCrypt.HashPassword("123456");
             var hashedPassword3 = BCrypt.Net.BCrypt.HashPassword("123456");
             var hashedPassword4 = BCrypt.Net.BCrypt.HashPassword("1234567");
-            var hashedPassword5 = BCrypt.Net.BCrypt.HashPassword("1234321");
-            var hashedPassword6 = BCrypt.Net.BCrypt.HashPassword("12342");
+            var hashedPassword5 = BCrypt.Net.BCrypt.HashPassword("123456");
+            var hashedPassword6 = BCrypt.Net.BCrypt.HashPassword("123456");
 
             User[] users =
             {
