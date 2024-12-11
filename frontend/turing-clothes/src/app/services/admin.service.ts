@@ -28,14 +28,16 @@ export class AdminService {
   }
 
   async updateUserRole(email: string, role: string): Promise<Result> {
-    const result = await this.api.put<void>(`Admin/editUserRol?email=${email}&role=${role}`, {
-      role,
-    });
+    const result = await this.api.put<void>(
+      `Admin/editUserRol?email=${email}&role=${role}`
+    );
     return result;
   }
 
   async deleteUser(email: string): Promise<Result> {
-    const result = await this.api.delete<void>(`Admin/deleteUser?email=${email}`);
+    const result = await this.api.delete<void>(
+      `Admin/deleteUser?email=${email}`
+    );
     return result;
   }
 
@@ -53,7 +55,10 @@ export class AdminService {
     return this.api.post<Image>('images', formData);
   }
 
-  updateImage(id: number, createOrUpdateImageRequest: CreateOrUpdateImageRequest): Promise<Result> {
+  updateImage(
+    id: number,
+    createOrUpdateImageRequest: CreateOrUpdateImageRequest
+  ): Promise<Result> {
     const formData = new FormData();
     formData.append('name', createOrUpdateImageRequest.name);
     formData.append('file', createOrUpdateImageRequest.file);
@@ -70,13 +75,19 @@ export class AdminService {
     return result;
   }
 
-  async updateProduct(productId: number, product: ProductDto): Promise<Result<void>> {
-    const result = await this.api.put<void>(`Admin/updateProduct/${productId}`, product);
-      return result;
+  async updateProduct(
+    productId: number,
+    product: ProductDto
+  ): Promise<Result<void>> {
+    const result = await this.api.put<void>(
+      `Admin/updateProduct/${productId}`,
+      product
+    );
+    return result;
   }
 
-  async getProductById(productId: number): Promise<any> {
-    return this.api.get(`/api/admin/getProduct/${productId}`);
+  async getProductById(productId: number): Promise<Result<ProductDto>> {
+    return this.api.get<ProductDto>(`Admin/getProduct/${productId}`);
   }
 
   async removeProduct(productId: number): Promise<Result<void>> {
