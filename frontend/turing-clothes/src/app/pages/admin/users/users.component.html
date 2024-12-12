@@ -42,8 +42,8 @@
                     <input
                       type="radio"
                       name="role-{{ user.id }}"
-                      [checked]="user.role === 'Alumno'"
-                      (change)="changeUserRole(user.email, 'Alumno')"
+                      [checked]="user.role === 'user'"
+                      (change)="changeUserRole(user.email, 'user')"
                     />
                     User
                   </label>

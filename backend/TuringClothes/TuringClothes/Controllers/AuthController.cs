@@ -71,6 +71,7 @@ namespace TuringClothes.Controllers
             return Ok(new AuthResultDto { AccessToken = stringToken });
         }
 
+        [Authorize]
         [HttpGet("user by email")]
         public async Task<User?> GetUserByEmail(string mail)
         {

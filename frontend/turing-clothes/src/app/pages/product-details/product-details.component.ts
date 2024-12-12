@@ -101,7 +101,11 @@ export class ProductDetailsComponent implements OnInit {
       );
 
       if (existingDetail) {
-        existingDetail.amount += quantity;
+        if (existingDetail.amount >= this.product.stock) {
+          alert('Nfjkjfni')
+        } else {
+          existingDetail.amount += quantity;
+        }
       } else {
         const newDetails = {
           id: null,
