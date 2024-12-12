@@ -26,10 +26,14 @@ export class UserService {
   public async updatePass(passDto: PassDto): Promise<Result<AuthResponse>> {
     const result = await this.api.put<AuthResponse>('Auth/UpdatePass', passDto);
     
+    return result;
+  }
+
+  public async editUser(editDto: EditDto): Promise<Result<AuthResponse>> {
+    const result = await this.api.put<AuthResponse>('Auth/UserUpdate', editDto);
     if (result.success) {
-      
       this.authService.handleSession(result.data.accessToken, false)
-    } 
+    }
     return result;
   }
 
@@ -38,8 +42,8 @@ export class UserService {
     return editUser;
   }
 
-  public async editUser(editDto: EditDto): Promise<Result<string>>{
+  /* public async editUser(editDto: EditDto): Promise<Result<string>>{
     const result = await this.api.put<string>('Auth/UserUpdate', editDto);
     return result;
-  }
+  } */
 }

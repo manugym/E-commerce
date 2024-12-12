@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { UserService } from '../../../services/user.service';
 import { PassDto } from '../../../models/pass-dto';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-password',
@@ -20,6 +21,7 @@ export class PasswordComponent {
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder,
+    private authService: AuthService,
     private router: Router
   ) {
     this.passForm = this.createPass();
@@ -66,7 +68,8 @@ export class PasswordComponent {
           position: 'top-right',
           timer: 1100
         });
-        this.router.navigate(['/home']);
+        this.authService.logout();
+        this.router.navigate(['/login']);
       }
     } else {
       // El formulario no es válido
