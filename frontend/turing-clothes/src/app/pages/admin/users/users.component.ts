@@ -28,12 +28,18 @@ export class UsersComponent implements OnInit {
     const result = await this.adminService.deleteUser(email);
     if (result.success) {
       this.getUsers();
+    } else {
+      alert('Como mínimo debe de haber un administrador en el sistema');
+      this.getUsers();
     }
   }
 
   async changeUserRole(userEmail: string, newRole: string) {
     const newUserRole = await this.adminService.updateUserRole(userEmail, newRole);
     if (newUserRole.success) {
+      this.getUsers();
+    } else {
+      alert('Como mínimo debe de haber un administrador en el sistema');
       this.getUsers();
     }
   }

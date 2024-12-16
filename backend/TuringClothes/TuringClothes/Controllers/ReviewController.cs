@@ -71,7 +71,7 @@ namespace TuringClothes.Controllers
             return Ok(review);
         }
         
-        [HttpGet]
+        [HttpGet("getAverageRating")]
         public async Task<ActionResult<double>> GetAverageRatingForProduct(int productId)
         {
             var averageRating = await _reviewService.GetAverageRatingForProduct(productId);

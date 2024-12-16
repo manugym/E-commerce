@@ -4,14 +4,12 @@ import { ProductDto } from '../../models/product-dto';
 import { CatalogService } from '../../services/catalog.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
-import { ReviewDto } from '../../models/review-dto';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
-import { User } from '../../models/user';
 import { Result } from '../../models/result';
 import { CartServiceService } from '../../services/cart-service.service';
-import { ChangeDetectorRef } from '@angular/core';
 import { Cart } from '../../models/cart';
+import { AddReview } from '../../models/add-review';
 
 @Component({
   selector: 'app-product-details',
@@ -43,95 +41,21 @@ export class ProductDetailsComponent implements OnInit {
     const result = await this.catalogService.getProductDetailsById(id);
 
     this.product = result.data;
-    // this.loadProductsAndReviews();
-    console.log(this.product);
+
+    this.product.averageRating = await this.getAverageRating(this.product.id);
   }
 
-  //esto duplicaba la url de la imagen, he hecho la versión de arriba que distingue el http y el https para que en caso del primero no la duplique
-  // async ngOnInit(): Promise<void> {
-  //   const id = this.activatedRoute.snapshot.paramMap.get('id') as unknown as number;
-
-  //   const result = await this.catalogService.getProductDetailsById(id);
-
-  //   result.data.image = `https://localhost:7183/${result.data.image}`;
-  //   this.product = result.data;
-  //   this.loadProductsAndReviews();
-  //   console.log(this.product);
-  // }
-
-  loadProductsAndReviews(): void {
-    this.loadProductReviews(this.product.id);
-  }
-
-  async loadProductReviews(productId: number) {
-    const reviews = await this.catalogService.getProductReviews(productId);
-
-    if (reviews.data && reviews.data.length > 0) {
-      const totalRating = reviews.data.reduce(
-        (acc, review) => acc + (review.rating || 0),
-        0
-      );
-      const averageRating = totalRating / reviews.data.length;
-
-      this.productReviews[productId] = averageRating;
-      console.log(
-        `Product ID: ${productId}, Calculated Average Rating: ${averageRating}`
-      );
-    } else {
-      this.productReviews[productId] = 0;
-      console.log(
-        `Product ID: ${productId} has no reviews, setting rating to 0`
-      );
-    }
-  }
-
-  getStarClasses(rating: number): string[] {
-    const classes = [];
-
-    if (rating === 1) {
-      // Buena: cinco estrellas completas
-      classes.push(
-        'bi bi-star-fill',
-        'bi bi-star-fill',
-        'bi bi-star-fill',
-        'bi bi-star-fill',
-        'bi bi-star-fill'
-      );
-    } else if (rating === 0) {
-      // Regular: tres estrellas completas y dos vacías
-      classes.push(
-        'bi bi-star-fill',
-        'bi bi-star-fill',
-        'bi bi-star-fill',
-        'bi bi-star',
-        'bi bi-star'
-      );
-    } else if (rating === -1) {
-      // Mala: cinco estrellas vacías
-      classes.push(
-        'bi bi-star',
-        'bi bi-star',
-        'bi bi-star',
-        'bi bi-star',
-        'bi bi-star'
-      );
-    }
-
-    return classes;
+  async getAverageRating(productId: number): Promise<number> {
+    const averageRating = await this.catalogService.getAverageRating(productId);
+    return averageRating;
   }
 
   async confirmReview(): Promise<void> {
     if (!this.product) return;
 
-    const review: ReviewDto = {
+    const review: AddReview = {
       productId: this.product.id,
       texto: this.reviewText,
-      id: 0,
-      userId: '',
-      rating: 0,
-      dateTime: '',
-      user: new User(),
-      product: undefined,
     };
     try {
       const result = await this.catalogService.addReview(review);
@@ -139,6 +63,7 @@ export class ProductDetailsComponent implements OnInit {
         Swal.fire('Reseña enviada');
         this.reviewText = '';
         this.product.reviews.push(result.data);
+        this.ngOnInit();
       } else {
         Swal.fire('No se pudo enviar la reseña');
       }
@@ -153,7 +78,8 @@ export class ProductDetailsComponent implements OnInit {
         await this.router.navigate(['/cart']);
         await this.cartService.getCart();
       } else {
-        await this.router.navigate(['/local-cart']);
+        await this.router.navigate(['/login']);
+        alert('Inicia sesión para continuar con tu compra');
       }
     }
   }
@@ -187,11 +113,29 @@ export class ProductDetailsComponent implements OnInit {
         localCart.details.push(newDetails);
       }
       localStorage.setItem('localCart', JSON.stringify(localCart));
+      Swal.fire({
+        icon: 'success',
+        text: 'Producto agregado al carrito',
+        showConfirmButton: false,
+        animation: true,
+        toast: true,
+        position: 'top-right',
+        timer: 1100,
+      });
       return Result.success(200, 'Producto agregado al carrito');
     }
     const result = await this.cartService.addProductToCart(productId, quantity);
     console.log(result);
     if (result.success) {
+      Swal.fire({
+        icon: 'success',
+        text: 'Producto agregado al carrito',
+        showConfirmButton: false,
+        animation: true,
+        toast: true,
+        position: 'top-right',
+        timer: 1100,
+      });
       await this.cartService.getCart();
       return result;
     }
