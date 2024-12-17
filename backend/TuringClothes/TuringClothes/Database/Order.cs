@@ -11,6 +11,7 @@ namespace TuringClothes.Database
         public string? TransactionStatus { get; set; }
         public string Email { get; set; }
         public long? TotalPrice { get; set; }
+        public DateTime DateTime { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
