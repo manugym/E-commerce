@@ -33,7 +33,7 @@
             @for (order of user.orders; track order.id) {
             <div class="card-body bg-white">
                 <div class="mb-4 p-3 border rounded">
-                    <p class="mb-1"><strong>Fecha de pago:</strong> </p>
+                    <p class="mb-1"><strong>Fecha de pago:</strong> {{order.dateTime | date : "dd/MM/yyyy"}} </p>
                     <p class="mb-1"><strong>Total:</strong> {{order.totalPrice/100}} €</p>
                     <p><strong>Método de pago:</strong> {{order.paymentMethod == 'card' ? 'Tarjeta de crédito' : 'Ethereum'}}</p>
                     <h3 class="h5 mt-3">Productos:</h3>
