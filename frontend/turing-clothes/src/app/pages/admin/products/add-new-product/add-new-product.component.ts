@@ -10,7 +10,7 @@ import { AdminService } from '../../../../services/admin.service';
 import { CreateOrUpdateImageRequest } from '../../../../models/create-or-update-image-request';
 import { Image } from '../../../../models/image';
 import { SidebarComponent } from "../../../../shared/sidebar/sidebar.component";
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-add-new-product',
@@ -40,14 +40,16 @@ export class AddNewProductComponent {
   addOrEditForm: FormGroup;
   imageToEdit: Image = null;
   imageToDelete: Image = null;
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService, private router: Router) {}
   private formBuilder: FormBuilder;
+  
 
   async addProduct(product: ProductDto) {
     product.price = product.price * 100;
     const result = await this.adminService.addProduct(product);
     if (result.success) {
       alert('Producto añadido correctamente');
+      await this.router.navigate(['/admin/products']);
     }
   }
 
@@ -72,7 +74,7 @@ export class AddNewProductComponent {
   }
 
   onFileSelected(event: any) {
-    const image = event.target.files[0] as File; // Here we use only the first file (single file)
+    const image = event.target.files[0] as File; 
     this.addOrEditForm.patchValue({ file: image });
   }
 

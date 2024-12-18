@@ -5,11 +5,12 @@ import { UserService } from '../../services/user.service';
 import { UserDto } from '../../models/user-dto';
 import { environment } from '../../../environments/environment';
 import { Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })

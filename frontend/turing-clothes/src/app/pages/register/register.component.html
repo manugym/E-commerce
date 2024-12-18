@@ -68,7 +68,7 @@
 
       <div class="mb-3">
         <label for="exampleFormControlInput1" class="form-label">Dirección</label>
-        <input class="form-control" formControlName="address" type="address" />
+        <input id="direction" class="form-control" formControlName="address" type="address" />
       </div>
 
       <div *ngIf="myForm.get('address').invalid && registerHints" class="error">
@@ -77,7 +77,7 @@
         </div>
       </div>
 
-      <input type="submit" class="btn bg-dark btn-light w-100 text-white" value="Registrarse" />
+      <button id="registerbutton" type="submit" class="btn bg-dark btn-light w-100 text-white">Registrarse</button>
       <!-- ESTO ESTÁ POR VER LA ANIMACIÓN NO SE VE-->
     </form>
   </div>

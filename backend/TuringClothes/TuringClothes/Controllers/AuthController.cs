@@ -127,9 +127,8 @@ namespace TuringClothes.Controllers
 
             await _unitOfWork.AuthRepository.UpdateAsync(user);
             await _unitOfWork.SaveChangesAsync();
-            string stringToken = GenerateToken(user);
 
-            return Ok(new AuthResultDto { AccessToken = stringToken });
+            return Ok("contraseña actualizada");
         }
 
         [Authorize]
@@ -174,11 +173,14 @@ namespace TuringClothes.Controllers
             user.Address = editDto.Address;
             user.Email = editDto.Email;
 
+
+
             await _unitOfWork.AuthRepository.UpdateAsync(user);
             await _unitOfWork.SaveChangesAsync();
+            string stringToken = GenerateToken(user);
 
-            return Ok("Usuario actualizado");
-            
+            return Ok(new AuthResultDto { AccessToken = stringToken });
+
         }
     }
 

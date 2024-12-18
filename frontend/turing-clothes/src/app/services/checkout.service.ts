@@ -5,6 +5,7 @@ import { Result } from '../models/result';
 import { CheckoutSessionStatus } from '../models/checkout-session-status';
 import { ProductDto } from '../models/product-dto';
 import { Order } from '../models/order';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,14 @@ export class CheckoutService {
 
   getOrderById(orderId: number) {
     return this.api.get<Order>(`Order/GetOrderById?orderId=${orderId}`)
+  }
+
+  sendEmail(to: string, htmlContent: string): Promise<any> {
+    return this.api.post('Checkout/SendEmail', { to, htmlContent });
+  }
+
+  async getUserByEmail(email: string): Promise<User> {
+    const result = await this.api.get<User>(`Auth/user by email?mail=${email}`);
+    return result.data;
   }
 }
