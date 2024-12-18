@@ -125,4 +125,10 @@ export class LocalCartComponent implements OnInit {
       await this.router.navigate(['/login']);
     }
   }
+
+  async goToBlockchainCheckout() {
+    if (!this.authService.isLoggedIn) {
+      await this.router.navigate(['/login'])
+    }
+  }
 }
