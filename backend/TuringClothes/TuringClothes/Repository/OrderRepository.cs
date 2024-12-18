@@ -37,6 +37,7 @@ namespace TuringClothes.Repository
                     TransactionStatus = paymentMethod == "card" ? status : null,
                     TotalPrice = total,
                     Email = email,
+                    DateTime = DateTime.Now,
                     OrderDetails = new List<OrderDetail>()
                 };
                 _myDatabase.Orders.Add(newOrder);

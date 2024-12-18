@@ -7,5 +7,6 @@ export interface Order {
   email?: string,
   transactionStatus: string,
   totalPrice: number,
+  dateTime: string,
   orderDetails: CartDetail[]
 }
