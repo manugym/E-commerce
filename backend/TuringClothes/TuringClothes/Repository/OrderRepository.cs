@@ -54,6 +54,9 @@ namespace TuringClothes.Repository
                     };
                     newOrder.OrderDetails.Add(newOrderDetail);
                 }
+                var user = await _myDatabase.TemporaryOrders.FirstOrDefaultAsync(t => t.Id == id);
+                var cart = await _myDatabase.Carts.FirstOrDefaultAsync(t => t.Id == user.Id);
+                cart.Details = new List<CartDetail>();
                 await _myDatabase.SaveChangesAsync();
                 return newOrder;
             }
