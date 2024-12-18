@@ -101,7 +101,11 @@ export class ProductDetailsComponent implements OnInit {
       );
 
       if (existingDetail) {
-        existingDetail.amount += quantity;
+        if (existingDetail.amount >= this.product.stock) {
+          alert('No se pueden añadir productos si no hay stock');
+        } else {
+          existingDetail.amount += quantity;
+        }
       } else {
         const newDetails = {
           id: null,

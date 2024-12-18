@@ -3,6 +3,8 @@ import { Cart } from '../../models/cart';
 import { FormsModule } from '@angular/forms';
 import { CartDetail } from '../../models/cart-detail';
 import { CatalogService } from '../../services/catalog.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-local-cart',
@@ -14,7 +16,7 @@ import { CatalogService } from '../../services/catalog.service';
 export class LocalCartComponent implements OnInit {
   cart: Cart;
 
-  constructor(private catalogService: CatalogService) {}
+  constructor(private catalogService: CatalogService, private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.cart = this.getLocalCart();
@@ -118,13 +120,15 @@ export class LocalCartComponent implements OnInit {
 
 
   async goToCheckout() {
-    // if (this.authService.isLoggedIn) {
-    //   await this.router.navigate(['/checkout']);
-    // }
+    
+    if (!this.authService.isLoggedIn) {
+      await this.router.navigate(['/login']);
+    }
+  }
 
-    console.log("Hola")
-    // this.router.navigate['/home']
-
-    //await this.cartService.saveToBackCartToCheckout(this.cart);
+  async goToBlockchainCheckout() {
+    if (!this.authService.isLoggedIn) {
+      await this.router.navigate(['/login'])
+    }
   }
 }
