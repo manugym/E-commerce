@@ -36,7 +36,7 @@
                 Email = "franruiz@gmail.com",
                 Password = hashedPassword2,
                 Address = "Calle Hermes 4",
-                Role = "Alumno"
+                Role = "user"
             },
             new User
             {
@@ -45,7 +45,7 @@
                 Email = "danidiazperez@gmail.com",
                 Password = hashedPassword3,
                 Address = "Calle Hermes 4",
-                Role = "Alumno"
+                Role = "user"
             },
             new User
             {
@@ -54,7 +54,7 @@
                 Email = "nereamuñoz@hotmail.com",
                 Password = hashedPassword4,
                 Address = "Calle Hermes 4",
-                Role = "Alumno"
+                Role = "user"
             },
             new User
             {
@@ -63,7 +63,7 @@
                 Email = "julitaperez@gmail.com",
                 Password = hashedPassword5,
                 Address = "Calle Navarro Ledesma 13",
-                Role = "Alumno"
+                Role = "user"
             },
             new User
             {
@@ -72,7 +72,7 @@
                 Email = "noe@gmail.com",
                 Password = hashedPassword6,
                 Address = "Riogordo n0 3",
-                Role = "Alumno"
+                Role = "user"
             }
             };
 
